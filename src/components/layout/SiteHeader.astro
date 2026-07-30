@@ -1,16 +1,20 @@
 ---
 import { en } from '../../i18n/en';
 import { site } from '../../config/site';
+
+const currentPath = Astro.url.pathname;
+const isCurrent = (path: string) =>
+  path === '/' ? currentPath === path : currentPath.startsWith(path);
 ---
 
 <header class="site-header">
   <div class="site-header__inner shell">
     <a class="site-name" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
     <nav class="site-nav" aria-label="Primary">
-      <a href="/">{en.navigation.home}</a>
-      <a href="/#latest-work">{en.navigation.work}</a>
-      <a href="/#latest-updates">{en.navigation.updates}</a>
-      <a href="/elsewhere/">{en.navigation.elsewhere}</a>
+      <a href="/" aria-current={isCurrent('/') ? 'page' : undefined}>{en.navigation.home}</a>
+      <a href="/work/" aria-current={isCurrent('/work/') ? 'page' : undefined}>{en.navigation.work}</a>
+      <a href="/updates/" aria-current={isCurrent('/updates/') ? 'page' : undefined}>{en.navigation.updates}</a>
+      <a href="/elsewhere/" aria-current={isCurrent('/elsewhere/') ? 'page' : undefined}>{en.navigation.elsewhere}</a>
     </nav>
   </div>
 </header>

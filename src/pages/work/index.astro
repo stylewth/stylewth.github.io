@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectRow from '../../components/content/ProjectRow.astro';
+import { site } from '../../config/site';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { assertUniqueProjectKeys } from '../../lib/content';
+
+const projects = await getCollection('projects');
+assertUniqueProjectKeys(projects);
+
+const publishedProjects = projects
+  .filter((entry) => entry.data.lang === 'en')
+  .sort((a, b) => b.data.year - a.data.year || a.id.localeCompare(b.id));
+---
+
+<ContentLayout
+  title="Work"
+  documentTitle={`Work | ${site.name}`}
+  description="Research and engineering projects by Tenghao Wang."
+  canonicalPath="/work/"
+  wide
+>
+  <div class="project-list">
+    {publishedProjects.map((project) => <ProjectRow project={project.data} />)}
+  </div>
+</ContentLayout>

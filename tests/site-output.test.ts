@@ -2,7 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-const outputPath = join(process.cwd(), 'dist', 'index.html');
+const outputDirectory = join(process.cwd(), 'dist');
+const outputPath = join(outputDirectory, 'index.html');
 let html = '';
 
 beforeAll(() => {
@@ -12,6 +13,21 @@ beforeAll(() => {
 
 function sectionPosition(id: string): number {
   return html.indexOf(`id="${id}"`);
+}
+
+function readOutput(path: string): string {
+  const outputPath = join(outputDirectory, path);
+  expect(existsSync(outputPath), `dist/${path} must be produced by npm run build:site`).toBe(true);
+  return readFileSync(outputPath, 'utf8');
+}
+
+function expectDocumentShell(page: string, canonicalPath: string, title: string): void {
+  expect(page).toContain(`<title>${title}</title>`);
+  expect(page).toContain(
+    `<link rel="canonical" href="https://stylewth.github.io${canonicalPath}">`,
+  );
+  expect(page.match(/<h1(?:\s|>)/g) ?? []).toHaveLength(1);
+  expect(page).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
 }
 
 describe('homepage output', () => {
@@ -33,8 +49,8 @@ describe('homepage output', () => {
 
   it('renders the no-JavaScript site shell and one homepage heading', () => {
     expect(html).toMatch(/<a[^>]+href="\/"[^>]*>Home<\/a>/);
-    expect(html).toMatch(/<a[^>]+href="\/#latest-work"[^>]*>Work<\/a>/);
-    expect(html).toMatch(/<a[^>]+href="\/#latest-updates"[^>]*>Updates<\/a>/);
+    expect(html).toMatch(/<a[^>]+href="\/work\/"[^>]*>Work<\/a>/);
+    expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>Updates<\/a>/);
     expect(html).toMatch(/<a[^>]+href="\/elsewhere\/"[^>]*>Elsewhere<\/a>/);
     expect(html.match(/<h1(?:\s|>)/g) ?? []).toHaveLength(1);
     expect(html).toContain('mailto:202464871049@mail.scut.edu.cn');
@@ -130,5 +146,63 @@ describe('homepage output', () => {
     expect(html).not.toContain('mix-blend-mode');
     expect(html).not.toContain('\u2013');
     expect(html).not.toContain('\u2014');
+  });
+});
+
+describe('content archive output', () => {
+  it('publishes a complete Work archive with internal project detail links', () => {
+    const work = readOutput('work/index.html');
+
+    expectDocumentShell(work, '/work/', 'Work | Tenghao Wang');
+    expect(work).toMatch(/<a[^>]+href="\/work\/sparse-navwm\/"[^>]*>SparseNavWM<\/a>/);
+    expect(work).toMatch(/<a[^>]+href="\/work\/dynamic-evrp\/"[^>]*>Dynamic EVRP<\/a>/);
+    expect(work).toContain(
+      'https://github.com/stylewth/Looking-Around-Before-Cropping-SparseNavWM',
+    );
+    expect(work).toContain('https://github.com/stylewth/EVRP-datastructure');
+    expect(work).not.toMatch(/>Paper<\/a>|>Demo<\/a>|>Scholar<\/a>/);
+    expect(work).toMatch(/<a[^>]+href="\/work\/"[^>]+aria-current="page"[^>]*>Work<\/a>/);
+  });
+
+  it('publishes dynamic project details from the full Markdown bodies', () => {
+    const sparseNavwm = readOutput('work/sparse-navwm/index.html');
+    const dynamicEvrp = readOutput('work/dynamic-evrp/index.html');
+
+    expectDocumentShell(sparseNavwm, '/work/sparse-navwm/', 'SparseNavWM | Tenghao Wang');
+    expectDocumentShell(dynamicEvrp, '/work/dynamic-evrp/', 'Dynamic EVRP | Tenghao Wang');
+    expect(sparseNavwm).toContain('SparseNavWM studies action-conditioned prediction');
+    expect(dynamicEvrp).toContain('Dynamic electric vehicle routing needs a simulation environment');
+    expect(sparseNavwm).toContain('>Code</a>');
+    expect(dynamicEvrp).toContain('>Code</a>');
+  });
+
+  it('publishes Updates in newest-first order and resolves archive navigation', () => {
+    const updates = readOutput('updates/index.html');
+
+    expectDocumentShell(updates, '/updates/', 'Updates | Tenghao Wang');
+    expect(updates.indexOf('Completed SparseNavWM')).toBeLessThan(
+      updates.indexOf('Completed Dynamic EVRP'),
+    );
+    expect(updates.indexOf('Completed Dynamic EVRP')).toBeLessThan(
+      updates.indexOf('MCM Honorable Mention'),
+    );
+    expect(updates).toMatch(/<a[^>]+href="\/updates\/"[^>]+aria-current="page"[^>]*>Updates<\/a>/);
+  });
+
+  it('publishes Elsewhere as an index using the full entry body without empty categories', () => {
+    const elsewhere = readOutput('elsewhere/index.html');
+
+    expectDocumentShell(elsewhere, '/elsewhere/', 'Elsewhere | Tenghao Wang');
+    expect(elsewhere).toContain('Pink Floyd, The Beatles, Radiohead, and The Smashing Pumpkins');
+    expect(elsewhere).not.toMatch(/<h2[^>]*>Film<\/h2>/);
+    expect(elsewhere).toMatch(/<a[^>]+href="\/elsewhere\/"[^>]+aria-current="page"[^>]*>Elsewhere<\/a>/);
+  });
+
+  it('publishes a minimal noindex 404 page', () => {
+    const notFound = readOutput('404.html');
+
+    expectDocumentShell(notFound, '/404.html', 'Page not found | Tenghao Wang');
+    expect(notFound).toMatch(/<meta name="robots" content="noindex, nofollow">/);
+    expect(notFound).toMatch(/<a[^>]+href="\/">Return home<\/a>/);
   });
 });

@@ -6,13 +6,15 @@ interface Props {
   description: string;
   eyebrow?: string;
   canonicalPath?: string;
+  documentTitle?: string;
+  wide?: boolean;
 }
 
-const { title, description, eyebrow, canonicalPath } = Astro.props;
+const { title, description, eyebrow, canonicalPath, documentTitle, wide = false } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
-  <article class="content-page shell">
+<BaseLayout title={documentTitle ?? title} description={description} canonicalPath={canonicalPath}>
+  <article class:list={['content-page', 'shell', { 'content-page--wide': wide }]}>
     <header class="content-page__header">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1>{title}</h1>

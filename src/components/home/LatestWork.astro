@@ -5,15 +5,13 @@ import { en } from '../../i18n/en';
 interface Project {
   data: {
     title: string;
+    slug: string;
     summary: string;
     year: number;
     role: string;
     topics: string[];
     links: {
-      overview?: string;
-      paper?: string;
       code?: string;
-      demo?: string;
     };
   };
 }

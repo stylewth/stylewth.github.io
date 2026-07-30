@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import UpdateList from '../../components/content/UpdateList.astro';
+import { site } from '../../config/site';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { sortUpdatesNewestFirst } from '../../lib/content';
+
+const updates = await getCollection('updates');
+const sortedUpdates = sortUpdatesNewestFirst(updates, 'en');
+---
+
+<ContentLayout
+  title="Updates"
+  documentTitle={`Updates | ${site.name}`}
+  description="Research milestones and project notes."
+  canonicalPath="/updates/"
+  wide
+>
+  <UpdateList updates={sortedUpdates.map((entry) => entry.data)} />
+</ContentLayout>

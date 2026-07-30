@@ -1,0 +1,17 @@
+---
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title={`Page not found | ${site.name}`}
+  description="The requested page could not be found."
+  canonicalPath="/404.html"
+  robots="noindex, nofollow"
+>
+  <section class="content-page shell">
+    <h1>Page not found</h1>
+    <p>The requested page does not exist.</p>
+    <p><a href="/">Return home</a></p>
+  </section>
+</BaseLayout>

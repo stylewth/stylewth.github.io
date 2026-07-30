@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import { site } from '../../config/site';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { assertUniqueProjectKeys } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  assertUniqueProjectKeys(projects);
+
+  return projects
+    .filter((entry) => entry.data.lang === 'en')
+    .map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<ContentLayout
+  title={entry.data.title}
+  documentTitle={`${entry.data.title} | ${site.name}`}
+  description={entry.data.summary}
+  canonicalPath={`/work/${entry.data.slug}/`}
+>
+  <dl class="content-page__meta">
+    <div>
+      <dt>Year</dt>
+      <dd>{entry.data.year}</dd>
+    </div>
+    <div>
+      <dt>Role</dt>
+      <dd>{entry.data.role}</dd>
+    </div>
+    <div>
+      <dt>Topics</dt>
+      <dd>{entry.data.topics.join(', ')}</dd>
+    </div>
+  </dl>
+  {entry.data.links.code && <p><a href={entry.data.links.code}>Code</a></p>}
+  <Content />
+</ContentLayout>

@@ -11,9 +11,10 @@ interface Props {
   description: string;
   canonicalPath?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  robots?: string;
 }
 
-const { title, description, canonicalPath, jsonLd } = Astro.props;
+const { title, description, canonicalPath, jsonLd, robots } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,6 +25,7 @@ const { title, description, canonicalPath, jsonLd } = Astro.props;
       description={description}
       canonicalPath={canonicalPath}
       jsonLd={jsonLd}
+      robots={robots}
     />
   </head>
   <body>

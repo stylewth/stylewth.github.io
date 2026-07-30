@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import { site } from '../../config/site';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+const elsewhere = (await getCollection('elsewhere'))
+  .filter((entry) => entry.data.lang === 'en')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || a.id.localeCompare(b.id));
+const entries = await Promise.all(
+  elsewhere.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+---
+
+<ContentLayout
+  title="Elsewhere"
+  documentTitle={`Elsewhere | ${site.name}`}
+  description="Notes on music, film, and other interests."
+  canonicalPath="/elsewhere/"
+>
+  {
+    entries.map(({ entry, Content }) => (
+      <article class="elsewhere-entry">
+        <p class="eyebrow">{entry.data.kind}</p>
+        <h2>{entry.data.title}</h2>
+        <p class="elsewhere-entry__meta">
+          <time datetime={entry.data.date.toISOString().slice(0, 10)}>
+            {entry.data.date.toISOString().slice(0, 10)}
+          </time>
+          {' · '}
+          {entry.data.tags.join(', ')}
+        </p>
+        <Content />
+      </article>
+    ))
+  }
+</ContentLayout>
