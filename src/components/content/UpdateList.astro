@@ -38,7 +38,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     display: grid;
     padding-block: 1.5rem;
     border-bottom: 1px solid var(--color-rule);
-    grid-template-columns: 7rem minmax(0, 0.7fr) minmax(0, 1fr);
+    grid-template-columns: 9rem minmax(0, 0.7fr) minmax(0, 1fr);
     gap: clamp(1.5rem, 4vw, 4rem);
   }
 
@@ -65,6 +65,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     gap: 0.5rem;
     font-size: 0.86rem;
     text-transform: lowercase;
+    white-space: nowrap;
   }
 
   .update-row__meta span::before {

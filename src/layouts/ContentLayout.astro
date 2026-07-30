@@ -57,19 +57,19 @@ const { title, description, eyebrow, canonicalPath, documentTitle, wide = false 
     max-width: var(--content-width);
   }
 
-  .content-page__body :global(h2) {
+  .content-page__body > :global(h2) {
     margin-block: 3rem 1rem;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  .content-page__body :global(h3) {
+  .content-page__body > :global(h3) {
     margin-block: 2rem 0.75rem;
     font-size: clamp(1.35rem, 2vw, 1.75rem);
   }
 
-  .content-page__body :global(p),
-  .content-page__body :global(ul),
-  .content-page__body :global(ol) {
+  .content-page__body > :global(p),
+  .content-page__body > :global(ul),
+  .content-page__body > :global(ol) {
     margin-block-end: 1.25rem;
   }
 

@@ -316,7 +316,7 @@ describe('public source contracts', () => {
 
     expect(contentLayout).toContain('content-page--wide');
     expect(contentLayout).toContain('--content-width');
-    expect(contentLayout).toContain('.content-page__body :global(h2)');
+    expect(contentLayout).toContain('.content-page__body > :global(h2)');
     expect(contentLayout).toContain('.content-page__header > p');
     expect(contentLayout).not.toContain('.content-page__meta');
     expect(workDetail).toContain('en.metadata.year');
@@ -345,6 +345,39 @@ describe('public source contracts', () => {
     expect(projectRow).not.toContain('!important');
     expect(updateList).toContain('.update-row > .update-row__meta');
     expect(updateList).toMatch(/\.update-row\s*>\s*\.update-row__meta\s*\{[\s\S]*font-size:\s*0\.86rem;/);
+  });
+
+  it('keeps update metadata on one desktop line and preserves the single-column mobile grid', () => {
+    const updateList = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'UpdateList.astro'),
+      'utf8',
+    );
+
+    expect(updateList).toMatch(
+      /\.update-row\s*\{[^}]*grid-template-columns:\s*9rem minmax\(0,\s*0\.7fr\) minmax\(0,\s*1fr\);[^}]*\}/,
+    );
+    expect(updateList).toMatch(
+      /\.update-row\s*>\s*\.update-row__meta\s*\{[^}]*white-space:\s*nowrap;[^}]*\}/,
+    );
+    expect(updateList).toMatch(
+      /@media\s*\(max-width:\s*48rem\)\s*\{[\s\S]*?\.update-row\s*\{[^}]*grid-template-columns:\s*1fr;[^}]*\}[\s\S]*?\}/,
+    );
+  });
+
+  it('limits content typography rules to direct body children', () => {
+    const contentLayout = readFileSync(
+      join(projectRoot, 'src', 'layouts', 'ContentLayout.astro'),
+      'utf8',
+    );
+
+    expect(contentLayout).toMatch(/\.content-page__body\s*>\s*:global\(h2\)\s*\{/);
+    expect(contentLayout).toMatch(/\.content-page__body\s*>\s*:global\(h3\)\s*\{/);
+    expect(contentLayout).toMatch(
+      /\.content-page__body\s*>\s*:global\(p\),\s*\.content-page__body\s*>\s*:global\(ul\),\s*\.content-page__body\s*>\s*:global\(ol\)\s*\{/,
+    );
+    expect(contentLayout).not.toMatch(
+      /\.content-page__body\s+(?!>)[^{]*:global\((?:h2|h3|p|ul|ol)\)/,
+    );
   });
 
   it('centralizes the accurate Elsewhere description', () => {
