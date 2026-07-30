@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
@@ -19,6 +19,20 @@ function readOutput(path: string): string {
   const outputPath = join(outputDirectory, path);
   expect(existsSync(outputPath), `dist/${path} must be produced by npm run build:site`).toBe(true);
   return readFileSync(outputPath, 'utf8');
+}
+
+function outputHtmlFiles(directory = outputDirectory): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return outputHtmlFiles(path);
+    return entry.name.endsWith('.html') ? [path] : [];
+  });
+}
+
+function outputPathForRootLink(href: string): string {
+  if (href === '/') return join(outputDirectory, 'index.html');
+  if (href.endsWith('.html')) return join(outputDirectory, href.slice(1));
+  return join(outputDirectory, href.slice(1), 'index.html');
 }
 
 function expectDocumentShell(page: string, canonicalPath: string, title: string): void {
@@ -43,8 +57,29 @@ describe('homepage output', () => {
       /<meta property="og:url" content="https:\/\/stylewth\.github\.io\/">/,
     );
     expect(html).toMatch(/<meta name="twitter:card" content="summary">/);
+    expect(html).not.toMatch(/<meta property="og:image"/);
     expect(html).toMatch(/<link rel="icon"[^>]+href="\/favicon\.svg"/);
     expect(html).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
+  });
+
+  it('publishes a parseable Person JSON-LD record for the public profile', () => {
+    const match = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    expect(match?.[1]).toBeTruthy();
+
+    const person = JSON.parse(match![1]) as Record<string, unknown>;
+    expect(person['@type']).toBe('Person');
+    expect(person.name).toBe('Tenghao Wang');
+    expect(person.url).toBe('https://stylewth.github.io');
+    expect(person.affiliation).toEqual({
+      '@type': 'CollegeOrUniversity',
+      name: 'South China University of Technology',
+    });
+    expect(person.sameAs).toContain('https://github.com/stylewth');
+    expect(person.knowsAbout).toEqual([
+      'World models',
+      'Multimodal learning',
+      'Predictive planning',
+    ]);
   });
 
   it('renders the no-JavaScript site shell and one homepage heading', () => {
@@ -146,6 +181,36 @@ describe('homepage output', () => {
     expect(html).not.toContain('mix-blend-mode');
     expect(html).not.toContain('\u2013');
     expect(html).not.toContain('\u2014');
+  });
+});
+
+describe('production crawl and script contracts', () => {
+  it('publishes a robots policy and sitemap index for the canonical site', () => {
+    const robots = readOutput('robots.txt');
+    const sitemapIndex = readOutput('sitemap-index.xml');
+
+    expect(robots).toBe(
+      'User-agent: *\nAllow: /\nSitemap: https://stylewth.github.io/sitemap-index.xml\n',
+    );
+    expect(sitemapIndex).toContain('https://stylewth.github.io/sitemap-0.xml');
+  });
+
+  it('keeps every generated root-relative navigation link inside the published site', () => {
+    const links = outputHtmlFiles().flatMap((file) => {
+      const page = readFileSync(file, 'utf8');
+      return [...page.matchAll(/<a[^>]+href="(\/[^"?#]*)"/g)].map((match) => match[1]);
+    });
+
+    [...new Set(links)].forEach((href) => {
+      expect(existsSync(outputPathForRootLink(href)), `${href} must resolve in dist`).toBe(true);
+    });
+  });
+
+  it('emits only JSON-LD script tags across generated HTML', () => {
+    outputHtmlFiles().forEach((file) => {
+      const page = readFileSync(file, 'utf8');
+      expect(page, file).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
+    });
   });
 });
 

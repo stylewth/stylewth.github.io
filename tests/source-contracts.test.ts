@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { dirname, extname, join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const projectRoot = process.cwd();
@@ -14,6 +14,7 @@ const forbiddenText = [
   '\u82f1\u56fd\u7b7e\u8bc1',
   'Download CV',
 ];
+const forbiddenPathParts = new Set(['cv', 'cvs', 'resume', 'resumes']);
 const designSourceExtensions = new Set(['.astro', '.css']);
 
 function markdownFiles(directory: string): string[] {
@@ -60,7 +61,8 @@ describe('public source contracts', () => {
         (file) =>
           statSync(file).isFile() &&
           sourceExtensions.has(extname(file).toLowerCase()) &&
-          !file.endsWith('package-lock.json'),
+          !file.endsWith('package-lock.json') &&
+          !file.endsWith('README.md'),
       )
       .find((file) => {
         const content = readFileSync(file, 'utf8');
@@ -69,6 +71,62 @@ describe('public source contracts', () => {
 
     expect(forbiddenFile && relative(projectRoot, forbiddenFile)).toBeUndefined();
     expect(forbiddenContent && relative(projectRoot, forbiddenContent)).toBeUndefined();
+  });
+
+  it('keeps production source free of private directories and parent asset references', () => {
+    const files = projectFiles(projectRoot);
+    const privatePath = files.find((file) =>
+      relative(projectRoot, file)
+        .split(/[\\/]/)
+        .some((part) => forbiddenPathParts.has(part.toLowerCase())),
+    );
+    const parentAssetReference = files
+      .filter((file) => sourceExtensions.has(extname(file).toLowerCase()))
+      .find((file) => {
+        const content = readFileSync(file, 'utf8');
+        const parentReferences = [
+          ...content.matchAll(/(?:from\s*|src\s*=\s*|href\s*=\s*|url\()\s*["'](\.\.\/[^"')\s]+)/g),
+        ].map((match) => match[1]);
+
+        return parentReferences.some((reference) => relative(projectRoot, resolve(dirname(file), reference)).startsWith('..'));
+      });
+
+    expect(privatePath && relative(projectRoot, privatePath)).toBeUndefined();
+    expect(parentAssetReference && relative(projectRoot, parentAssetReference)).toBeUndefined();
+  });
+
+  it('ships GitHub Pages deployment metadata without an OG image dependency', () => {
+    const robotsPath = join(projectRoot, 'public', 'robots.txt');
+    const workflowPath = join(projectRoot, '.github', 'workflows', 'deploy.yml');
+    const seoHead = readFileSync(join(projectRoot, 'src', 'components', 'layout', 'SeoHead.astro'), 'utf8');
+
+    expect(readFileSync(robotsPath, 'utf8')).toBe(
+      'User-agent: *\nAllow: /\nSitemap: https://stylewth.github.io/sitemap-index.xml\n',
+    );
+    expect(readFileSync(workflowPath, 'utf8')).toContain('actions/checkout@v7');
+    expect(readFileSync(workflowPath, 'utf8')).toContain('withastro/action@v6');
+    expect(readFileSync(workflowPath, 'utf8')).toContain('actions/deploy-pages@v5');
+    expect(seoHead).not.toContain('og:image');
+    expect(seoHead).toContain('name="twitter:card" content="summary"');
+    expect(existsSync(join(projectRoot, 'public', 'og.png'))).toBe(false);
+  });
+
+  it('documents content maintenance, bilingual expansion, and the publication gate', () => {
+    const readme = readFileSync(join(projectRoot, 'README.md'), 'utf8');
+
+    expect(readme).toContain('npm install');
+    expect(readme).toContain('npm run dev');
+    expect(readme).toContain('npm run build');
+    expect(readme).toContain('## Project Markdown example');
+    expect(readme).toContain('## Update Markdown example');
+    expect(readme).toContain('## Elsewhere Markdown example');
+    expect(readme).toContain('site config');
+    expect(readme).toContain('i18n');
+    expect(readme).toContain('CV gate');
+    expect(readme).toContain('Chinese');
+    expect(readme).toContain('GitHub Pages');
+    expect(readme).toContain('Settings > Pages');
+    expect(readme).toContain('dynamic character particles');
   });
 
   it('defines the approved editorial design system', () => {
@@ -127,7 +185,13 @@ describe('public source contracts', () => {
         'framer-motion',
         'motion',
         'gsap',
+        'three',
+        'rive-js',
+        '@rive-app/canvas',
+        'tsparticles',
+        '@tsparticles/engine',
       ]),
     );
+    expect(dependencyNames.some((name) => /(^three(?:-|$)|^@rive-app\/|particle)/i.test(name))).toBe(false);
   });
 });

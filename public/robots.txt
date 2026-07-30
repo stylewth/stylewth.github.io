@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stylewth.github.io/sitemap-index.xml
