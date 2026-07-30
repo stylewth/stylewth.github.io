@@ -1,0 +1,29 @@
+---
+import UpdateList from '../content/UpdateList.astro';
+import { en } from '../../i18n/en';
+
+interface Update {
+  data: {
+    title: string;
+    date: string;
+    summary: string;
+    url?: string;
+  };
+}
+
+interface Props {
+  updates: Update[];
+}
+
+const { updates } = Astro.props;
+---
+
+<section
+  id="latest-updates"
+  class="latest-section shell"
+  aria-labelledby="latest-updates-title"
+>
+  <p class="eyebrow">{en.updates.eyebrow}</p>
+  <h2 id="latest-updates-title" class="section-heading">{en.updates.title}</h2>
+  <UpdateList updates={updates.map((update) => update.data)} />
+</section>

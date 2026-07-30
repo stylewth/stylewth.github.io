@@ -1,0 +1,26 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../../assets/images/tenghao-wang-portrait.png';
+import { en } from '../../i18n/en';
+---
+
+<section id="profile" class="profile shell" aria-labelledby="profile-title">
+  <figure class="profile__portrait">
+    <Picture
+      src={portrait}
+      formats={['avif', 'webp']}
+      fallbackFormat="png"
+      widths={[190, 250, 500]}
+      sizes="(max-width: 48rem) 190px, 250px"
+      alt="Portrait of Tenghao Wang"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </figure>
+  <div class="profile__copy">
+    <p class="eyebrow">Academic portfolio</p>
+    <h1 id="profile-title">{en.profile.role}</h1>
+    <p>{en.profile.introduction}</p>
+    <p>{en.profile.currentWork}</p>
+  </div>
+</section>

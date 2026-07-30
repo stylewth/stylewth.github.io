@@ -1,0 +1,39 @@
+---
+interface Project {
+  title: string;
+  summary: string;
+  year: number;
+  role: string;
+  topics: string[];
+  links: {
+    overview?: string;
+    paper?: string;
+    code?: string;
+    demo?: string;
+  };
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const primaryLink =
+  project.links.overview ??
+  project.links.paper ??
+  project.links.code ??
+  project.links.demo;
+---
+
+<article class="project-row">
+  <div>
+    <h3>{project.title}</h3>
+    <p>{project.summary}</p>
+  </div>
+  <div class="project-row__meta">
+    <p>{project.year}</p>
+    <p>{project.role}</p>
+    <p>{project.topics.join(', ')}</p>
+    {primaryLink && <a class="project-row__link" href={primaryLink}>View project</a>}
+  </div>
+</article>

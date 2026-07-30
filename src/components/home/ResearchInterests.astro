@@ -1,0 +1,33 @@
+---
+import { Picture } from 'astro:assets';
+import rabbit from '../../assets/images/research-world-model-rabbit.png';
+import { en } from '../../i18n/en';
+---
+
+<section
+  id="research-interests"
+  class="research-field"
+  aria-labelledby="research-interests-title"
+>
+  <div class="research-field__image" data-rabbit-field aria-hidden="true">
+    <Picture
+      src={rabbit}
+      formats={['avif', 'webp']}
+      fallbackFormat="png"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      alt=""
+      loading="lazy"
+    />
+  </div>
+  <div class="research-field__content shell">
+    <p class="eyebrow">{en.research.eyebrow}</p>
+    <h2 id="research-interests-title" class="research-field__statement">
+      {en.research.statement}
+    </h2>
+    <p class="research-field__description">{en.research.description}</p>
+    <ul class="interest-list" aria-label="Research interests">
+      {en.research.interests.map((interest) => <li>{interest}</li>)}
+    </ul>
+  </div>
+</section>

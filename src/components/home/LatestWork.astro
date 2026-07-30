@@ -1,0 +1,34 @@
+---
+import ProjectRow from '../content/ProjectRow.astro';
+import { en } from '../../i18n/en';
+
+interface Project {
+  data: {
+    title: string;
+    summary: string;
+    year: number;
+    role: string;
+    topics: string[];
+    links: {
+      overview?: string;
+      paper?: string;
+      code?: string;
+      demo?: string;
+    };
+  };
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section id="latest-work" class="latest-section shell" aria-labelledby="latest-work-title">
+  <p class="eyebrow">{en.work.eyebrow}</p>
+  <h2 id="latest-work-title" class="section-heading">{en.work.title}</h2>
+  <div class="project-list">
+    {projects.map((project) => <ProjectRow project={project.data} />)}
+  </div>
+</section>

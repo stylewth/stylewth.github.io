@@ -1,0 +1,28 @@
+---
+interface Update {
+  title: string;
+  date: string;
+  summary: string;
+  url?: string;
+}
+
+interface Props {
+  updates: Update[];
+}
+
+const { updates } = Astro.props;
+---
+
+<ol class="update-list">
+  {
+    updates.map((update) => (
+      <li class="update-row">
+        <time datetime={update.date}>{update.date}</time>
+        <h3>
+          {update.url ? <a href={update.url}>{update.title}</a> : update.title}
+        </h3>
+        <p>{update.summary}</p>
+      </li>
+    ))
+  }
+</ol>

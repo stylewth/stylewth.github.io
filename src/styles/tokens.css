@@ -1,0 +1,13 @@
+:root {
+  --content-width: 60rem;
+  --reading-width: 62ch;
+  --font-display: 'Newsreader', 'Newsreader Variable', Georgia, serif;
+  --font-body: 'DM Sans', 'DM Sans Variable', sans-serif;
+  --color-paper: #ffffff;
+  --color-text: #11110f;
+  --color-muted: #65645f;
+  --color-rule: #d9d6ce;
+  --color-bone: #f3efe6;
+  --space-section: clamp(5rem, 8vw, 6.5rem);
+  --space-page: clamp(1.25rem, 4vw, 2rem);
+}

@@ -1,0 +1,16 @@
+---
+import { en } from '../../i18n/en';
+import { site } from '../../config/site';
+---
+
+<header class="site-header">
+  <div class="site-header__inner shell">
+    <a class="site-name" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/">{en.navigation.home}</a>
+      <a href="/#latest-work">{en.navigation.work}</a>
+      <a href="/#latest-updates">{en.navigation.updates}</a>
+      <a href="/elsewhere/">{en.navigation.elsewhere}</a>
+    </nav>
+  </div>
+</header>

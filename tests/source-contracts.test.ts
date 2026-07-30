@@ -14,6 +14,7 @@ const forbiddenText = [
   '\u82f1\u56fd\u7b7e\u8bc1',
   'Download CV',
 ];
+const designSourceExtensions = new Set(['.astro', '.css']);
 
 function markdownFiles(directory: string): string[] {
   if (!existsSync(directory)) return [];
@@ -68,5 +69,60 @@ describe('public source contracts', () => {
 
     expect(forbiddenFile && relative(projectRoot, forbiddenFile)).toBeUndefined();
     expect(forbiddenContent && relative(projectRoot, forbiddenContent)).toBeUndefined();
+  });
+
+  it('defines the approved editorial design system', () => {
+    const tokens = readFileSync(join(projectRoot, 'src', 'styles', 'tokens.css'), 'utf8');
+    const globalStyles = readFileSync(join(projectRoot, 'src', 'styles', 'global.css'), 'utf8');
+    const baseLayout = readFileSync(
+      join(projectRoot, 'src', 'layouts', 'BaseLayout.astro'),
+      'utf8',
+    );
+
+    expect(tokens).toMatch(/--content-width:\s*60rem/);
+    expect(tokens).toMatch(/--font-display:\s*['"]Newsreader['"]/);
+    expect(tokens).toMatch(/--font-body:\s*['"]DM Sans['"]/);
+    expect(tokens).toMatch(/--color-text:\s*#[01][0-9a-f]{5}/i);
+    expect(tokens).toMatch(/--color-rule:\s*#[0-9a-f]{6}/i);
+    expect(tokens).toMatch(/--color-bone:\s*#[0-9a-f]{6}/i);
+    expect(globalStyles).toContain(':focus-visible');
+    expect(globalStyles).toMatch(/@media\s*\(max-width:\s*48rem\)/);
+    expect(baseLayout).toContain('@fontsource-variable/newsreader');
+    expect(baseLayout).toContain('@fontsource-variable/dm-sans');
+  });
+
+  it('keeps visual effects restrained and requires no client framework', () => {
+    const source = projectFiles(projectRoot)
+      .filter((file) => designSourceExtensions.has(extname(file).toLowerCase()))
+      .map((file) => readFileSync(file, 'utf8'))
+      .join('\n');
+    const packageJson = JSON.parse(readFileSync(join(projectRoot, 'package.json'), 'utf8')) as {
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+    const dependencyNames = Object.keys({
+      ...packageJson.dependencies,
+      ...packageJson.devDependencies,
+    });
+
+    expect(source).not.toContain('gradient(');
+    expect(source).not.toMatch(/\bfilter\s*:/);
+    expect(source).not.toContain('mix-blend-mode');
+    expect(source).not.toContain('h-screen');
+    expect(source).not.toMatch(/client:(load|idle|visible|media|only)/);
+    expect(source).not.toMatch(/scroll-snap|scroll-behavior:\s*smooth/);
+    expect(dependencyNames).not.toEqual(
+      expect.arrayContaining([
+        'react',
+        'react-dom',
+        'vue',
+        'svelte',
+        'solid-js',
+        'preact',
+        'framer-motion',
+        'motion',
+        'gsap',
+      ]),
+    );
   });
 });

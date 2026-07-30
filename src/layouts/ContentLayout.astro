@@ -1,0 +1,25 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow?: string;
+  canonicalPath?: string;
+}
+
+const { title, description, eyebrow, canonicalPath } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <article class="content-page shell">
+    <header class="content-page__header">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      <p>{description}</p>
+    </header>
+    <div class="content-page__body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

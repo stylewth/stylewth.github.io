@@ -1,0 +1,36 @@
+---
+import '@fontsource-variable/newsreader/wght.css';
+import '@fontsource-variable/dm-sans/wght.css';
+import '../styles/global.css';
+import SeoHead from '../components/layout/SeoHead.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, canonicalPath, jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SeoHead
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      jsonLd={jsonLd}
+    />
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

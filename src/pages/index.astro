@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfileIntro from '../components/home/ProfileIntro.astro';
+import ResearchInterests from '../components/home/ResearchInterests.astro';
+import LatestWork from '../components/home/LatestWork.astro';
+import LatestUpdates from '../components/home/LatestUpdates.astro';
+import {
+  assertUniqueProjectKeys,
+  selectFeaturedProjects,
+  sortUpdatesNewestFirst,
+} from '../lib/content';
+import { site } from '../config/site';
+
+const projects = await getCollection('projects');
+const updates = await getCollection('updates');
+
+assertUniqueProjectKeys(projects);
+const featuredProjects = selectFeaturedProjects(projects, 'en', 2);
+const latestUpdates = sortUpdatesNewestFirst(updates, 'en').slice(0, 3);
+
+const pageTitle = `${site.name} | Academic Portfolio`;
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.role,
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: site.affiliation,
+  },
+  url: site.url,
+  sameAs: [site.github],
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={site.description}
+  canonicalPath="/"
+  jsonLd={personJsonLd}
+>
+  <ProfileIntro />
+  <ResearchInterests />
+  <LatestWork projects={featuredProjects} />
+  <LatestUpdates updates={latestUpdates} />
+</BaseLayout>

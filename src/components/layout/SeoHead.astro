@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, canonicalPath = Astro.url.pathname, jsonLd } = Astro.props;
+const siteUrl = Astro.site;
+
+if (!siteUrl) {
+  throw new Error('Astro.site is required to build canonical metadata');
+}
+
+const canonical = new URL(canonicalPath, siteUrl).toString();
+const serializedJsonLd = jsonLd
+  ? JSON.stringify(jsonLd).replaceAll('<', '\\u003c')
+  : undefined;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+{
+  serializedJsonLd && (
+    <script type="application/ld+json" set:html={serializedJsonLd} is:inline />
+  )
+}
