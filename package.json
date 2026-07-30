@@ -1,0 +1,29 @@
+{
+  "name": "stylewth.github.io",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check --minimumFailingSeverity warning",
+    "test": "vitest run src",
+    "test:site": "vitest run tests",
+    "build:site": "astro build",
+    "build": "npm run check && npm run test && npm run build:site && npm run test:site",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "astro": "^7.1.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}
