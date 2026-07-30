@@ -30,16 +30,16 @@ const { Content } = await render(entry);
       <dd>{entry.data.year}</dd>
     </div>
     <div>
+      <dt>{en.metadata.stage}</dt>
+      <dd>{entry.data.stage}</dd>
+    </div>
+    <div>
       <dt>{en.metadata.role}</dt>
       <dd>{entry.data.role}</dd>
     </div>
     <div>
       <dt>{en.metadata.topics}</dt>
       <dd>{entry.data.topics.join(', ')}</dd>
-    </div>
-    <div>
-      <dt>{en.metadata.stage}</dt>
-      <dd>{entry.data.stage}</dd>
     </div>
   </dl>
   {entry.data.links.code && <p><a href={entry.data.links.code}>{en.links.code}</a></p>}
@@ -51,7 +51,7 @@ const { Content } = await render(entry);
     display: grid;
     margin: 0 0 3rem;
     border-top: 1px solid var(--color-text);
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .content-page__meta div {

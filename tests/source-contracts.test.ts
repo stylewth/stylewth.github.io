@@ -331,6 +331,31 @@ describe('public source contracts', () => {
     expect(footer).toContain('new Date().getFullYear()');
   });
 
+  it('orders work detail metadata from compact to descriptive values', () => {
+    const workDetail = readFileSync(
+      join(projectRoot, 'src', 'pages', 'work', '[slug].astro'),
+      'utf8',
+    );
+
+    expect(workDetail).toMatch(
+      /<dl class="content-page__meta">[\s\S]*?en\.metadata\.year[\s\S]*?en\.metadata\.stage[\s\S]*?en\.metadata\.role[\s\S]*?en\.metadata\.topics[\s\S]*?<\/dl>/,
+    );
+  });
+
+  it('balances work detail metadata on desktop and preserves the single-column mobile grid', () => {
+    const workDetail = readFileSync(
+      join(projectRoot, 'src', 'pages', 'work', '[slug].astro'),
+      'utf8',
+    );
+
+    expect(workDetail).toMatch(
+      /\.content-page__meta\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);[^}]*\}/,
+    );
+    expect(workDetail).toMatch(
+      /@media\s*\(max-width:\s*48rem\)\s*\{[\s\S]*?\.content-page__meta\s*\{[^}]*grid-template-columns:\s*1fr;[^}]*\}[\s\S]*?\}/,
+    );
+  });
+
   it('keeps classified record metadata visible without competing selector specificity', () => {
     const projectRow = readFileSync(
       join(projectRoot, 'src', 'components', 'content', 'ProjectRow.astro'),
