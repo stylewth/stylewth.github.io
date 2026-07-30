@@ -195,6 +195,51 @@ describe('public source contracts', () => {
     });
   });
 
+  it('connects collection uniqueness checks to every build-time query path', () => {
+    const homepage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
+    const workArchive = readFileSync(
+      join(projectRoot, 'src', 'pages', 'work', 'index.astro'),
+      'utf8',
+    );
+    const workDetails = readFileSync(
+      join(projectRoot, 'src', 'pages', 'work', '[slug].astro'),
+      'utf8',
+    );
+    const updatesArchive = readFileSync(
+      join(projectRoot, 'src', 'pages', 'updates', 'index.astro'),
+      'utf8',
+    );
+    const elsewhereArchive = readFileSync(
+      join(projectRoot, 'src', 'pages', 'elsewhere', 'index.astro'),
+      'utf8',
+    );
+
+    expect(homepage).toMatch(/assertUniqueProjectKeys\(projects\)/);
+    expect(homepage).toMatch(/assertUniqueTranslationKeys\(updates,\s*'update'\)/);
+    expect(workArchive).toMatch(/assertUniqueProjectKeys\(projects\)/);
+    expect(workDetails).toMatch(/assertUniqueProjectKeys\(projects\)/);
+    expect(updatesArchive).toMatch(/assertUniqueTranslationKeys\(updates,\s*'update'\)/);
+    expect(elsewhereArchive).toMatch(
+      /assertUniqueTranslationKeys\(elsewhere,\s*'elsewhere'\)/,
+    );
+  });
+
+  it('uses the strict reusable Elsewhere date schema without coercion', () => {
+    const contentConfig = readFileSync(
+      join(projectRoot, 'src', 'content.config.ts'),
+      'utf8',
+    );
+    const dateSchemaPath = join(projectRoot, 'src', 'lib', 'content-schema.ts');
+
+    expect(existsSync(dateSchemaPath)).toBe(true);
+    if (!existsSync(dateSchemaPath)) return;
+    const dateSchema = readFileSync(dateSchemaPath, 'utf8');
+    expect(contentConfig).toContain('date: elsewhereDateSchema');
+    expect(contentConfig).not.toContain('z.coerce.date()');
+    expect(dateSchema).toContain('z.iso.date()');
+    expect(dateSchema).toContain("new Date(`${value}T00:00:00.000Z`)");
+  });
+
   it('keeps the latest updates section conditional and self-contained', () => {
     const indexPage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
     const latestUpdates = readFileSync(

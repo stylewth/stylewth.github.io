@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   assertUniqueProjectKeys,
+  assertUniqueTranslationKeys,
   selectFeaturedProjects,
   sortProjectsForArchive,
   sortUpdatesNewestFirst,
@@ -76,6 +77,41 @@ describe('assertUniqueProjectKeys', () => {
         { id: 'en', data: { lang: 'en', slug: 'same', translationKey: 'project' } },
         { id: 'zh', data: { lang: 'zh', slug: 'same', translationKey: 'project' } },
       ]),
+    ).not.toThrow();
+  });
+
+  it('rejects duplicate translation keys within one language', () => {
+    expect(() =>
+      assertUniqueProjectKeys([
+        { id: 'one', data: { lang: 'en', slug: 'one', translationKey: 'same' } },
+        { id: 'two', data: { lang: 'en', slug: 'two', translationKey: 'same' } },
+      ]),
+    ).toThrow('Duplicate project translationKey "same" for language "en"');
+  });
+});
+
+describe('assertUniqueTranslationKeys', () => {
+  it('rejects a duplicate translation key within one language', () => {
+    expect(() =>
+      assertUniqueTranslationKeys(
+        [
+          { id: 'one', data: { lang: 'en', translationKey: 'same' } },
+          { id: 'two', data: { lang: 'en', translationKey: 'same' } },
+        ],
+        'update',
+      ),
+    ).toThrow('Duplicate update translationKey "same" for language "en"');
+  });
+
+  it('allows one translation key to be shared across languages', () => {
+    expect(() =>
+      assertUniqueTranslationKeys(
+        [
+          { id: 'en', data: { lang: 'en', translationKey: 'same' } },
+          { id: 'zh', data: { lang: 'zh', translationKey: 'same' } },
+        ],
+        'update',
+      ),
     ).not.toThrow();
   });
 });

@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { elsewhereDateSchema } from './lib/content-schema';
 
 const language = z.literal('en');
 const links = z.object({
@@ -68,7 +69,7 @@ const elsewhere = defineCollection({
     z
       .object({
         title: z.string().trim().min(1),
-        date: z.coerce.date(),
+        date: elsewhereDateSchema,
         translationKey: z.string().trim().min(1),
         summary: z.string().trim().min(1),
         kind: z.enum(['music', 'film', 'note']),

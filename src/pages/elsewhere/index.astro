@@ -3,12 +3,16 @@ import { getCollection, render } from 'astro:content';
 import { site } from '../../config/site';
 import { en } from '../../i18n/en';
 import ContentLayout from '../../layouts/ContentLayout.astro';
+import { assertUniqueTranslationKeys } from '../../lib/content';
 
-const elsewhere = (await getCollection('elsewhere'))
+const elsewhere = await getCollection('elsewhere');
+assertUniqueTranslationKeys(elsewhere, 'elsewhere');
+
+const publishedElsewhere = elsewhere
   .filter((entry) => entry.data.lang === 'en')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || a.id.localeCompare(b.id));
 const entries = await Promise.all(
-  elsewhere.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+  publishedElsewhere.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
 );
 ---
 

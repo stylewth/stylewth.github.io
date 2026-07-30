@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import UpdateList from '../../components/content/UpdateList.astro';
 import { site } from '../../config/site';
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { sortUpdatesNewestFirst } from '../../lib/content';
+import { assertUniqueTranslationKeys, sortUpdatesNewestFirst } from '../../lib/content';
 
 const updates = await getCollection('updates');
+assertUniqueTranslationKeys(updates, 'update');
 const sortedUpdates = sortUpdatesNewestFirst(updates, 'en');
 ---
 

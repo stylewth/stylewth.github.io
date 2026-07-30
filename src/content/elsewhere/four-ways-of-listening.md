@@ -1,6 +1,6 @@
 ---
 title: Four ways of listening
-date: 2026-07-31
+date: '2026-07-31'
 translationKey: four-ways-of-listening
 kind: music
 summary: Pink Floyd, The Beatles, Radiohead, and The Smashing Pumpkins remain four recurring points of reference.

@@ -26,6 +26,12 @@ type ProjectKeyEntry = LanguageEntry & {
   };
 };
 
+type TranslationKeyEntry = LanguageEntry & {
+  data: LanguageEntry['data'] & {
+    translationKey: string;
+  };
+};
+
 export function selectFeaturedProjects<T extends ProjectOrderingEntry>(
   entries: readonly T[],
   lang: string,
@@ -72,22 +78,34 @@ export function sortProjectsForArchive<T extends ProjectOrderingEntry>(
 
 export function assertUniqueProjectKeys(entries: readonly ProjectKeyEntry[]): void {
   const slugs = new Set<string>();
-  const translationKeys = new Set<string>();
 
   for (const entry of entries) {
     const slugKey = `${entry.data.lang}:${entry.data.slug}`;
-    const translationKey = `${entry.data.lang}:${entry.data.translationKey}`;
     if (slugs.has(slugKey)) {
       throw new Error(
         `Duplicate project slug "${entry.data.slug}" for language "${entry.data.lang}"`,
       );
     }
+    slugs.add(slugKey);
+  }
+
+  assertUniqueTranslationKeys(entries, 'project');
+}
+
+export function assertUniqueTranslationKeys(
+  entries: readonly TranslationKeyEntry[],
+  collectionName?: string,
+): void {
+  const translationKeys = new Set<string>();
+
+  for (const entry of entries) {
+    const translationKey = `${entry.data.lang}:${entry.data.translationKey}`;
     if (translationKeys.has(translationKey)) {
+      const collectionLabel = collectionName ? `${collectionName} ` : '';
       throw new Error(
-        `Duplicate project translationKey "${entry.data.translationKey}" for language "${entry.data.lang}"`,
+        `Duplicate ${collectionLabel}translationKey "${entry.data.translationKey}" for language "${entry.data.lang}"`,
       );
     }
-    slugs.add(slugKey);
     translationKeys.add(translationKey);
   }
 }

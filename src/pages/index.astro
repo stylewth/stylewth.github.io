@@ -7,6 +7,7 @@ import LatestWork from '../components/home/LatestWork.astro';
 import LatestUpdates from '../components/home/LatestUpdates.astro';
 import {
   assertUniqueProjectKeys,
+  assertUniqueTranslationKeys,
   selectFeaturedProjects,
   sortUpdatesNewestFirst,
 } from '../lib/content';
@@ -19,6 +20,7 @@ const projects = await getCollection('projects');
 const updates = await getCollection('updates');
 
 assertUniqueProjectKeys(projects);
+assertUniqueTranslationKeys(updates, 'update');
 const featuredProjects = selectFeaturedProjects(projects, 'en', 2);
 const latestUpdates = sortUpdatesNewestFirst(updates, 'en').slice(0, 3);
 
