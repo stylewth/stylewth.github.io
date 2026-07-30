@@ -18,3 +18,61 @@ const isCurrent = (path: string) =>
     </nav>
   </div>
 </header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-rule);
+    background: var(--color-paper);
+  }
+
+  .site-header__inner {
+    display: flex;
+    min-height: 4.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .site-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 550;
+    text-decoration: none;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+    font-size: 0.92rem;
+  }
+
+  .site-nav a {
+    text-decoration: none;
+  }
+
+  .site-nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.35rem;
+  }
+
+  .site-nav a[aria-current='page'] {
+    font-weight: 700;
+  }
+
+  @media (max-width: 48rem) {
+    .site-header__inner {
+      min-height: auto;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.85rem;
+      padding-block: 1rem;
+    }
+
+    .site-nav {
+      width: 100%;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+  }
+</style>

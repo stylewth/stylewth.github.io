@@ -1,32 +1,41 @@
 ---
 import ProjectRow from '../content/ProjectRow.astro';
-import { en } from '../../i18n/en';
+import type { CollectionEntry } from 'astro:content';
 
-interface Project {
-  data: {
-    title: string;
-    slug: string;
-    summary: string;
-    year: number;
-    role: string;
-    topics: string[];
-    links: {
-      code?: string;
-    };
-  };
-}
+type Project = CollectionEntry<'projects'>;
 
 interface Props {
   projects: Project[];
+  eyebrow: string;
+  title: string;
+  allProjectsLabel: string;
+  codeLabel: string;
 }
 
-const { projects } = Astro.props;
+const { projects, eyebrow, title, allProjectsLabel, codeLabel } = Astro.props;
 ---
 
 <section id="latest-work" class="latest-section shell" aria-labelledby="latest-work-title">
-  <p class="eyebrow">{en.work.eyebrow}</p>
-  <h2 id="latest-work-title" class="section-heading">{en.work.title}</h2>
+  <p class="eyebrow">{eyebrow}</p>
+  <h2 id="latest-work-title" class="section-heading">{title}</h2>
   <div class="project-list">
-    {projects.map((project) => <ProjectRow project={project.data} />)}
+    {projects.map((project) => <ProjectRow project={project.data} headingLevel={3} codeLabel={codeLabel} />)}
   </div>
+  <a class="latest-work__archive" href="/work/">{allProjectsLabel}</a>
 </section>
+
+<style>
+  .latest-section {
+    padding-block: var(--space-section);
+  }
+
+  .project-list {
+    border-top: 1px solid var(--color-text);
+  }
+
+  .latest-work__archive {
+    display: inline-block;
+    margin-block-start: 1.5rem;
+    font-weight: 650;
+  }
+</style>

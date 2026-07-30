@@ -5,7 +5,7 @@ type LanguageEntry = {
   };
 };
 
-type FeaturedEntry = LanguageEntry & {
+type ProjectOrderingEntry = LanguageEntry & {
   data: LanguageEntry['data'] & {
     featured: boolean;
     featuredOrder?: number;
@@ -26,7 +26,7 @@ type ProjectKeyEntry = LanguageEntry & {
   };
 };
 
-export function selectFeaturedProjects<T extends FeaturedEntry>(
+export function selectFeaturedProjects<T extends ProjectOrderingEntry>(
   entries: readonly T[],
   lang: string,
   limit: number,
@@ -50,6 +50,24 @@ export function sortUpdatesNewestFirst<T extends UpdateEntry>(
   return [...entries]
     .filter((entry) => entry.data.lang === lang)
     .sort((a, b) => b.data.date.localeCompare(a.data.date) || a.id.localeCompare(b.id));
+}
+
+export function sortProjectsForArchive<T extends ProjectOrderingEntry>(
+  entries: readonly T[],
+  lang: string,
+): T[] {
+  return [...entries]
+    .filter((entry) => entry.data.lang === lang)
+    .sort((a, b) => {
+      if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+      if (a.data.featured && b.data.featured) {
+        return (a.data.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+          (b.data.featuredOrder ?? Number.MAX_SAFE_INTEGER) ||
+          b.data.year - a.data.year ||
+          a.id.localeCompare(b.id);
+      }
+      return b.data.year - a.data.year || a.id.localeCompare(b.id);
+    });
 }
 
 export function assertUniqueProjectKeys(entries: readonly ProjectKeyEntry[]): void {

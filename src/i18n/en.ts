@@ -7,6 +7,9 @@ export const en = {
   },
   profile: {
     role: 'Undergraduate in Artificial Intelligence at South China University of Technology',
+    portraitAlt: 'Portrait of Tenghao Wang',
+    emailLabel: 'Email',
+    githubLabel: 'GitHub',
     introduction:
       'I am an undergraduate in Artificial Intelligence at South China University of Technology. I am interested in world models and multimodal learning, especially how models can build useful internal representations from partial observations.',
     currentWork:
@@ -22,6 +25,7 @@ export const en = {
       'Multimodal grounding',
       'Predictive planning',
     ],
+    interestsLabel: 'Research interests',
   },
   work: {
     eyebrow: 'Work',
@@ -40,7 +44,7 @@ export const en = {
   elsewhere: {
     eyebrow: 'Elsewhere',
     title: 'Elsewhere',
-    description: 'Notes on music, film, and other interests.',
+    description: 'Notes on music and other interests.',
     explore: 'Explore',
   },
   metadata: {

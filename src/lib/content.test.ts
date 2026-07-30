@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   assertUniqueProjectKeys,
   selectFeaturedProjects,
+  sortProjectsForArchive,
   sortUpdatesNewestFirst,
 } from './content';
 import { en } from '../i18n/en';
@@ -31,6 +32,31 @@ describe('sortUpdatesNewestFirst', () => {
       '2026-05-01-project',
       '2026-05-02-award',
     ]);
+  });
+});
+
+describe('sortProjectsForArchive', () => {
+  it('filters by language, orders every archive tier, and does not mutate input', () => {
+    const records = [
+      { id: 'same-year-b', data: { lang: 'en', featured: false, year: 2025 } },
+      { id: 'zh-featured', data: { lang: 'zh', featured: true, featuredOrder: 0, year: 2028 } },
+      { id: 'dynamic-evrp', data: { lang: 'en', featured: true, featuredOrder: 2, year: 2026 } },
+      { id: 'newest-unfeatured', data: { lang: 'en', featured: false, year: 2027 } },
+      { id: 'sparse-navwm', data: { lang: 'en', featured: true, featuredOrder: 1, year: 2026 } },
+      { id: 'older-unfeatured', data: { lang: 'en', featured: false, year: 2024 } },
+      { id: 'same-year-a', data: { lang: 'en', featured: false, year: 2025 } },
+    ];
+    const originalIds = records.map((entry) => entry.id);
+
+    expect(sortProjectsForArchive(records, 'en').map((entry) => entry.id)).toEqual([
+      'sparse-navwm',
+      'dynamic-evrp',
+      'newest-unfeatured',
+      'same-year-a',
+      'same-year-b',
+      'older-unfeatured',
+    ]);
+    expect(records.map((entry) => entry.id)).toEqual(originalIds);
   });
 });
 

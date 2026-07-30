@@ -1,8 +1,25 @@
 ---
 import { Picture } from 'astro:assets';
-import portrait from '../../assets/images/tenghao-wang-portrait.png';
-import { site } from '../../config/site';
-import { en } from '../../i18n/en';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  identity: {
+    name: string;
+    email: string;
+    github: string;
+  };
+  copy: {
+    role: string;
+    portraitAlt: string;
+    emailLabel: string;
+    githubLabel: string;
+    introduction: string;
+    currentWork: string;
+  };
+  portrait: ImageMetadata;
+}
+
+const { identity, copy, portrait } = Astro.props;
 ---
 
 <section id="profile" class="profile shell" aria-labelledby="profile-title">
@@ -13,19 +30,83 @@ import { en } from '../../i18n/en';
       fallbackFormat="png"
       widths={[190, 250, 500]}
       sizes="(max-width: 48rem) 190px, 250px"
-      alt="Portrait of Tenghao Wang"
+      alt={copy.portraitAlt}
       loading="eager"
       fetchpriority="high"
     />
   </figure>
   <div class="profile__copy">
-    <h1 id="profile-title">{site.name}</h1>
-    <p class="profile__role">{en.profile.role}</p>
-    <p>{en.profile.introduction}</p>
-    <p>{en.profile.currentWork}</p>
+    <h1 id="profile-title">{identity.name}</h1>
+    <p class="profile__role">{copy.role}</p>
+    <p>{copy.introduction}</p>
+    <p>{copy.currentWork}</p>
     <p class="profile__links">
-      <a href={`mailto:${site.email}`}>Email</a>
-      <a href={site.github} rel="me">GitHub</a>
+      <a href={`mailto:${identity.email}`}>{copy.emailLabel}</a>
+      <a href={identity.github} rel="me">{copy.githubLabel}</a>
     </p>
   </div>
 </section>
+
+<style>
+  .profile {
+    display: grid;
+    min-height: min(47rem, calc(100dvh - 4.75rem));
+    align-items: center;
+    grid-template-columns: 15.625rem minmax(0, 1fr);
+    gap: 4rem;
+    padding-block: var(--space-section);
+  }
+
+  .profile__portrait {
+    width: 15.625rem;
+    margin: 0;
+  }
+
+  .profile__portrait :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .profile__copy {
+    max-width: var(--reading-width);
+  }
+
+  .profile h1 {
+    max-width: 16ch;
+    margin-block-end: 0.65rem;
+    font-size: clamp(40px, 4vw, 42px);
+  }
+
+  .profile__role {
+    margin-block-end: 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .profile__copy > p:not(.profile__role) {
+    max-width: var(--reading-width);
+    margin-block-end: 1rem;
+  }
+
+  .profile__links {
+    display: flex;
+    gap: 1rem;
+    margin-block-start: 1.5rem;
+    margin-block-end: 0;
+    font-size: 0.95rem;
+    font-weight: 650;
+  }
+
+  @media (max-width: 48rem) {
+    .profile {
+      min-height: auto;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .profile__portrait {
+      width: 11.875rem;
+    }
+  }
+</style>

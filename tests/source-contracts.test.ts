@@ -136,7 +136,10 @@ describe('public source contracts', () => {
       join(projectRoot, 'src', 'layouts', 'BaseLayout.astro'),
       'utf8',
     );
-    const desktopProfile = globalStyles.match(/\.profile\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const profile = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ProfileIntro.astro'),
+      'utf8',
+    );
 
     expect(tokens).toMatch(/--content-width:\s*60rem/);
     expect(tokens).toMatch(/--font-display:\s*['"]Newsreader['"]/);
@@ -145,13 +148,166 @@ describe('public source contracts', () => {
     expect(tokens).toMatch(/--color-rule:\s*#[0-9a-f]{6}/i);
     expect(tokens).toMatch(/--color-bone:\s*#[0-9a-f]{6}/i);
     expect(globalStyles).toContain(':focus-visible');
-    expect(globalStyles).toMatch(/@media\s*\(max-width:\s*48rem\)/);
-    expect(desktopProfile).toMatch(
+    expect(profile).toMatch(/@media\s*\(max-width:\s*48rem\)/);
+    expect(profile).toMatch(
       /grid-template-columns:\s*15\.625rem minmax\(0,\s*1fr\);/,
     );
-    expect(desktopProfile).toMatch(/gap:\s*4rem;/);
+    expect(profile).toMatch(/gap:\s*4rem;/);
     expect(baseLayout).toContain('@fontsource-variable/newsreader');
     expect(baseLayout).toContain('@fontsource-variable/dm-sans');
+  });
+
+  it('keeps feature-owned selectors out of global CSS', () => {
+    const globalStyles = readFileSync(join(projectRoot, 'src', 'styles', 'global.css'), 'utf8');
+
+    [
+      'site-header',
+      'site-name',
+      'site-nav',
+      'site-footer',
+      'profile',
+      'research-field',
+      'interest-list',
+      'latest-section',
+      'project-list',
+      'project-row',
+      'update-list',
+      'update-row',
+      'content-page',
+      'elsewhere-entry',
+    ].forEach((selector) => expect(globalStyles).not.toContain(`.${selector}`));
+  });
+
+  it('keeps homepage components data-free and driven by explicit props', () => {
+    const homeRoot = join(projectRoot, 'src', 'components', 'home');
+    const components = [
+      'ProfileIntro.astro',
+      'ResearchInterests.astro',
+      'LatestWork.astro',
+      'LatestUpdates.astro',
+    ];
+
+    components.forEach((component) => {
+      const source = readFileSync(join(homeRoot, component), 'utf8');
+      expect(source).not.toMatch(/from ['"][^'"]*(?:i18n\/en|config\/site)['"]/);
+      expect(source).not.toMatch(/\bget(?:Collection|Entry|Entries)\s*\(/);
+      expect(source).toContain('interface Props');
+    });
+  });
+
+  it('keeps the latest updates section conditional and self-contained', () => {
+    const indexPage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
+    const latestUpdates = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'LatestUpdates.astro'),
+      'utf8',
+    );
+
+    expect(indexPage).toMatch(/latestUpdates\.length\s*>\s*0\s*&&\s*\(?\s*<LatestUpdates/);
+    expect(latestUpdates).toContain('border-top: 1px solid var(--color-rule);');
+    expect(latestUpdates).not.toContain('+ .latest-section');
+  });
+
+  it('gives reusable records explicit typed heading levels', () => {
+    const projectRow = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'ProjectRow.astro'),
+      'utf8',
+    );
+    const updateList = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'UpdateList.astro'),
+      'utf8',
+    );
+
+    expect(projectRow).toContain("CollectionEntry<'projects'>");
+    expect(projectRow).toMatch(/headingLevel:\s*2\s*\|\s*3/);
+    expect(updateList).toContain("CollectionEntry<'updates'>");
+    expect(updateList).toMatch(/headingLevel:\s*2\s*\|\s*3/);
+  });
+
+  it('passes all homepage record and accessibility labels explicitly', () => {
+    const indexPage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
+    const latestWork = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'LatestWork.astro'),
+      'utf8',
+    );
+    const projectRow = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'ProjectRow.astro'),
+      'utf8',
+    );
+    const profile = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ProfileIntro.astro'),
+      'utf8',
+    );
+    const research = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ResearchInterests.astro'),
+      'utf8',
+    );
+
+    expect(indexPage).toMatch(
+      /<ProfileIntro\s+identity=\{site\}\s+copy=\{en\.profile\}\s+portrait=\{portrait\}\s*\/>/,
+    );
+    expect(indexPage).toMatch(
+      /<ResearchInterests\s+copy=\{en\.research\}\s+image=\{researchImage\}\s*\/>/,
+    );
+    expect(indexPage).toMatch(
+      /<LatestWork[\s\S]*?title=\{en\.work\.title\}[\s\S]*?allProjectsLabel=\{en\.work\.allProjects\}[\s\S]*?codeLabel=\{en\.links\.code\}[\s\S]*?\/>/,
+    );
+    expect(indexPage).toMatch(
+      /<LatestUpdates[\s\S]*?title=\{en\.updates\.title\}[\s\S]*?allUpdatesLabel=\{en\.updates\.allUpdates\}[\s\S]*?\/>/,
+    );
+    expect(latestWork).toContain('allProjectsLabel: string');
+    expect(latestWork).toContain('codeLabel: string');
+    expect(projectRow).toContain('codeLabel: string');
+    expect(projectRow).not.toContain('>Code</a>');
+    expect(profile).toContain('portraitAlt: string');
+    expect(profile).toContain('emailLabel: string');
+    expect(profile).toContain('githubLabel: string');
+    expect(research).toContain('interestsLabel: string');
+  });
+
+  it('uses the content-width shell for wide archive pages and metadata config values', () => {
+    const contentLayout = readFileSync(join(projectRoot, 'src', 'layouts', 'ContentLayout.astro'), 'utf8');
+    const workDetail = readFileSync(join(projectRoot, 'src', 'pages', 'work', '[slug].astro'), 'utf8');
+    const footer = readFileSync(join(projectRoot, 'src', 'components', 'layout', 'SiteFooter.astro'), 'utf8');
+
+    expect(contentLayout).toContain('content-page--wide');
+    expect(contentLayout).toContain('--content-width');
+    expect(contentLayout).toContain('.content-page__body :global(h2)');
+    expect(contentLayout).toContain('.content-page__header > p');
+    expect(contentLayout).not.toContain('.content-page__meta');
+    expect(workDetail).toContain('en.metadata.year');
+    expect(workDetail).toContain('en.metadata.role');
+    expect(workDetail).toContain('en.metadata.topics');
+    expect(workDetail).toContain('en.links.code');
+    expect(workDetail).toContain('.content-page__meta');
+    expect(footer).toContain('site.name');
+    expect(footer).toContain('site.location');
+    expect(footer).toContain('site.email');
+    expect(footer).toContain('site.github');
+    expect(footer).toContain('new Date().getFullYear()');
+  });
+
+  it('keeps classified record metadata visible without competing selector specificity', () => {
+    const projectRow = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'ProjectRow.astro'),
+      'utf8',
+    );
+    const updateList = readFileSync(
+      join(projectRoot, 'src', 'components', 'content', 'UpdateList.astro'),
+      'utf8',
+    );
+
+    expect(projectRow).toContain('.project-row__meta .project-row__classification');
+    expect(projectRow).not.toContain('!important');
+    expect(updateList).toContain('.update-row > .update-row__meta');
+    expect(updateList).toMatch(/\.update-row\s*>\s*\.update-row__meta\s*\{[\s\S]*font-size:\s*0\.86rem;/);
+  });
+
+  it('centralizes the accurate Elsewhere description', () => {
+    const locale = readFileSync(join(projectRoot, 'src', 'i18n', 'en.ts'), 'utf8');
+    const page = readFileSync(join(projectRoot, 'src', 'pages', 'elsewhere', 'index.astro'), 'utf8');
+
+    expect(locale).toContain("description: 'Notes on music and other interests.'");
+    expect(page).toContain('en.elsewhere.description');
   });
 
   it('keeps visual effects restrained and requires no client framework', () => {

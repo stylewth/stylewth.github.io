@@ -44,6 +44,18 @@ function expectDocumentShell(page: string, canonicalPath: string, title: string)
   expect(page).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
 }
 
+function expectNoHeadingLevelSkips(page: string): void {
+  const headings = [...page.matchAll(/<h([1-6])(?:\s|>)/g)].map((match) => Number(match[1]));
+
+  headings.slice(1).forEach((level, index) => {
+    expect(level).toBeLessThanOrEqual(headings[index] + 1);
+  });
+}
+
+function elementFragments(page: string, tag: 'article' | 'li', className: string): string[] {
+  return page.match(new RegExp(`<${tag} class="${className}"[^>]*>[\\s\\S]*?</${tag}>`, 'g')) ?? [];
+}
+
 describe('homepage output', () => {
   it('publishes complete metadata without executable scripts', () => {
     expect(html).toContain('<title>Tenghao Wang | Academic Portfolio</title>');
@@ -124,17 +136,20 @@ describe('homepage output', () => {
 
     expect(profile).toMatch(/<h1[^>]*>Tenghao Wang<\/h1>/);
     expect(profile).toMatch(
-      /<p class="profile__role">Undergraduate in Artificial Intelligence at South China University of Technology<\/p>/,
+      /<p class="profile__role"[^>]*>Undergraduate in Artificial Intelligence at South China University of Technology<\/p>/,
     );
-    expect(profile).toMatch(/<a href="mailto:202464871049@mail\.scut\.edu\.cn">Email<\/a>/);
+    expect(profile).toMatch(/<a href="mailto:202464871049@mail\.scut\.edu\.cn"[^>]*>Email<\/a>/);
     expect(profile).toMatch(/<a href="https:\/\/github\.com\/stylewth"[^>]*>GitHub<\/a>/);
     expect(profile).not.toContain('Academic portfolio');
   });
 
   it('uses a compact academic profile heading and a dynamic viewport height', () => {
-    const globalStyles = readFileSync(join(process.cwd(), 'src', 'styles', 'global.css'), 'utf8');
-    const desktopProfile = globalStyles.match(/\.profile\s*\{([^}]*)\}/s)?.[1] ?? '';
-    const profileHeading = globalStyles.match(/\.profile h1\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const profileStyles = readFileSync(
+      join(process.cwd(), 'src', 'components', 'home', 'ProfileIntro.astro'),
+      'utf8',
+    );
+    const desktopProfile = profileStyles.match(/\.profile\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const profileHeading = profileStyles.match(/\.profile h1\s*\{([^}]*)\}/s)?.[1] ?? '';
 
     expect(profileHeading).toMatch(/font-size:\s*clamp\(40px,\s*4vw,\s*42px\);/);
     expect(desktopProfile).toMatch(/min-height:\s*min\(47rem,\s*calc\(100dvh - 4\.75rem\)\);/);
@@ -147,6 +162,23 @@ describe('homepage output', () => {
     expect(html.indexOf('Completed SparseNavWM')).toBeLessThan(
       html.indexOf('MCM Honorable Mention'),
     );
+  });
+
+  it('uses nested record headings and exposes project and update classifications', () => {
+    const projectRows = elementFragments(html, 'article', 'project-row');
+    const updateRows = elementFragments(html, 'li', 'update-row');
+    const sparseNavwm = projectRows.find((row) => row.includes('SparseNavWM'));
+    const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
+    const sparseUpdate = updateRows.find((row) => row.includes('Completed SparseNavWM'));
+
+    expectNoHeadingLevelSkips(html);
+    expect(sparseNavwm).toContain('research');
+    expect(sparseNavwm).toContain('completed');
+    expect(dynamicEvrp).toContain('engineering');
+    expect(dynamicEvrp).toContain('completed');
+    expect(sparseUpdate).toMatch(/<time[^>]*>2026-06<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
+    expect(html).toMatch(/<a[^>]+href="\/work\/"[^>]*>All projects<\/a>/);
+    expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>All updates<\/a>/);
   });
 
   it('emits the portrait before the rabbit field with modern image sources', () => {
@@ -227,6 +259,15 @@ describe('content archive output', () => {
     expect(work).toContain('https://github.com/stylewth/EVRP-datastructure');
     expect(work).not.toMatch(/>Paper<\/a>|>Demo<\/a>|>Scholar<\/a>/);
     expect(work).toMatch(/<a[^>]+href="\/work\/"[^>]+aria-current="page"[^>]*>Work<\/a>/);
+    expectNoHeadingLevelSkips(work);
+    expect(work.indexOf('SparseNavWM')).toBeLessThan(work.indexOf('Dynamic EVRP'));
+    const projectRows = elementFragments(work, 'article', 'project-row');
+    const sparseNavwm = projectRows.find((row) => row.includes('SparseNavWM'));
+    const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
+    expect(sparseNavwm).toContain('research');
+    expect(sparseNavwm).toContain('completed');
+    expect(dynamicEvrp).toContain('engineering');
+    expect(dynamicEvrp).toContain('completed');
   });
 
   it('publishes dynamic project details from the full Markdown bodies', () => {
@@ -252,6 +293,10 @@ describe('content archive output', () => {
       updates.indexOf('MCM Honorable Mention'),
     );
     expect(updates).toMatch(/<a[^>]+href="\/updates\/"[^>]+aria-current="page"[^>]*>Updates<\/a>/);
+    expectNoHeadingLevelSkips(updates);
+    const updateRows = elementFragments(updates, 'li', 'update-row');
+    const sparseUpdate = updateRows.find((row) => row.includes('Completed SparseNavWM'));
+    expect(sparseUpdate).toMatch(/<time[^>]*>2026-06<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
   });
 
   it('publishes Elsewhere as an index using the full entry body without empty categories', () => {
@@ -261,6 +306,13 @@ describe('content archive output', () => {
     expect(elsewhere).toContain('Pink Floyd, The Beatles, Radiohead, and The Smashing Pumpkins');
     expect(elsewhere).not.toMatch(/<h2[^>]*>Film<\/h2>/);
     expect(elsewhere).toMatch(/<a[^>]+href="\/elsewhere\/"[^>]+aria-current="page"[^>]*>Elsewhere<\/a>/);
+  });
+
+  it('uses the approved Elsewhere description', () => {
+    const elsewhere = readOutput('elsewhere/index.html');
+
+    expect(elsewhere).toContain('Notes on music and other interests.');
+    expect(elsewhere).not.toContain('Notes on music, film, and other interests.');
   });
 
   it('publishes a minimal noindex 404 page', () => {

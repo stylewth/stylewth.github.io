@@ -11,6 +11,9 @@ import {
   sortUpdatesNewestFirst,
 } from '../lib/content';
 import { site } from '../config/site';
+import { en } from '../i18n/en';
+import portrait from '../assets/images/tenghao-wang-portrait.png';
+import researchImage from '../assets/images/research-world-model-rabbit.png';
 
 const projects = await getCollection('projects');
 const updates = await getCollection('updates');
@@ -41,8 +44,23 @@ const personJsonLd = {
   canonicalPath="/"
   jsonLd={personJsonLd}
 >
-  <ProfileIntro />
-  <ResearchInterests />
-  <LatestWork projects={featuredProjects} />
-  <LatestUpdates updates={latestUpdates} />
+  <ProfileIntro identity={site} copy={en.profile} portrait={portrait} />
+  <ResearchInterests copy={en.research} image={researchImage} />
+  <LatestWork
+    projects={featuredProjects}
+    eyebrow={en.work.eyebrow}
+    title={en.work.title}
+    allProjectsLabel={en.work.allProjects}
+    codeLabel={en.links.code}
+  />
+  {
+    latestUpdates.length > 0 && (
+      <LatestUpdates
+        updates={latestUpdates}
+        eyebrow={en.updates.eyebrow}
+        title={en.updates.title}
+        allUpdatesLabel={en.updates.allUpdates}
+      />
+    )
+  }
 </BaseLayout>

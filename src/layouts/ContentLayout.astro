@@ -25,3 +25,55 @@ const { title, description, eyebrow, canonicalPath, documentTitle, wide = false 
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .content-page {
+    min-height: 65vh;
+    padding-block: var(--space-section);
+  }
+
+  .content-page__header {
+    margin-block-end: 3rem;
+  }
+
+  .content-page__header h1 {
+    margin-block-end: 1rem;
+    font-size: clamp(2.75rem, 6vw, 5.4rem);
+  }
+
+  .content-page__header > p {
+    max-width: var(--reading-width);
+  }
+
+  .content-page__body {
+    max-width: var(--reading-width);
+  }
+
+  .content-page--wide {
+    width: min(calc(100% - (2 * var(--space-page))), var(--content-width));
+  }
+
+  .content-page--wide .content-page__body {
+    max-width: var(--content-width);
+  }
+
+  .content-page__body :global(h2) {
+    margin-block: 3rem 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .content-page__body :global(h3) {
+    margin-block: 2rem 0.75rem;
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+  }
+
+  .content-page__body :global(p),
+  .content-page__body :global(ul),
+  .content-page__body :global(ol) {
+    margin-block-end: 1.25rem;
+  }
+
+  .content-page__body :global(li + li) {
+    margin-block-start: 0.4rem;
+  }
+</style>

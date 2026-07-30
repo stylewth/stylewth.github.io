@@ -2,15 +2,14 @@
 import { getCollection } from 'astro:content';
 import ProjectRow from '../../components/content/ProjectRow.astro';
 import { site } from '../../config/site';
+import { en } from '../../i18n/en';
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { assertUniqueProjectKeys } from '../../lib/content';
+import { assertUniqueProjectKeys, sortProjectsForArchive } from '../../lib/content';
 
 const projects = await getCollection('projects');
 assertUniqueProjectKeys(projects);
 
-const publishedProjects = projects
-  .filter((entry) => entry.data.lang === 'en')
-  .sort((a, b) => b.data.year - a.data.year || a.id.localeCompare(b.id));
+const publishedProjects = sortProjectsForArchive(projects, 'en');
 ---
 
 <ContentLayout
@@ -21,6 +20,12 @@ const publishedProjects = projects
   wide
 >
   <div class="project-list">
-    {publishedProjects.map((project) => <ProjectRow project={project.data} />)}
+    {publishedProjects.map((project) => <ProjectRow project={project.data} headingLevel={2} codeLabel={en.links.code} />)}
   </div>
 </ContentLayout>
+
+<style>
+  .project-list {
+    border-top: 1px solid var(--color-text);
+  }
+</style>
