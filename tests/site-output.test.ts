@@ -40,6 +40,7 @@ describe('homepage output', () => {
     expect(html).toContain('mailto:202464871049@mail.scut.edu.cn');
     expect(html).toContain('https://github.com/stylewth');
     expect(html).toContain('Guangzhou, China');
+    expect(html).toContain('© 2026 Tenghao Wang');
   });
 
   it('keeps the four homepage sections in the approved order', () => {
@@ -63,6 +64,29 @@ describe('homepage output', () => {
     expect(html).toContain('World representations');
     expect(html).toContain('Multimodal grounding');
     expect(html).toContain('Predictive planning');
+  });
+
+  it('renders an academic profile hierarchy with direct contact links', () => {
+    const profileStart = sectionPosition('profile');
+    const profileEnd = html.indexOf('</section>', profileStart);
+    const profile = html.slice(profileStart, profileEnd);
+
+    expect(profile).toMatch(/<h1[^>]*>Tenghao Wang<\/h1>/);
+    expect(profile).toMatch(
+      /<p class="profile__role">Undergraduate in Artificial Intelligence at South China University of Technology<\/p>/,
+    );
+    expect(profile).toMatch(/<a href="mailto:202464871049@mail\.scut\.edu\.cn">Email<\/a>/);
+    expect(profile).toMatch(/<a href="https:\/\/github\.com\/stylewth"[^>]*>GitHub<\/a>/);
+    expect(profile).not.toContain('Academic portfolio');
+  });
+
+  it('uses a compact academic profile heading and a dynamic viewport height', () => {
+    const globalStyles = readFileSync(join(process.cwd(), 'src', 'styles', 'global.css'), 'utf8');
+    const desktopProfile = globalStyles.match(/\.profile\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const profileHeading = globalStyles.match(/\.profile h1\s*\{([^}]*)\}/s)?.[1] ?? '';
+
+    expect(profileHeading).toMatch(/font-size:\s*clamp\(40px,\s*4vw,\s*42px\);/);
+    expect(desktopProfile).toMatch(/min-height:\s*min\(47rem,\s*calc\(100dvh - 4\.75rem\)\);/);
   });
 
   it('renders exactly two selected projects and three newest updates', () => {

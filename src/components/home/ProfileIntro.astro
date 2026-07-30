@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import portrait from '../../assets/images/tenghao-wang-portrait.png';
+import { site } from '../../config/site';
 import { en } from '../../i18n/en';
 ---
 
@@ -18,9 +19,13 @@ import { en } from '../../i18n/en';
     />
   </figure>
   <div class="profile__copy">
-    <p class="eyebrow">Academic portfolio</p>
-    <h1 id="profile-title">{en.profile.role}</h1>
+    <h1 id="profile-title">{site.name}</h1>
+    <p class="profile__role">{en.profile.role}</p>
     <p>{en.profile.introduction}</p>
     <p>{en.profile.currentWork}</p>
+    <p class="profile__links">
+      <a href={`mailto:${site.email}`}>Email</a>
+      <a href={site.github} rel="me">GitHub</a>
+    </p>
   </div>
 </section>
