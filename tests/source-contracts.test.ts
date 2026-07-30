@@ -78,6 +78,7 @@ describe('public source contracts', () => {
       join(projectRoot, 'src', 'layouts', 'BaseLayout.astro'),
       'utf8',
     );
+    const desktopProfile = globalStyles.match(/\.profile\s*\{([^}]*)\}/s)?.[1] ?? '';
 
     expect(tokens).toMatch(/--content-width:\s*60rem/);
     expect(tokens).toMatch(/--font-display:\s*['"]Newsreader['"]/);
@@ -87,6 +88,10 @@ describe('public source contracts', () => {
     expect(tokens).toMatch(/--color-bone:\s*#[0-9a-f]{6}/i);
     expect(globalStyles).toContain(':focus-visible');
     expect(globalStyles).toMatch(/@media\s*\(max-width:\s*48rem\)/);
+    expect(desktopProfile).toMatch(
+      /grid-template-columns:\s*15\.625rem minmax\(0,\s*1fr\);/,
+    );
+    expect(desktopProfile).toMatch(/gap:\s*4rem;/);
     expect(baseLayout).toContain('@fontsource-variable/newsreader');
     expect(baseLayout).toContain('@fontsource-variable/dm-sans');
   });

@@ -122,7 +122,7 @@ h3 {
   min-height: min(47rem, calc(100vh - 4.75rem));
   align-items: center;
   grid-template-columns: 15.625rem minmax(0, 1fr);
-  gap: clamp(3rem, 8vw, 7rem);
+  gap: 4rem;
   padding-block: var(--space-section);
 }
 
