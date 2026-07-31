@@ -1829,10 +1829,12 @@ Replace the global executable-script test with:
 Add this assertion to the Elsewhere Top Tens test:
 
 ```ts
-expect(elsewhere).toMatch(
-  /<script(?=[^>]+type="module")(?=[^>]+src="\/_astro\/[^"]+\.js")[^>]*>/,
-);
+expect(elsewhere).toMatch(/<script[^>]+type="module"[^>]*>/);
 ```
+
+Astro automatically inlines small processed module scripts. The contract
+therefore checks for one route-local module script and deliberately allows
+either Astro's inline form or an external bundled asset.
 
 - [ ] **Step 7: Build and verify RED for the route-local script**
 
@@ -1866,7 +1868,8 @@ npm run build:site
 npx vitest run tests/site-output.test.ts
 ```
 
-Expected: all commands pass with exactly one bundled interaction script on `/elsewhere/`.
+Expected: all commands pass with exactly one processed interaction script on
+`/elsewhere/`, whether Astro emits it inline or as an external asset.
 
 - [ ] **Step 10: Commit**
 
