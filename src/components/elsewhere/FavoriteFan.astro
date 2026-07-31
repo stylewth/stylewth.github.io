@@ -135,9 +135,10 @@ const tabId = `favorite-tab-${kind}`;
   }
 
   .favorite-card__foot {
+    box-sizing: border-box;
     display: flex;
     gap: 0.38rem;
-    min-height: 3.6rem;
+    height: 5.6rem;
     align-items: center;
     padding: 0.8rem;
     color: var(--color-muted);
@@ -155,6 +156,11 @@ const tabId = `favorite-tab-${kind}`;
 
   :global(favorites-stage[data-enhanced]) .favorite-card__trigger {
     cursor: pointer;
+  }
+
+  :global(favorites-stage[data-enhanced]) .favorite-card__trigger:focus-visible {
+    outline: 2px solid var(--favorite-accent);
+    outline-offset: -3px;
   }
 
   :global(favorites-stage[data-enhanced]) .favorite-fan__viewport {
@@ -186,8 +192,7 @@ const tabId = `favorite-tab-${kind}`;
       opacity 180ms ease;
   }
 
-  :global(favorites-stage[data-enhanced]) .favorite-card:hover,
-  :global(favorites-stage[data-enhanced]) .favorite-card:focus-within {
+  :global(favorites-stage[data-enhanced]) .favorite-card:hover {
     z-index: 30;
     transform:
       translate3d(calc(-50% + var(--fan-x)), calc(var(--fan-y) - 1rem), 0)
@@ -209,8 +214,7 @@ const tabId = `favorite-tab-${kind}`;
       transition: none;
     }
 
-    :global(favorites-stage[data-enhanced]) .favorite-card:hover,
-    :global(favorites-stage[data-enhanced]) .favorite-card:focus-within {
+    :global(favorites-stage[data-enhanced]) .favorite-card:hover {
       transform:
         translate3d(calc(-50% + var(--fan-x)), var(--fan-y), 0)
         rotate(var(--fan-rotation));

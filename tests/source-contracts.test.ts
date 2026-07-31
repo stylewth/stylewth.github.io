@@ -780,6 +780,22 @@ describe('public source contracts', () => {
     );
   });
 
+  it('restores focused cards to the fan and keeps every caption the same height', () => {
+    const fan = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoriteFan.astro'),
+      'utf8',
+    );
+
+    expect(fan).not.toContain('.favorite-card:focus-within');
+    expect(fan).toMatch(
+      /\.favorite-card__trigger:focus-visible\s*\{[^}]*outline:[^;}]+;[^}]*\}/,
+    );
+    expect(fan).toMatch(
+      /\.favorite-card__foot\s*\{[^}]*box-sizing:\s*border-box;[^}]*height:\s*5\.6rem;[^}]*\}/,
+    );
+    expect(fan).not.toMatch(/\.favorite-card__foot\s*\{[^}]*min-height:/);
+  });
+
   it('keeps visual effects restrained and requires no client framework', () => {
     const source = projectFiles(projectRoot)
       .filter((file) => designSourceExtensions.has(extname(file).toLowerCase()))
