@@ -218,16 +218,16 @@ Cross-record invariants belong in a reusable content assertion with unit coverag
 |---:|---|---|---:|---|---|
 | 1 | *The Dark Side of the Moon* | — | 1973 | Pink Floyd | [Pink Floyd](https://www.pinkfloyd.com/albums/the-dark-side-of-the-moon/) |
 | 2 | *The Key* | — | 2013 | Eason Chan | [Apple Music](https://music.apple.com/us/album/the-key/1386714588) |
-| 3 | *Heisei Fuuzoku — Japanese Manners* | 平成風俗 | 2007 | Sheena Ringo × Neko Saito | [Kronekodow](https://www.kronekodow.com/disc_detail.php?id=1316&r_cat_id=28) |
+| 3 | *Heisei Fuuzoku - Japanese Manners* | 平成風俗 | 2007 | Sheena Ringo × Neko Saito | [Kronekodow](https://www.kronekodow.com/disc_detail.php?id=1316&r_cat_id=28) |
 | 4 | *OK Computer* | — | 1997 | Radiohead | [Apple Music](https://music.apple.com/us/album/ok-computer/1097861387) |
-| 5 | *Karuki Zahmen Kuri No Hana — Kalk Samen Chestnut Flower* | 加爾基 精液 栗ノ花 | 2003 | Sheena Ringo | [Universal Music Japan](https://www.universal-music.co.jp/sheena-ringo/products/toct-24942/) |
+| 5 | *Karuki Zahmen Kuri No Hana - Kalk Samen Chestnut Flower* | 加爾基 精液 栗ノ花 | 2003 | Sheena Ringo | [Universal Music Japan](https://www.universal-music.co.jp/sheena-ringo/products/toct-24942/) |
 | 6 | *Inside the Cable Temple* | 冀西南林路行 | 2020 | Omnipotent Youth Society | [Apple Music](https://music.apple.com/us/album/%E5%86%80%E8%A5%BF%E5%8D%97%E6%9E%97%E8%B7%AF%E8%A1%8C/1545534900) |
 | 7 | *Siamese Dream* | — | 1993 | The Smashing Pumpkins | [Apple Music](https://music.apple.com/us/album/siamese-dream/721207206) |
 | 8 | *CRIMSON* | — | 1986 | Akina Nakamori | [Apple Music Japan](https://music.apple.com/jp/album/crimson/903270513) |
 | 9 | *Selling England by the Pound* | — | 1973 | Genesis | [MusicBrainz release group](https://musicbrainz.org/release-group/1fadec3d-7451-32e8-9194-ad7e5312cb9b) |
 | 10 | *good kid, m.A.A.d city* | — | 2012 | Kendrick Lamar | [Apple Music](https://music.apple.com/us/album/good-kid-m-a-a-d-city/1471263898) |
 
-Use the original standard edition for every album. Do not use anniversary, remaster, deluxe, expanded, or alternate-cover editions. Preserve the collaborative credit for *Heisei Fuuzoku — Japanese Manners* and the all-caps styling of *CRIMSON*.
+Use the original standard edition for every album. Do not use anniversary, remaster, deluxe, expanded, or alternate-cover editions. Preserve the collaborative credit for *Heisei Fuuzoku - Japanese Manners* and the all-caps styling of *CRIMSON*.
 
 ## 8. Cover Asset Rules
 
