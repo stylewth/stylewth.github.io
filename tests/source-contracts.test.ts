@@ -714,6 +714,24 @@ describe('public source contracts', () => {
     expect(source).not.toContain('\u2014');
   });
 
+  it('resets intrinsic favorite artwork heights in cards and the focus dialog', () => {
+    const fan = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoriteFan.astro'),
+      'utf8',
+    );
+    const stage = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoritesStage.astro'),
+      'utf8',
+    );
+
+    expect(fan).toMatch(
+      /\.favorite-card__trigger\s+:global\(img\)\s*\{[^}]*height:\s*auto;[^}]*\}/,
+    );
+    expect(stage).toMatch(
+      /\.favorite-dialog__art\s+:global\(img\)\s*\{[^}]*height:\s*auto;[^}]*\}/,
+    );
+  });
+
   it('keeps visual effects restrained and requires no client framework', () => {
     const source = projectFiles(projectRoot)
       .filter((file) => designSourceExtensions.has(extname(file).toLowerCase()))
