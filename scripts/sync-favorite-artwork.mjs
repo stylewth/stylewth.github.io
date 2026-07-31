@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import matter from 'gray-matter';
 
 const SPOTIFY_ALBUM_URL = /^https:\/\/open\.spotify\.com\/album\/([A-Za-z0-9]+)$/;
+const SPOTIFY_IMAGE_CDN_HOST = /^image-cdn-[a-z0-9-]+\.spotifycdn\.com$/;
 
 function requireNonEmptyString(value, field, filename) {
   if (typeof value !== 'string' || value.trim() === '') {
@@ -202,7 +203,8 @@ async function fetchSpotifyArtwork(entry, options) {
   }
   if (
     thumbnail.protocol !== 'https:' ||
-    thumbnail.hostname !== 'i.scdn.co' ||
+    (thumbnail.hostname !== 'i.scdn.co' &&
+      !SPOTIFY_IMAGE_CDN_HOST.test(thumbnail.hostname)) ||
     thumbnail.pathname === '/'
   ) {
     throw new Error(`Spotify thumbnail host is invalid for ${entry.translationKey}`);

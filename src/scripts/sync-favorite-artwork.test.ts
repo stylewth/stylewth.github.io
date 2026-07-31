@@ -294,6 +294,26 @@ describe('buildFavoriteArtworkManifest', () => {
     expect(serialized).not.toContain('iframe');
   });
 
+  it('accepts Spotify oEmbed artwork from an image-cdn spotifycdn.com host', async () => {
+    const imageUrl =
+      'https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02abc123';
+    const fetch = async () => spotifyResponse({ thumbnail_url: imageUrl });
+
+    await expect(
+      buildFavoriteArtworkManifest([albumEntry()], {
+        token: 'TOKEN',
+        fetch,
+        generatedAt,
+      }),
+    ).resolves.toMatchObject({
+      items: {
+        'album-one': {
+          imageUrl,
+        },
+      },
+    });
+  });
+
   it('starts all provider requests before awaiting their results', async () => {
     const calls: string[] = [];
     const resolvers: Array<(response: Response) => void> = [];

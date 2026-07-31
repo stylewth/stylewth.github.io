@@ -8,7 +8,9 @@ export type TmdbArtwork = {
 export type SpotifyArtwork = {
   provider: 'spotify';
   providerId: string;
-  imageUrl: `https://i.scdn.co/${string}`;
+  imageUrl:
+    | `https://i.scdn.co/${string}`
+    | `https://image-cdn-${string}.spotifycdn.com/${string}`;
   imageWidth: number;
   imageHeight: number;
   sourceUrl: `https://open.spotify.com/album/${string}`;
@@ -30,6 +32,7 @@ export type FavoriteProviderEntry =
 const tmdbImageBaseUrl = 'https://image.tmdb.org/t/p';
 const tmdbImageSizes = ['w342', 'w500', 'w780'] as const;
 const spotifyAlbumUrlPattern = /^https:\/\/open\.spotify\.com\/album\/([A-Za-z0-9]+)$/;
+const spotifyImageCdnHostPattern = /^image-cdn-[a-z0-9-]+\.spotifycdn\.com$/;
 
 export function tmdbImageUrl(
   posterPath: `/${string}`,
@@ -114,7 +117,18 @@ function assertSpotifyArtwork(
   if (!albumMatch || artwork.providerId !== albumMatch[1]) {
     throw new Error(`${entry.translationKey} has an invalid Spotify provider ID`);
   }
-  if (!/^https:\/\/i\.scdn\.co\/.+/.test(artwork.imageUrl)) {
+  let imageUrl: URL;
+  try {
+    imageUrl = new URL(artwork.imageUrl);
+  } catch {
+    throw new Error(`${entry.translationKey} has an invalid Spotify image URL`);
+  }
+  if (
+    imageUrl.protocol !== 'https:' ||
+    (imageUrl.hostname !== 'i.scdn.co' &&
+      !spotifyImageCdnHostPattern.test(imageUrl.hostname)) ||
+    imageUrl.pathname === '/'
+  ) {
     throw new Error(`${entry.translationKey} has an invalid Spotify image URL`);
   }
   if (!Number.isFinite(artwork.imageWidth) || artwork.imageWidth <= 0) {

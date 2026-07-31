@@ -131,4 +131,13 @@ describe('favorite artwork providers', () => {
   it('accepts matching provider entries and manifest items', () => {
     expect(() => assertFavoriteArtworkManifest(entries, manifest)).not.toThrow();
   });
+
+  it('accepts Spotify oEmbed artwork from an image-cdn spotifycdn.com host', () => {
+    const spotifyCdnManifest = structuredClone(manifest);
+    Object.assign(spotifyCdnManifest.items['the-dark-side-of-the-moon'], {
+      imageUrl: 'https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02abc123',
+    });
+
+    expect(() => assertFavoriteArtworkManifest(entries, spotifyCdnManifest)).not.toThrow();
+  });
 });
