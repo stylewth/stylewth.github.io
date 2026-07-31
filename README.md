@@ -69,6 +69,31 @@ lang: en
 The entry body can add context without changing the site structure.
 ```
 
+## Favorite Markdown example
+
+Favorites live in `src/content/favorites/film` and `src/content/favorites/album`. Keep exactly 10 films and 10 albums, with each kind ranked once from `1` through `10`. Store each cover locally under `src/assets/images/favorites/films` or `src/assets/images/favorites/albums`; use the established `film-01-...` or `album-01-...` filename pattern and point `cover` to that local file.
+
+```md
+---
+title: Taxi Driver
+translationKey: taxi-driver
+kind: film
+rank: 1
+year: 1976
+creator: Martin Scorsese
+cover: ../../../assets/images/favorites/films/film-01-taxi-driver-us-theatrical.jpg
+coverAlt: 1976 US Columbia theatrical one-sheet for Taxi Driver
+coverSourceUrl: https://www.impawards.com/1976/taxi_driver_ver1.html
+coverCredit: Artwork by Guy Peellaert. Poster copyright Columbia Pictures.
+editionNote: 1976 first-run US Columbia one-sheet
+lang: en
+---
+```
+
+The review is optional. When there is no review, omit the field entirely instead of writing an empty value. Keep `coverSourceUrl`, `coverCredit`, and `editionNote` for every favorite so the source, attribution, and edition are recorded.
+
+Do not hotlink covers or recolor, crop, or use generated imitations of the artwork. Before public deployment, pass the artwork permission and attribution gate: a source or attribution does not equal permission to republish. Do not publicly deploy these covers without permission to do so.
+
 ## Site config and i18n
 
 Update identity, URLs, contact details, and default metadata in the site config at `src/config/site.ts`. Public interface copy lives in `src/i18n/en.ts`. Add Chinese only as a deliberately designed second locale: introduce a `zh` content language, paired translations sharing the same `translationKey`, localized routes, and a visible language switcher before adding Chinese content. Do not mix Chinese records into the current English-only collections.

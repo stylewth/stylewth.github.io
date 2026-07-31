@@ -368,6 +368,12 @@ describe('public source contracts', () => {
     expect(readme).toContain('## Project Markdown example');
     expect(readme).toContain('## Update Markdown example');
     expect(readme).toContain('## Elsewhere Markdown example');
+    expect(readme).toContain('## Favorite Markdown example');
+    expect(readme).toContain('review is optional');
+    expect(readme).toContain('coverSourceUrl');
+    expect(readme).toContain('editionNote');
+    expect(readme).toContain('exactly 10 films and 10 albums');
+    expect(readme).toContain('artwork permission and attribution gate');
     expect(readme).toContain('site config');
     expect(readme).toContain('i18n');
     expect(readme).toContain('CV gate');
