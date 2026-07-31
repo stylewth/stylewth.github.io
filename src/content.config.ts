@@ -90,25 +90,29 @@ const elsewhere = defineCollection({
       }),
 });
 
+const favoriteBase = z.object({
+  title: z.string().trim().min(1),
+  originalTitle: z.string().trim().min(1).optional(),
+  translationKey: z.string().trim().min(1),
+  rank: z.number().int().min(1).max(10),
+  year: z.number().int().min(1900).max(9999),
+  creator: z.string().trim().min(1),
+  coverAlt: z.string().trim().min(1),
+  review: z.string().trim().min(1).max(180).optional(),
+  lang: language,
+});
+
 const favorites = defineCollection({
   loader: glob({ base: './src/content/favorites', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string().trim().min(1),
-      originalTitle: z.string().trim().min(1).optional(),
-      translationKey: z.string().trim().min(1),
-      kind: z.enum(['film', 'album']),
-      rank: z.number().int().min(1).max(10),
-      year: z.number().int().min(1900).max(9999),
-      creator: z.string().trim().min(1),
-      cover: image(),
-      coverAlt: z.string().trim().min(1),
-      coverSourceUrl: z.url(),
-      coverCredit: z.string().trim().min(1).optional(),
-      editionNote: z.string().trim().min(1),
-      review: z.string().trim().min(1).max(180).optional(),
-      lang: language,
+  schema: z.discriminatedUnion('kind', [
+    favoriteBase.extend({ kind: z.literal('film'), tmdbId: z.number().int().positive() }),
+    favoriteBase.extend({
+      kind: z.literal('album'),
+      spotifyUrl: z
+        .url()
+        .refine((value) => /^https:\/\/open\.spotify\.com\/album\/[A-Za-z0-9]+$/.test(value)),
     }),
+  ]),
 });
 
 export const collections = {
