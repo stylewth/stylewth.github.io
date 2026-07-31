@@ -85,3 +85,180 @@ const { films, albums, copy } = Astro.props;
     </article>
   </dialog>
 </favorites-stage>
+
+<style>
+  favorites-stage {
+    --favorite-accent: #9f3d2f;
+
+    display: block;
+  }
+
+  .favorites-stage__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: end;
+    padding-block-end: 1rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .favorites-stage__header h2 {
+    margin: 0;
+    font-size: clamp(2.5rem, 5vw, 4.25rem);
+  }
+
+  favorites-stage[data-enhanced] .favorites-stage__tabs {
+    display: flex;
+    gap: 1.35rem;
+  }
+
+  favorites-stage[data-enhanced] .favorites-stage__tabs button,
+  favorites-stage[data-enhanced] .favorite-dialog__close {
+    padding: 0.35rem 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--color-muted);
+    font: 650 0.78rem/1 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  favorites-stage[data-enhanced] .favorites-stage__tabs button[aria-selected='true'] {
+    border-bottom-color: var(--favorite-accent);
+    color: var(--color-text);
+  }
+
+  .favorites-stage__panels {
+    padding-block-start: 2rem;
+  }
+
+  .favorite-dialog {
+    width: min(calc(100% - 2rem), 30rem);
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--color-text);
+    background: var(--color-paper);
+    color: var(--color-text);
+    box-shadow: 0.75rem 0.85rem 0 rgb(17 17 15 / 0.12);
+  }
+
+  .favorite-dialog::backdrop {
+    background: rgb(17 17 15 / 0.42);
+  }
+
+  .favorite-dialog__close {
+    position: sticky;
+    z-index: 4;
+    top: 0;
+    display: block;
+    margin-left: auto;
+    padding: 0.85rem 1rem;
+    border-bottom: 0;
+    background: var(--color-paper);
+    color: var(--color-text);
+  }
+
+  .favorite-dialog__card {
+    display: grid;
+  }
+
+  .favorite-dialog__art {
+    grid-area: 1 / 1;
+    align-self: start;
+  }
+
+  .favorite-dialog__art :global(picture),
+  .favorite-dialog__art :global(img) {
+    width: 100%;
+  }
+
+  .favorite-dialog__art :global(img) {
+    max-height: 78dvh;
+    object-fit: contain;
+    background: var(--color-paper);
+  }
+
+  .favorite-dialog__caption {
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: end;
+    padding: 1.15rem;
+    background: rgb(17 17 15 / 0.86);
+    color: #f7f5ef;
+  }
+
+  .favorite-dialog__caption h3 {
+    margin: 0.25rem 0;
+    font-size: clamp(1.45rem, 4vw, 2rem);
+  }
+
+  .favorite-dialog__rank,
+  .favorite-dialog__original,
+  .favorite-dialog__meta,
+  .favorite-dialog__review,
+  .favorite-dialog__credit {
+    margin: 0;
+  }
+
+  .favorite-dialog__rank,
+  .favorite-dialog__meta {
+    color: rgb(247 245 239 / 0.72);
+    font: 600 0.76rem/1.4 var(--font-body);
+  }
+
+  .favorite-dialog__original {
+    margin-block-start: 0.25rem;
+    color: rgb(247 245 239 / 0.82);
+    font-size: 0.86rem;
+  }
+
+  .favorite-dialog__review {
+    margin-block-start: 0.9rem;
+    padding-block-start: 0.8rem;
+    border-top: 1px solid rgb(247 245 239 / 0.28);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .favorite-dialog__credit,
+  .favorite-dialog__source {
+    color: rgb(247 245 239 / 0.76);
+    font: 500 0.68rem/1.4 var(--font-body);
+  }
+
+  .favorite-dialog__credit {
+    margin-block-start: 0.8rem;
+  }
+
+  .favorite-dialog__source {
+    margin-block-start: 0.35rem;
+    text-underline-offset: 0.16em;
+  }
+
+  .favorite-dialog__source:not([hidden]) {
+    display: inline-block;
+  }
+
+  @media (max-width: 48rem) {
+    .favorites-stage__header {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .favorite-dialog {
+      width: calc(100% - 1rem);
+      max-height: calc(100dvh - 1rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    favorites-stage[data-enhanced] .favorites-stage__tabs button,
+    .favorite-dialog {
+      scroll-behavior: auto;
+    }
+  }
+</style>

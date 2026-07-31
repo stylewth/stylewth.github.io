@@ -680,6 +680,34 @@ describe('public source contracts', () => {
     expect(page).toContain('en.elsewhere.description');
   });
 
+  it('implements the favorite fan as a gated, restrained visual enhancement', () => {
+    const fan = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoriteFan.astro'),
+      'utf8',
+    );
+    const stage = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoritesStage.astro'),
+      'utf8',
+    );
+    const source = `${fan}\n${stage}`;
+
+    expect(source).toContain(':global(favorites-stage[data-enhanced])');
+    expect(source).toContain('overflow-x: auto');
+    expect(source).toContain('var(--fan-x)');
+    expect(source).toContain('var(--fan-y)');
+    expect(source).toContain('var(--fan-rotation)');
+    expect(source).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(source).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?favorite-card:hover[\s\S]*?var\(--fan-y\)[\s\S]*?var\(--fan-rotation\)/,
+    );
+    expect(source).not.toContain('gradient(');
+    expect(source).not.toMatch(/\bfilter\s*:/);
+    expect(source).not.toContain('mix-blend-mode');
+    expect(source).not.toContain('border-radius');
+    expect(source).not.toContain('\u2013');
+    expect(source).not.toContain('\u2014');
+  });
+
   it('keeps visual effects restrained and requires no client framework', () => {
     const source = projectFiles(projectRoot)
       .filter((file) => designSourceExtensions.has(extname(file).toLowerCase()))
