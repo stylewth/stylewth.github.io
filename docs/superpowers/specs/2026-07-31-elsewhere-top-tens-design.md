@@ -2,7 +2,7 @@
 
 Date: 2026-07-31  
 Owner: Tenghao Wang  
-Status: Approved in conversation, pending written-spec review  
+Status: Approved in conversation and written-spec review
 Language: English UI with original-script titles where useful
 
 ## 1. Goal
@@ -37,7 +37,7 @@ The feature must:
 
 Movies and Albums share one stage rather than forming two large consecutive fans. This keeps the page compact and gives the collection a single visual center.
 
-When JavaScript is unavailable, both ranked lists render in normal document order and remain readable. JavaScript changes the two lists into a single tabbed stage only after the component initializes.
+When JavaScript is unavailable, both ranked lists render in normal document order and remain readable. JavaScript changes the two lists into a single tabbed stage only after the component initializes. Fan positioning, inactive-panel hiding, and tab-only styles are gated behind an explicit `data-enhanced` state set after initialization; they never apply to the fallback lists.
 
 ### Resting fan
 
@@ -172,7 +172,7 @@ cover: local image
 coverAlt: non-empty string
 coverSourceUrl: URL
 coverCredit: optional string
-editionNote: optional string
+editionNote: non-empty string
 review: optional non-empty string, maximum 180 characters
 lang: en
 ```
@@ -184,7 +184,7 @@ Rules:
 - duplicate ranks fail the build;
 - duplicate `translationKey` values within a locale fail the build;
 - sorting never depends on filenames;
-- `cover`, `coverAlt`, and `coverSourceUrl` are required together;
+- `cover`, `coverAlt`, `coverSourceUrl`, and `editionNote` are required together;
 - `review` is omitted when unwritten; an empty string is invalid;
 - `creator` is the display-ready director or artist string;
 - movie and album labels are derived from `kind`;
@@ -233,7 +233,7 @@ Use the original standard edition for every album. Do not use anniversary, remas
 
 Implementation must source the standard-release cover for every item:
 
-- original theatrical-release main poster for films;
+- original theatrical-release main poster from the film's production territory for films;
 - original standard-edition front cover for albums;
 - no recoloring, filters, blend modes, AI imitation, or decorative crop;
 - no hotlinking;
@@ -243,9 +243,9 @@ Implementation must source the standard-release cover for every item:
 - album covers retain square proportion;
 - `object-fit: contain` is used whenever a container and source ratio differ.
 
-Every record stores the page from which the chosen edition was identified. `coverSourceUrl` documents provenance; it does not itself establish permission. Before public deployment, each asset's permitted use and any attribution requirement must be checked. A required credit is stored in `coverCredit` and rendered in a compact sources note or associated accessible detail.
+Every record stores the page from which the exact chosen artwork was identified. `editionNote` records the territory and edition, such as `original US theatrical one-sheet`, `original Japanese theatrical poster`, or `1973 standard LP front cover`. `coverSourceUrl` documents provenance; it does not itself establish permission. Before public deployment, each asset's permitted use and any attribution requirement must be checked. A required credit is stored in `coverCredit` and rendered in a compact sources note or associated accessible detail.
 
-The feature is not considered publication-ready if an image has no traceable source or requires an unfulfilled attribution. Generated lookalikes are not an acceptable fallback for missing rights.
+Artwork permission and attribution review is a deployment gate. The feature is not considered publication-ready if an image has no traceable source, lacks an edition/territory note, or requires an unfulfilled attribution. Generated lookalikes are not an acceptable fallback for missing rights.
 
 ## 9. Accessibility
 
