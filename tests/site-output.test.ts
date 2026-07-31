@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 const outputDirectory = join(process.cwd(), 'dist');
@@ -35,13 +35,22 @@ function outputPathForRootLink(href: string): string {
   return join(outputDirectory, href.slice(1), 'index.html');
 }
 
-function expectDocumentShell(page: string, canonicalPath: string, title: string): void {
+function executableScripts(page: string): string[] {
+  return page.match(/<script(?![^>]*type="application\/ld\+json")[^>]*>/g) ?? [];
+}
+
+function expectDocumentShell(
+  page: string,
+  canonicalPath: string,
+  title: string,
+  executableScriptCount = 0,
+): void {
   expect(page).toContain(`<title>${title}</title>`);
   expect(page).toContain(
     `<link rel="canonical" href="https://stylewth.github.io${canonicalPath}">`,
   );
   expect(page.match(/<h1(?:\s|>)/g) ?? []).toHaveLength(1);
-  expect(page).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
+  expect(executableScripts(page)).toHaveLength(executableScriptCount);
 }
 
 function expectNoHeadingLevelSkips(page: string): void {
@@ -238,10 +247,13 @@ describe('production crawl and script contracts', () => {
     });
   });
 
-  it('emits only JSON-LD script tags across generated HTML', () => {
+  it('ships one route-local interaction script only on Elsewhere', () => {
     outputHtmlFiles().forEach((file) => {
       const page = readFileSync(file, 'utf8');
-      expect(page, file).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
+      const relativePath = relative(outputDirectory, file).replaceAll('\\', '/');
+      expect(executableScripts(page), relativePath).toHaveLength(
+        relativePath === 'elsewhere/index.html' ? 1 : 0,
+      );
     });
   });
 });
@@ -302,7 +314,8 @@ describe('content archive output', () => {
   it('publishes Top 10 collections before the existing Notes archive', () => {
     const elsewhere = readOutput('elsewhere/index.html');
 
-    expectDocumentShell(elsewhere, '/elsewhere/', 'Elsewhere | Tenghao Wang');
+    expectDocumentShell(elsewhere, '/elsewhere/', 'Elsewhere | Tenghao Wang', 1);
+    expect(elsewhere).toMatch(/<script[^>]+type="module"[^>]*>/);
     expect(elsewhere).toContain('<favorites-stage');
     expect(elsewhere.match(/<ol[^>]+data-favorite-list=/g) ?? []).toHaveLength(2);
     expect(elsewhere.match(/class="favorite-card"/g) ?? []).toHaveLength(20);
@@ -357,7 +370,7 @@ describe('content archive output', () => {
         /<button(?=[^>]*data-favorite-trigger)(?=[^>]*\sdisabled(?:\s|=|>))[^>]*>/g,
       ) ?? [],
     ).toHaveLength(20);
-    expect(elsewhere).not.toContain('data-enhanced');
+    expect(elsewhere.match(/<favorites-stage\b[^>]*>/)?.[0]).not.toContain('data-enhanced');
   });
 
   it('uses the approved Elsewhere description', () => {
