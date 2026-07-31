@@ -1,0 +1,84 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import {
+  favoriteCreatorLabel,
+  getFavoriteFanPosition,
+  type FavoriteKind,
+} from '../../lib/favorites';
+
+interface Props {
+  favorites: CollectionEntry<'favorites'>[];
+  kind: FavoriteKind;
+  title: string;
+}
+
+const { favorites, kind, title } = Astro.props;
+const creatorLabel = favoriteCreatorLabel(kind);
+const panelId = `favorite-panel-${kind}`;
+const tabId = `favorite-tab-${kind}`;
+---
+
+<section
+  class="favorite-panel"
+  id={panelId}
+  role="tabpanel"
+  aria-labelledby={tabId}
+  data-favorite-panel={kind}
+>
+  <h3>{title}</h3>
+  <div class="favorite-fan__viewport">
+    <ol class="favorite-fan" data-favorite-list={kind}>
+      {
+        favorites.map((favorite) => {
+          const position = getFavoriteFanPosition(favorite.data.rank);
+          const rank = String(favorite.data.rank).padStart(2, '0');
+          const accessibleName = `${rank}. ${favorite.data.title}, ${favorite.data.year}, ${creatorLabel}: ${favorite.data.creator}`;
+          const style = [
+            `--fan-x:${position.xRem}rem`,
+            `--fan-y:${position.yRem}rem`,
+            `--fan-rotation:${position.rotationDeg}deg`,
+            `--fan-z:${position.zIndex}`,
+          ].join(';');
+
+          return (
+            <li class="favorite-card" style={style}>
+              <button
+                type="button"
+                class="favorite-card__trigger"
+                disabled
+                aria-label={accessibleName}
+                data-favorite-trigger
+                data-favorite-kind={kind}
+                data-favorite-rank={favorite.data.rank}
+                data-favorite-title={favorite.data.title}
+                data-favorite-original-title={favorite.data.originalTitle}
+                data-favorite-year={favorite.data.year}
+                data-favorite-creator={favorite.data.creator}
+                data-favorite-creator-label={creatorLabel}
+                data-favorite-review={favorite.data.review}
+                data-favorite-cover-credit={favorite.data.coverCredit}
+                data-favorite-cover-source={favorite.data.coverSourceUrl}
+              >
+                <Picture
+                  src={favorite.data.cover}
+                  alt={favorite.data.coverAlt}
+                  widths={[160, 240, 360, 520, 720, 960]}
+                  sizes="(max-width: 48rem) 8.5rem, 9.25rem"
+                  formats={['avif', 'webp']}
+                  loading="lazy"
+                />
+                <span class="favorite-card__foot">
+                  <span class="favorite-card__rank" aria-hidden="true">{rank}</span>
+                  <span>{favorite.data.year}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{favorite.data.creator}</span>
+                </span>
+              </button>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>

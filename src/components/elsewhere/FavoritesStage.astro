@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FavoriteFan from './FavoriteFan.astro';
+
+interface Props {
+  films: CollectionEntry<'favorites'>[];
+  albums: CollectionEntry<'favorites'>[];
+  copy: {
+    topTens: string;
+    movies: string;
+    albums: string;
+    collectionsLabel: string;
+    close: string;
+    selectedWork: string;
+    artworkSource: string;
+  };
+}
+
+const { films, albums, copy } = Astro.props;
+---
+
+<favorites-stage>
+  <header class="favorites-stage__header">
+    <h2>{copy.topTens}</h2>
+    <div
+      class="favorites-stage__tabs"
+      role="tablist"
+      aria-label={copy.collectionsLabel}
+      data-favorite-tabs
+      hidden
+    >
+      <button
+        id="favorite-tab-film"
+        type="button"
+        role="tab"
+        aria-controls="favorite-panel-film"
+        aria-selected="true"
+        tabindex="0"
+        data-favorite-tab="film"
+      >
+        {copy.movies}
+      </button>
+      <button
+        id="favorite-tab-album"
+        type="button"
+        role="tab"
+        aria-controls="favorite-panel-album"
+        aria-selected="false"
+        tabindex="-1"
+        data-favorite-tab="album"
+      >
+        {copy.albums}
+      </button>
+    </div>
+  </header>
+
+  <div class="favorites-stage__panels">
+    <FavoriteFan favorites={films} kind="film" title={copy.movies} />
+    <FavoriteFan favorites={albums} kind="album" title={copy.albums} />
+  </div>
+
+  <dialog class="favorite-dialog" aria-labelledby="favorite-dialog-title" data-favorite-dialog>
+    <button type="button" class="favorite-dialog__close" data-favorite-close>
+      {copy.close}
+    </button>
+    <article class="favorite-dialog__card" aria-label={copy.selectedWork}>
+      <div class="favorite-dialog__art" data-favorite-dialog-art></div>
+      <div class="favorite-dialog__caption">
+        <p class="favorite-dialog__rank" data-favorite-dialog-rank></p>
+        <h3 id="favorite-dialog-title" data-favorite-dialog-title></h3>
+        <p class="favorite-dialog__original" data-favorite-dialog-original hidden></p>
+        <p class="favorite-dialog__meta" data-favorite-dialog-meta></p>
+        <p class="favorite-dialog__review" data-favorite-dialog-review hidden></p>
+        <p class="favorite-dialog__credit" data-favorite-dialog-credit hidden></p>
+        <a
+          class="favorite-dialog__source"
+          data-favorite-dialog-source
+          target="_blank"
+          rel="noreferrer"
+          hidden
+        >
+          {copy.artworkSource}
+        </a>
+      </div>
+    </article>
+  </dialog>
+</favorites-stage>

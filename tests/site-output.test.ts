@@ -299,13 +299,65 @@ describe('content archive output', () => {
     expect(sparseUpdate).toMatch(/<time[^>]*>2026-06<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
   });
 
-  it('publishes Elsewhere as an index using the full entry body without empty categories', () => {
+  it('publishes Top 10 collections before the existing Notes archive', () => {
     const elsewhere = readOutput('elsewhere/index.html');
 
     expectDocumentShell(elsewhere, '/elsewhere/', 'Elsewhere | Tenghao Wang');
-    expect(elsewhere).toContain('Pink Floyd, The Beatles, Radiohead, and The Smashing Pumpkins');
-    expect(elsewhere).not.toMatch(/<h2[^>]*>Film<\/h2>/);
-    expect(elsewhere).toMatch(/<a[^>]+href="\/elsewhere\/"[^>]+aria-current="page"[^>]*>Elsewhere<\/a>/);
+    expect(elsewhere).toContain('<favorites-stage');
+    expect(elsewhere.match(/<ol[^>]+data-favorite-list=/g) ?? []).toHaveLength(2);
+    expect(elsewhere.match(/class="favorite-card"/g) ?? []).toHaveLength(20);
+    expect(elsewhere.match(/data-favorite-kind="film"/g) ?? []).toHaveLength(10);
+    expect(elsewhere.match(/data-favorite-kind="album"/g) ?? []).toHaveLength(10);
+    expect(elsewhere).toContain('role="tablist"');
+    expect(elsewhere).toContain('aria-selected="true"');
+    expect(elsewhere).toContain('Movies');
+    expect(elsewhere).toContain('Albums');
+    expect(elsewhere).toContain('Taxi Driver');
+    expect(elsewhere).toContain('The Dark Side of the Moon');
+    expect(elsewhere).toContain('1976');
+    expect(elsewhere).toContain('Martin Scorsese');
+    expect(elsewhere).toContain('Artwork by Guy Peellaert');
+    expect(elsewhere).not.toMatch(/<(?:img|source)[^>]+(?:src|srcset)="https:/);
+    expect(elsewhere).not.toContain('One-line review');
+    expect(elsewhere).not.toMatch(/data-favorite-review="[^"]+"/);
+    expect(elsewhere.indexOf('Top tens')).toBeLessThan(elsewhere.indexOf('>Notes<'));
+    expect(elsewhere.indexOf('>Notes<')).toBeLessThan(
+      elsewhere.indexOf('Pink Floyd, The Beatles, Radiohead, and The Smashing Pumpkins'),
+    );
+    expect(elsewhere).toMatch(
+      /<a[^>]+href="\/elsewhere\/"[^>]+aria-current="page"[^>]*>Elsewhere<\/a>/,
+    );
+    expectNoHeadingLevelSkips(elsewhere);
+  });
+
+  it('keeps every favorite readable in the unenhanced document order', () => {
+    const elsewhere = readOutput('elsewhere/index.html');
+    const filmRanks = [
+      ...elsewhere.matchAll(
+        /data-favorite-kind="film"[\s\S]*?data-favorite-rank="(\d+)"/g,
+      ),
+    ].map((match) => Number(match[1]));
+    const albumRanks = [
+      ...elsewhere.matchAll(
+        /data-favorite-kind="album"[\s\S]*?data-favorite-rank="(\d+)"/g,
+      ),
+    ].map((match) => Number(match[1]));
+
+    expect(filmRanks).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(albumRanks).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    const panels =
+      elsewhere.match(
+        /<section[^>]+data-favorite-panel="(?:film|album)"[^>]*>/g,
+      ) ?? [];
+    expect(panels).toHaveLength(2);
+    panels.forEach((panel) => expect(panel).not.toMatch(/\shidden(?:\s|=|>)/));
+    expect(elsewhere).toMatch(/<div[^>]+data-favorite-tabs[^>]*\shidden(?:\s|=|>)/);
+    expect(
+      elsewhere.match(
+        /<button(?=[^>]*data-favorite-trigger)(?=[^>]*\sdisabled(?:\s|=|>))[^>]*>/g,
+      ) ?? [],
+    ).toHaveLength(20);
+    expect(elsewhere).not.toContain('data-enhanced');
   });
 
   it('uses the approved Elsewhere description', () => {

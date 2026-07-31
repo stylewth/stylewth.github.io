@@ -1,12 +1,16 @@
 ---
 import { getCollection, render } from 'astro:content';
+import FavoritesStage from '../../components/elsewhere/FavoritesStage.astro';
 import { site } from '../../config/site';
 import { en } from '../../i18n/en';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import { assertUniqueTranslationKeys } from '../../lib/content';
+import { assertCompleteFavoriteSet, sortFavorites } from '../../lib/favorites';
 
 const elsewhere = await getCollection('elsewhere');
 assertUniqueTranslationKeys(elsewhere, 'elsewhere');
+const favorites = await getCollection('favorites');
+assertCompleteFavoriteSet(favorites, 'en');
 
 const publishedElsewhere = elsewhere
   .filter((entry) => entry.data.lang === 'en')
@@ -14,6 +18,8 @@ const publishedElsewhere = elsewhere
 const entries = await Promise.all(
   publishedElsewhere.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
 );
+const films = sortFavorites(favorites, 'film', 'en');
+const albums = sortFavorites(favorites, 'album', 'en');
 ---
 
 <ContentLayout
@@ -21,33 +27,47 @@ const entries = await Promise.all(
   documentTitle={`Elsewhere | ${site.name}`}
   description={en.elsewhere.description}
   canonicalPath="/elsewhere/"
+  wide
 >
-  {
-    entries.map(({ entry, Content }) => (
-      <article class="elsewhere-entry">
-        <p class="eyebrow">{entry.data.kind}</p>
-        <h2>{entry.data.title}</h2>
-        <p class="elsewhere-entry__meta">
-          <time datetime={entry.data.date.toISOString().slice(0, 10)}>
-            {entry.data.date.toISOString().slice(0, 10)}
-          </time>
-          {' · '}
-          {entry.data.tags.join(', ')}
-        </p>
-        <Content />
-      </article>
-    ))
-  }
+  <FavoritesStage films={films} albums={albums} copy={en.elsewhere} />
+  <section class="elsewhere-notes">
+    <h2>{en.elsewhere.notes}</h2>
+    {
+      entries.map(({ entry, Content }) => (
+        <article class="elsewhere-entry">
+          <p class="eyebrow">{entry.data.kind}</p>
+          <h3>{entry.data.title}</h3>
+          <p class="elsewhere-entry__meta">
+            <time datetime={entry.data.date.toISOString().slice(0, 10)}>
+              {entry.data.date.toISOString().slice(0, 10)}
+            </time>
+            {' · '}
+            {entry.data.tags.join(', ')}
+          </p>
+          <Content />
+        </article>
+      ))
+    }
+  </section>
 </ContentLayout>
 
 <style>
+  .elsewhere-notes {
+    margin-block-start: var(--space-section);
+  }
+
+  .elsewhere-notes > h2 {
+    margin-block-end: 2rem;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+  }
+
   .elsewhere-entry + .elsewhere-entry {
     margin-block-start: 3rem;
     padding-block-start: 3rem;
     border-top: 1px solid var(--color-rule);
   }
 
-  .elsewhere-entry h2 {
+  .elsewhere-entry h3 {
     margin-block-end: 0.75rem;
     font-size: clamp(1.7rem, 3vw, 2.3rem);
   }
