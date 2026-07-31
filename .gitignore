@@ -3,5 +3,6 @@ dist/
 .astro/
 .npm-cache/
 .superpowers/
+.env
 .DS_Store
 Thumbs.db

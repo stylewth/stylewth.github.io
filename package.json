@@ -13,6 +13,7 @@
     "test:site": "vitest run tests",
     "build:site": "astro build",
     "build": "npm run check && npm run test && npm run build:site && npm run test:site",
+    "sync:favorites": "node --env-file-if-exists=.env scripts/sync-favorite-artwork.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "gray-matter": "^4.0.3",
     "happy-dom": "^20.11.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
