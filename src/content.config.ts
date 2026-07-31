@@ -90,8 +90,30 @@ const elsewhere = defineCollection({
       }),
 });
 
+const favorites = defineCollection({
+  loader: glob({ base: './src/content/favorites', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().trim().min(1),
+      originalTitle: z.string().trim().min(1).optional(),
+      translationKey: z.string().trim().min(1),
+      kind: z.enum(['film', 'album']),
+      rank: z.number().int().min(1).max(10),
+      year: z.number().int().min(1900).max(9999),
+      creator: z.string().trim().min(1),
+      cover: image(),
+      coverAlt: z.string().trim().min(1),
+      coverSourceUrl: z.url(),
+      coverCredit: z.string().trim().min(1).optional(),
+      editionNote: z.string().trim().min(1),
+      review: z.string().trim().min(1).max(180).optional(),
+      lang: language,
+    }),
+});
+
 export const collections = {
   projects,
   updates,
   elsewhere,
+  favorites,
 };

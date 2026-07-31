@@ -4,7 +4,14 @@ import { describe, expect, it } from 'vitest';
 
 const projectRoot = process.cwd();
 const contentRoot = join(projectRoot, 'src', 'content');
-const ignoredDirectories = new Set(['.git', 'node_modules', 'dist', '.astro', 'tests']);
+const ignoredDirectories = new Set([
+  '.git',
+  '.superpowers',
+  'node_modules',
+  'dist',
+  '.astro',
+  'tests',
+]);
 const forbiddenExtensions = new Set(['.pdf', '.docx', '.tex', '.log', '.aux', '.pptx']);
 const sourceExtensions = new Set(['.astro', '.css', '.html', '.js', '.json', '.md', '.mts', '.ts']);
 const forbiddenText = [
@@ -238,6 +245,25 @@ describe('public source contracts', () => {
     expect(contentConfig).not.toContain('z.coerce.date()');
     expect(dateSchema).toContain('z.iso.date()');
     expect(dateSchema).toContain("new Date(`${value}T00:00:00.000Z`)");
+  });
+
+  it('defines strict favorite records without runtime metadata fetching', () => {
+    const contentConfig = readFileSync(
+      join(projectRoot, 'src', 'content.config.ts'),
+      'utf8',
+    );
+
+    expect(contentConfig).toContain('const favorites = defineCollection');
+    expect(contentConfig).toContain("kind: z.enum(['film', 'album'])");
+    expect(contentConfig).toMatch(/rank:\s*z\.number\(\)\.int\(\)\.min\(1\)\.max\(10\)/);
+    expect(contentConfig).toMatch(/year:\s*z\.number\(\)\.int\(\)\.min\(1900\)\.max\(9999\)/);
+    expect(contentConfig).toContain('cover: image()');
+    expect(contentConfig).toContain('coverSourceUrl: z.url()');
+    expect(contentConfig).toContain('editionNote: z.string().trim().min(1)');
+    expect(contentConfig).toMatch(
+      /review:\s*z\.string\(\)\.trim\(\)\.min\(1\)\.max\(180\)\.optional\(\)/,
+    );
+    expect(contentConfig).toMatch(/export const collections = \{[\s\S]*favorites/);
   });
 
   it('keeps the latest updates section conditional and self-contained', () => {
