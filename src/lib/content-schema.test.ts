@@ -1,8 +1,24 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseFrontmatter } from '@astrojs/internal-helpers/frontmatter';
+import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
 import { elsewhereDateSchema } from './content-schema';
+
+const obsoleteArtworkFields = [
+  'cover',
+  'coverSourceUrl',
+  'coverCredit',
+  'editionNote',
+] as const;
+
+function favoriteFrontmatter(kind: 'film' | 'album') {
+  const directory = join(process.cwd(), 'src', 'content', 'favorites', kind);
+  return readdirSync(directory)
+    .filter((filename) => filename.endsWith('.md'))
+    .sort()
+    .map((filename) => matter(readFileSync(join(directory, filename), 'utf8')).data);
+}
 
 describe('Elsewhere date schema', () => {
   it('receives the real Elsewhere frontmatter date as a canonical string', () => {
@@ -42,5 +58,43 @@ describe('Elsewhere date schema', () => {
 
     expect(frontmatter.date).toBeInstanceOf(Date);
     expect(elsewhereDateSchema.safeParse(frontmatter.date).success).toBe(false);
+  });
+});
+
+describe('favorite provider content contract', () => {
+  it('requires a positive TMDB ID on films and rejects Spotify URLs', () => {
+    const films = favoriteFrontmatter('film');
+
+    expect(films).toHaveLength(10);
+    for (const film of films) {
+      expect(film.kind).toBe('film');
+      expect(film.tmdbId).toBeTypeOf('number');
+      expect(Number.isInteger(film.tmdbId) && film.tmdbId > 0).toBe(true);
+      expect(film).not.toHaveProperty('spotifyUrl');
+    }
+  });
+
+  it('requires a canonical Spotify album URL on albums and rejects TMDB IDs', () => {
+    const albums = favoriteFrontmatter('album');
+
+    expect(albums).toHaveLength(10);
+    for (const album of albums) {
+      expect(album.kind).toBe('album');
+      expect(album.spotifyUrl).toMatch(
+        /^https:\/\/open\.spotify\.com\/album\/[A-Za-z0-9]+$/,
+      );
+      expect(album).not.toHaveProperty('tmdbId');
+    }
+  });
+
+  it('rejects obsolete local artwork metadata from every favorite', () => {
+    const favorites = [...favoriteFrontmatter('film'), ...favoriteFrontmatter('album')];
+
+    expect(favorites).toHaveLength(20);
+    for (const favorite of favorites) {
+      for (const field of obsoleteArtworkFields) {
+        expect(favorite).not.toHaveProperty(field);
+      }
+    }
   });
 });

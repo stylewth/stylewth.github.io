@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { readFavoriteProviderEntries } from '../../scripts/sync-favorite-artwork.mjs';
 import {
   assertFavoriteArtworkManifest,
   favoriteArtworkFor,
@@ -139,5 +142,20 @@ describe('favorite artwork providers', () => {
     });
 
     expect(() => assertFavoriteArtworkManifest(entries, spotifyCdnManifest)).not.toThrow();
+  });
+
+  it('matches every repository favorite to one complete manifest item', () => {
+    const repositoryEntries = readFavoriteProviderEntries(
+      join(process.cwd(), 'src', 'content', 'favorites'),
+    );
+    const repositoryManifest = JSON.parse(
+      readFileSync(join(process.cwd(), 'src', 'data', 'favorite-artwork.json'), 'utf8'),
+    ) as FavoriteArtworkManifest;
+
+    expect(repositoryEntries).toHaveLength(20);
+    expect(Object.keys(repositoryManifest.items)).toHaveLength(20);
+    expect(() =>
+      assertFavoriteArtworkManifest(repositoryEntries, repositoryManifest),
+    ).not.toThrow();
   });
 });

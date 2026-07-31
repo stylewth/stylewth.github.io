@@ -1,5 +1,156 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-31T00:00:00.000Z",
-  "items": {}
+  "generatedAt": "2026-07-31T10:07:00.952Z",
+  "items": {
+    "a-beautiful-mind": {
+      "provider": "tmdb",
+      "providerId": 453,
+      "posterPath": "/rEIg5yJdNOt9fmX4P8gU9LeNoTQ.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/453"
+    },
+    "burning": {
+      "provider": "tmdb",
+      "providerId": 491584,
+      "posterPath": "/kXiF80o74fE9gf3Utf9moAI7ar0.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/491584"
+    },
+    "crimson": {
+      "provider": "spotify",
+      "providerId": "6QOn35uhhnotiad01xwGaN",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02bab8c2fc22d67bb96326396b",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/6QOn35uhhnotiad01xwGaN",
+      "embedUrl": "https://open.spotify.com/embed/album/6QOn35uhhnotiad01xwGaN"
+    },
+    "eat-drink-man-woman": {
+      "provider": "tmdb",
+      "providerId": 10451,
+      "posterPath": "/olhIWtIBFg6VWK59DEd4lAvgVgz.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/10451"
+    },
+    "good-kid-maad-city": {
+      "provider": "spotify",
+      "providerId": "6PBZN8cbwkqm1ERj2BGXJ1",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02d28d2ebdedb220e479743797",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/6PBZN8cbwkqm1ERj2BGXJ1",
+      "embedUrl": "https://open.spotify.com/embed/album/6PBZN8cbwkqm1ERj2BGXJ1"
+    },
+    "heisei-fuuzoku": {
+      "provider": "spotify",
+      "providerId": "7jl8ThqlDTqSff9Dam29wM",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e026ca0c29a46567a8fd46e1f23",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/7jl8ThqlDTqSff9Dam29wM",
+      "embedUrl": "https://open.spotify.com/embed/album/7jl8ThqlDTqSff9Dam29wM"
+    },
+    "in-the-mood-for-love": {
+      "provider": "tmdb",
+      "providerId": 843,
+      "posterPath": "/iYypPT4bhqXfq1b6EnmxvRt6b2Y.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/843"
+    },
+    "inside-the-cable-temple": {
+      "provider": "spotify",
+      "providerId": "6ValxpcsrkQP2ugCU2Kxwy",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e029a3446ba8c977f0efa3657f8",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/6ValxpcsrkQP2ugCU2Kxwy",
+      "embedUrl": "https://open.spotify.com/embed/album/6ValxpcsrkQP2ugCU2Kxwy"
+    },
+    "interstellar": {
+      "provider": "tmdb",
+      "providerId": 157336,
+      "posterPath": "/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/157336"
+    },
+    "karuki-zahmen-kuri-no-hana": {
+      "provider": "spotify",
+      "providerId": "2i4fy6a51XTaZOYA8rIdRK",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02e2d9afc08d7bc7f6165ed33f",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/2i4fy6a51XTaZOYA8rIdRK",
+      "embedUrl": "https://open.spotify.com/embed/album/2i4fy6a51XTaZOYA8rIdRK"
+    },
+    "love-letter": {
+      "provider": "tmdb",
+      "providerId": 47002,
+      "posterPath": "/9iAgQSkt9z34DTYQfpG0M69SyiL.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/47002"
+    },
+    "ok-computer": {
+      "provider": "spotify",
+      "providerId": "7dxKtc08dYeRVHt3p9CZJn",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02adb1732fa8d44b8eb2f6c0bf",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/7dxKtc08dYeRVHt3p9CZJn",
+      "embedUrl": "https://open.spotify.com/embed/album/7dxKtc08dYeRVHt3p9CZJn"
+    },
+    "paprika": {
+      "provider": "tmdb",
+      "providerId": 4977,
+      "posterPath": "/bLUUr474Go1DfeN1HLjE3rnZXBq.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/4977"
+    },
+    "selling-england-by-the-pound": {
+      "provider": "spotify",
+      "providerId": "7xaM3ah9ZO4BjrcFj5vOZe",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e029068a893a0b7310fd7ef765b",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/7xaM3ah9ZO4BjrcFj5vOZe",
+      "embedUrl": "https://open.spotify.com/embed/album/7xaM3ah9ZO4BjrcFj5vOZe"
+    },
+    "siamese-dream": {
+      "provider": "spotify",
+      "providerId": "4UVERYsIzs6xbDYO8srlqd",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e027294b25ee8c2135e171aabf1",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/4UVERYsIzs6xbDYO8srlqd",
+      "embedUrl": "https://open.spotify.com/embed/album/4UVERYsIzs6xbDYO8srlqd"
+    },
+    "taxi-driver": {
+      "provider": "tmdb",
+      "providerId": 103,
+      "posterPath": "/ekstpH614fwDX8DUln1a2Opz0N8.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/103"
+    },
+    "the-dark-side-of-the-moon": {
+      "provider": "spotify",
+      "providerId": "4LH4d3cOWNNsVw41Gqt2kv",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02db216ca805faf5fe35df4ee6",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv",
+      "embedUrl": "https://open.spotify.com/embed/album/4LH4d3cOWNNsVw41Gqt2kv"
+    },
+    "the-key": {
+      "provider": "spotify",
+      "providerId": "0wWuBzOyOFxzfSPr9HSehB",
+      "imageUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0241ca3d76508f21f81e44a523",
+      "imageWidth": 300,
+      "imageHeight": 300,
+      "sourceUrl": "https://open.spotify.com/album/0wWuBzOyOFxzfSPr9HSehB",
+      "embedUrl": "https://open.spotify.com/embed/album/0wWuBzOyOFxzfSPr9HSehB"
+    },
+    "the-prestige": {
+      "provider": "tmdb",
+      "providerId": 1124,
+      "posterPath": "/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/1124"
+    },
+    "titanic": {
+      "provider": "tmdb",
+      "providerId": 597,
+      "posterPath": "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+      "sourceUrl": "https://www.themoviedb.org/movie/597"
+    }
+  }
 }
