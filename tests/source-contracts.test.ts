@@ -24,6 +24,202 @@ const forbiddenText = [
 const forbiddenPathParts = new Set(['cv', 'cvs', 'resume', 'resumes']);
 const designSourceExtensions = new Set(['.astro', '.css']);
 
+type ApprovedFavorite = readonly [
+  file: string,
+  rank: number,
+  title: string,
+  year: number,
+  creator: string,
+  coverFile: string,
+  sourceUrl: string,
+];
+
+const approvedFilmRecords: ApprovedFavorite[] = [
+  [
+    '01-taxi-driver.md',
+    1,
+    'Taxi Driver',
+    1976,
+    'Martin Scorsese',
+    'film-01-taxi-driver-us-theatrical.jpg',
+    'https://www.impawards.com/1976/taxi_driver_ver1.html',
+  ],
+  [
+    '02-a-beautiful-mind.md',
+    2,
+    'A Beautiful Mind',
+    2001,
+    'Ron Howard',
+    'film-02-a-beautiful-mind-us-theatrical.jpg',
+    'https://www.impawards.com/2001/beautiful_mind.html',
+  ],
+  [
+    '03-interstellar.md',
+    3,
+    'Interstellar',
+    2014,
+    'Christopher Nolan',
+    'film-03-interstellar-us-theatrical.jpg',
+    'https://www.impawards.com/2014/interstellar.html',
+  ],
+  [
+    '04-eat-drink-man-woman.md',
+    4,
+    'Eat Drink Man Woman',
+    1994,
+    'Ang Lee',
+    'film-04-eat-drink-man-woman-tw-theatrical.jpg',
+    'https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2010.019.1068',
+  ],
+  [
+    '05-titanic.md',
+    5,
+    'Titanic',
+    1997,
+    'James Cameron',
+    'film-05-titanic-us-theatrical.jpg',
+    'https://www.impawards.com/1997/titanic_ver2.html',
+  ],
+  [
+    '06-burning.md',
+    6,
+    'Burning',
+    2018,
+    'Lee Chang-dong',
+    'film-06-burning-kr-theatrical.jpg',
+    'https://www.koreanfilm.or.kr/eng/films/index/filmsView.jsp?category=ALL&mode=INDEX_FILMS_LIST&movieCd=20173202&pageIndex=1&pageRowSize=10&peopleCd=&s_genre=ALL&searchKeyword=Lee+Chang-dong&searchType=DIRECTOR&strMenuId=010401&userId=',
+  ],
+  [
+    '07-paprika.md',
+    7,
+    'Paprika',
+    2006,
+    'Satoshi Kon',
+    'film-07-paprika-jp-theatrical.jpg',
+    'https://www.sonypictures.jp/he/815804',
+  ],
+  [
+    '08-in-the-mood-for-love.md',
+    8,
+    'In the Mood for Love',
+    2000,
+    'Wong Kar-wai',
+    'film-08-in-the-mood-for-love-hk-theatrical.jpg',
+    'https://posteritati.com/poster/14327/in-the-mood-for-love-original-2000-hong-kong-b1-movie-poster',
+  ],
+  [
+    '09-love-letter.md',
+    9,
+    'Love Letter',
+    1995,
+    'Shunji Iwai',
+    'film-09-love-letter-jp-theatrical.jpg',
+    'https://cineswitch.com/movie_detail/love-letter',
+  ],
+  [
+    '10-the-prestige.md',
+    10,
+    'The Prestige',
+    2006,
+    'Christopher Nolan',
+    'film-10-the-prestige-us-theatrical.jpg',
+    'https://www.impawards.com/2006/prestige.html',
+  ],
+];
+
+const approvedAlbumRecords: ApprovedFavorite[] = [
+  [
+    '01-the-dark-side-of-the-moon.md',
+    1,
+    'The Dark Side of the Moon',
+    1973,
+    'Pink Floyd',
+    'album-01-the-dark-side-of-the-moon.jpg',
+    'https://musicbrainz.org/release/b84ee12a-09ef-421b-82de-0441a926375b/cover-art',
+  ],
+  [
+    '02-the-key.md',
+    2,
+    'The Key',
+    2013,
+    'Eason Chan',
+    'album-02-the-key.jpg',
+    'https://music.apple.com/us/album/the-key/1386714588',
+  ],
+  [
+    '03-heisei-fuuzoku.md',
+    3,
+    'Heisei Fuuzoku - Japanese Manners',
+    2007,
+    'Sheena Ringo × Neko Saito',
+    'album-03-heisei-fuuzoku.jpg',
+    'https://music.apple.com/us/album/heisei-fuuzoku-japanese-manners/1384785330',
+  ],
+  [
+    '04-ok-computer.md',
+    4,
+    'OK Computer',
+    1997,
+    'Radiohead',
+    'album-04-ok-computer.jpg',
+    'https://musicbrainz.org/release/425d8db9-88a3-31e2-bd23-b1a967626dd5/cover-art',
+  ],
+  [
+    '05-karuki-zahmen-kuri-no-hana.md',
+    5,
+    'Karuki Zahmen Kuri No Hana - Kalk Samen Chestnut Flower',
+    2003,
+    'Sheena Ringo',
+    'album-05-karuki-zahmen-kuri-no-hana.jpg',
+    'https://music.apple.com/jp/album/karuki-zahmen-kuri-no-hana-kalk-samen-chestnut-flower/1385320232',
+  ],
+  [
+    '06-inside-the-cable-temple.md',
+    6,
+    'Inside the Cable Temple',
+    2020,
+    'Omnipotent Youth Society',
+    'album-06-inside-the-cable-temple.jpg',
+    'https://music.apple.com/tw/album/%E5%86%80%E8%A5%BF%E5%8D%97%E6%9E%97%E8%B7%AF%E8%A1%8C/1545534900',
+  ],
+  [
+    '07-siamese-dream.md',
+    7,
+    'Siamese Dream',
+    1993,
+    'The Smashing Pumpkins',
+    'album-07-siamese-dream.jpg',
+    'https://musicbrainz.org/release/8d967bcd-02e3-380f-8e0d-2f3cfb79561d/cover-art',
+  ],
+  [
+    '08-crimson.md',
+    8,
+    'CRIMSON',
+    1986,
+    'Akina Nakamori',
+    'album-08-crimson.jpg',
+    'https://music.apple.com/jp/album/crimson/903270513',
+  ],
+  [
+    '09-selling-england-by-the-pound.md',
+    9,
+    'Selling England by the Pound',
+    1973,
+    'Genesis',
+    'album-09-selling-england-by-the-pound.jpg',
+    'https://musicbrainz.org/release/b20fe9b2-ffdb-4765-8d1b-60e4c91577eb/cover-art',
+  ],
+  [
+    '10-good-kid-maad-city.md',
+    10,
+    'good kid, m.A.A.d city',
+    2012,
+    'Kendrick Lamar',
+    'album-10-good-kid-maad-city.jpg',
+    'https://musicbrainz.org/release/5d850f71-e51e-44be-96c8-51cc305f3596/cover-art',
+  ],
+];
+
 function markdownFiles(directory: string): string[] {
   if (!existsSync(directory)) return [];
 
@@ -47,6 +243,51 @@ describe('public source contracts', () => {
     expect(markdownFiles(join(contentRoot, 'projects'))).toHaveLength(2);
     expect(markdownFiles(join(contentRoot, 'updates'))).toHaveLength(3);
     expect(markdownFiles(join(contentRoot, 'elsewhere'))).toHaveLength(1);
+  });
+
+  it('contains the approved Top 10 films and albums with local covers', () => {
+    const filmRoot = join(contentRoot, 'favorites', 'film');
+    const albumRoot = join(contentRoot, 'favorites', 'album');
+    const imageRoot = join(projectRoot, 'src', 'assets', 'images', 'favorites');
+    const films = existsSync(filmRoot)
+      ? readdirSync(filmRoot).filter((file) => file.endsWith('.md')).sort()
+      : [];
+    const albums = existsSync(albumRoot)
+      ? readdirSync(albumRoot).filter((file) => file.endsWith('.md')).sort()
+      : [];
+    const approvedRecords = [
+      ...approvedFilmRecords.map((record) => ['film', filmRoot, record] as const),
+      ...approvedAlbumRecords.map((record) => ['album', albumRoot, record] as const),
+    ];
+    const favoriteImages = existsSync(imageRoot)
+      ? projectFiles(imageRoot).filter((file) =>
+          ['.jpg', '.jpeg', '.png', '.webp'].includes(extname(file).toLowerCase()),
+        )
+      : [];
+
+    expect(films).toEqual(approvedFilmRecords.map(([file]) => file));
+    expect(albums).toEqual(approvedAlbumRecords.map(([file]) => file));
+    expect(favoriteImages.map((file) => file.split(/[\\/]/).at(-1)).sort()).toEqual(
+      approvedRecords.map(([, , [, , , , , coverFile]]) => coverFile).sort(),
+    );
+
+    approvedRecords.forEach(([kind, root, record]) => {
+      const [file, rank, title, year, creator, coverFile, sourceUrl] = record;
+      const content = readFileSync(join(root, file), 'utf8');
+      expect(content).toContain(`title: ${title}`);
+      expect(content).toContain(`kind: ${kind}`);
+      expect(content).toContain(`rank: ${rank}`);
+      expect(content).toContain(`year: ${year}`);
+      expect(content).toContain(`creator: ${creator}`);
+      expect(content).toContain(
+        `cover: ../../../assets/images/favorites/${kind === 'film' ? 'films' : 'albums'}/${coverFile}`,
+      );
+      expect(content).toContain(`coverSourceUrl: ${sourceUrl}`);
+      expect(content).toMatch(/^coverCredit:\s+\S/m);
+      expect(content).toMatch(/editionNote:\s+\S/);
+      expect(content).not.toMatch(/^review:/m);
+      expect(content).not.toContain('.invalid');
+    });
   });
 
   it('retains the two verified project repositories', () => {
