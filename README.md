@@ -71,7 +71,9 @@ The entry body can add context without changing the site structure.
 
 ## Favorite Markdown example
 
-Favorites live in `src/content/favorites/film` and `src/content/favorites/album`. Keep exactly 10 films and 10 albums, with each kind ranked once from `1` through `10`. Store each cover locally under `src/assets/images/favorites/films` or `src/assets/images/favorites/albums`; use the established `film-01-...` or `album-01-...` filename pattern and point `cover` to that local file.
+Favorites live in `src/content/favorites/film` and `src/content/favorites/album`. Keep exactly 10 films and 10 albums, with each kind ranked once from `1` through `10`. Film records identify artwork with a TMDB movie ID; album records use a canonical Spotify album URL.
+
+Film record:
 
 ```md
 ---
@@ -81,18 +83,41 @@ kind: film
 rank: 1
 year: 1976
 creator: Martin Scorsese
-cover: ../../../assets/images/favorites/films/film-01-taxi-driver-us-theatrical.jpg
+tmdbId: 103
 coverAlt: 1976 US Columbia theatrical one-sheet for Taxi Driver
-coverSourceUrl: https://www.impawards.com/1976/taxi_driver_ver1.html
-coverCredit: Artwork by Guy Peellaert. Poster copyright Columbia Pictures.
-editionNote: 1976 first-run US Columbia one-sheet
 lang: en
 ---
 ```
 
-The review is optional. When there is no review, omit the field entirely instead of writing an empty value. Keep `coverSourceUrl`, `coverCredit`, and `editionNote` for every favorite so the source, attribution, and edition are recorded.
+Album record:
 
-Do not hotlink covers or recolor, crop, or use generated imitations of the artwork. Before public deployment, pass the artwork permission and attribution gate: a source or attribution does not equal permission to republish. Do not publicly deploy these covers without permission to do so.
+```md
+---
+title: The Dark Side of the Moon
+translationKey: the-dark-side-of-the-moon
+kind: album
+rank: 1
+year: 1973
+creator: Pink Floyd
+spotifyUrl: https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv
+coverAlt: 1973 standard album cover for The Dark Side of the Moon
+lang: en
+---
+```
+
+The review is optional. When there is no review, omit the field entirely instead of writing an empty value.
+
+### Refresh favorite artwork
+
+Provider metadata is pinned in `src/data/favorite-artwork.json`, so a normal build never calls TMDB or Spotify. Refresh it only when a favorite changes:
+
+1. Copy `.env.example` to `.env` and set `TMDB_READ_ACCESS_TOKEN` to your local TMDB read access token. Spotify oEmbed does not require a key. Never commit `.env`.
+2. Edit the film `tmdbId` or album `spotifyUrl` in the relevant Markdown record.
+3. Run `npm run sync:favorites`.
+4. Review the complete diff in `src/data/favorite-artwork.json`; commit it only after the provider IDs, titles, years, source links, and artwork URLs are correct.
+5. Run `npm run build` before publishing.
+
+The sync command needs the TMDB token only on the maintainer's machine. Keep provider artwork unmodified and preserve the TMDB and Spotify credits rendered by the site.
 
 ## Site config and i18n
 
@@ -108,4 +133,6 @@ The future dynamic character particles and richer interactive visual experiments
 
 ## GitHub Pages activation
 
-This repository includes a deployment workflow but does not create a remote or push changes. After the repository is on GitHub, open `Settings > Pages`, set **Source** to **GitHub Actions**, and allow the workflow to run from the `main` branch. Confirm the published address is `https://stylewth.github.io/` and inspect the workflow run before sharing the site.
+This repository includes a deployment workflow but does not create a remote or push changes. GitHub Pages builds only from the committed artwork manifest. No TMDB or Spotify secret is required in the repository or GitHub Actions.
+
+After the repository is on GitHub, open `Settings > Pages`, set **Source** to **GitHub Actions**, and allow the workflow to run from the `main` branch. Confirm the published address is `https://stylewth.github.io/` and inspect the workflow run before sharing the site.
