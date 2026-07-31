@@ -13,6 +13,11 @@ interface Props {
     close: string;
     selectedWork: string;
     artworkSource: string;
+    credits: string;
+    tmdbLogoAlt: string;
+    tmdbNotice: string;
+    spotifyLogoAlt: string;
+    spotifyAttribution: string;
   };
 }
 
@@ -58,6 +63,32 @@ const { films, albums, copy } = Astro.props;
     <FavoriteFan favorites={films} kind="film" title={copy.movies} />
     <FavoriteFan favorites={albums} kind="album" title={copy.albums} />
   </div>
+
+  <section class="favorites-stage__credits" aria-labelledby="favorite-credits-title">
+    <h3 id="favorite-credits-title">{copy.credits}</h3>
+    <div class="favorites-stage__credit">
+      <a
+        class="favorites-stage__brand favorites-stage__brand--tmdb"
+        href="https://www.themoviedb.org"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img src="/brands/tmdb.svg" width="423" height="35" alt={copy.tmdbLogoAlt} />
+      </a>
+      <p>{copy.tmdbNotice}</p>
+    </div>
+    <div class="favorites-stage__credit">
+      <a
+        class="favorites-stage__brand favorites-stage__brand--spotify"
+        href="https://open.spotify.com"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img src="/brands/spotify.svg" width="823" height="225" alt={copy.spotifyLogoAlt} />
+      </a>
+      <p>{copy.spotifyAttribution}</p>
+    </div>
+  </section>
 
   <dialog class="favorite-dialog" aria-labelledby="favorite-dialog-title" data-favorite-dialog>
     <button type="button" class="favorite-dialog__close" data-favorite-close>
@@ -131,6 +162,56 @@ const { films, albums, copy } = Astro.props;
 
   .favorites-stage__panels {
     padding-block-start: 2rem;
+  }
+
+  .favorites-stage__credits {
+    display: grid;
+    gap: 1rem;
+    margin-block-start: clamp(2.75rem, 6vw, 4.5rem);
+    padding-block-start: 1.25rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .favorites-stage__credits h3 {
+    margin: 0;
+    color: var(--color-muted);
+    font: 650 0.72rem/1 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .favorites-stage__credit {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    max-width: 42rem;
+  }
+
+  .favorites-stage__brand {
+    display: inline-flex;
+    width: fit-content;
+  }
+
+  .favorites-stage__brand--tmdb {
+    width: 8.5rem;
+  }
+
+  .favorites-stage__brand--spotify {
+    width: 7rem;
+  }
+
+  .favorites-stage__credit img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .favorites-stage__credit p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    line-height: 1.45;
   }
 
   .favorite-dialog {
@@ -241,6 +322,11 @@ const { films, albums, copy } = Astro.props;
     .favorite-dialog {
       width: calc(100% - 1rem);
       max-height: calc(100dvh - 1rem);
+    }
+
+    .favorites-stage__credit {
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
     }
   }
 

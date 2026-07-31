@@ -360,6 +360,27 @@ describe('content archive output', () => {
     expectNoHeadingLevelSkips(elsewhere);
   });
 
+  it('renders provider credits after the collections without bundling favorite covers', () => {
+    const elsewhere = readOutput('elsewhere/index.html');
+    const favoriteImages =
+      elsewhere.match(
+        /<img(?=[^>]+src="https:\/\/(?:image\.tmdb\.org|i\.scdn\.co|image-cdn-[a-z0-9-]+\.spotifycdn\.com)\/)[^>]*>/g,
+      ) ?? [];
+
+    expect(elsewhere).toContain(
+      'This product uses the TMDB API but is not endorsed or certified by TMDB.',
+    );
+    expect(elsewhere).toMatch(
+      /<a[^>]+href="https:\/\/www\.themoviedb\.org"[^>]*>[\s\S]*?<img[^>]+src="\/brands\/tmdb\.svg"/,
+    );
+    expect(elsewhere).toMatch(
+      /<a[^>]+href="https:\/\/open\.spotify\.com"[^>]*>[\s\S]*?<img[^>]+src="\/brands\/spotify\.svg"/,
+    );
+    expect(elsewhere.indexOf('favorites-stage__credits')).toBeLessThan(elsewhere.indexOf('>Notes<'));
+    expect(favoriteImages).toHaveLength(20);
+    favoriteImages.forEach((image) => expect(image).not.toContain('/_astro/'));
+  });
+
   it('keeps every favorite readable in the unenhanced document order', () => {
     const elsewhere = readOutput('elsewhere/index.html');
     const filmRanks = [

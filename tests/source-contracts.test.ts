@@ -30,7 +30,7 @@ type ApprovedFavorite = readonly [
   title: string,
   year: number,
   creator: string,
-  coverFile: string,
+  providerId: number | string,
   sourceUrl: string,
 ];
 
@@ -41,8 +41,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Taxi Driver',
     1976,
     'Martin Scorsese',
-    'film-01-taxi-driver-us-theatrical.jpg',
-    'https://www.impawards.com/1976/taxi_driver_ver1.html',
+    103,
+    'https://www.themoviedb.org/movie/103',
   ],
   [
     '02-a-beautiful-mind.md',
@@ -50,8 +50,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'A Beautiful Mind',
     2001,
     'Ron Howard',
-    'film-02-a-beautiful-mind-us-theatrical.jpg',
-    'https://www.impawards.com/2001/beautiful_mind.html',
+    453,
+    'https://www.themoviedb.org/movie/453',
   ],
   [
     '03-interstellar.md',
@@ -59,8 +59,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Interstellar',
     2014,
     'Christopher Nolan',
-    'film-03-interstellar-us-theatrical.jpg',
-    'https://www.impawards.com/2014/interstellar.html',
+    157336,
+    'https://www.themoviedb.org/movie/157336',
   ],
   [
     '04-eat-drink-man-woman.md',
@@ -68,8 +68,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Eat Drink Man Woman',
     1994,
     'Ang Lee',
-    'film-04-eat-drink-man-woman-tw-theatrical.jpg',
-    'https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2010.019.1068',
+    10451,
+    'https://www.themoviedb.org/movie/10451',
   ],
   [
     '05-titanic.md',
@@ -77,8 +77,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Titanic',
     1997,
     'James Cameron',
-    'film-05-titanic-us-theatrical.jpg',
-    'https://www.impawards.com/1997/titanic_ver2.html',
+    597,
+    'https://www.themoviedb.org/movie/597',
   ],
   [
     '06-burning.md',
@@ -86,8 +86,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Burning',
     2018,
     'Lee Chang-dong',
-    'film-06-burning-kr-theatrical.jpg',
-    'https://www.koreanfilm.or.kr/eng/films/index/filmsView.jsp?category=ALL&mode=INDEX_FILMS_LIST&movieCd=20173202&pageIndex=1&pageRowSize=10&peopleCd=&s_genre=ALL&searchKeyword=Lee+Chang-dong&searchType=DIRECTOR&strMenuId=010401&userId=',
+    491584,
+    'https://www.themoviedb.org/movie/491584',
   ],
   [
     '07-paprika.md',
@@ -95,8 +95,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Paprika',
     2006,
     'Satoshi Kon',
-    'film-07-paprika-jp-theatrical.jpg',
-    'https://www.sonypictures.jp/he/815804',
+    4977,
+    'https://www.themoviedb.org/movie/4977',
   ],
   [
     '08-in-the-mood-for-love.md',
@@ -104,8 +104,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'In the Mood for Love',
     2000,
     'Wong Kar-wai',
-    'film-08-in-the-mood-for-love-hk-theatrical.jpg',
-    'https://posteritati.com/poster/14327/in-the-mood-for-love-original-2000-hong-kong-b1-movie-poster',
+    843,
+    'https://www.themoviedb.org/movie/843',
   ],
   [
     '09-love-letter.md',
@@ -113,8 +113,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'Love Letter',
     1995,
     'Shunji Iwai',
-    'film-09-love-letter-jp-theatrical.jpg',
-    'https://cineswitch.com/movie_detail/love-letter',
+    47002,
+    'https://www.themoviedb.org/movie/47002',
   ],
   [
     '10-the-prestige.md',
@@ -122,8 +122,8 @@ const approvedFilmRecords: ApprovedFavorite[] = [
     'The Prestige',
     2006,
     'Christopher Nolan',
-    'film-10-the-prestige-us-theatrical.jpg',
-    'https://www.impawards.com/2006/prestige.html',
+    1124,
+    'https://www.themoviedb.org/movie/1124',
   ],
 ];
 
@@ -134,8 +134,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'The Dark Side of the Moon',
     1973,
     'Pink Floyd',
-    'album-01-the-dark-side-of-the-moon.jpg',
-    'https://musicbrainz.org/release/b84ee12a-09ef-421b-82de-0441a926375b/cover-art',
+    '4LH4d3cOWNNsVw41Gqt2kv',
+    'https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv',
   ],
   [
     '02-the-key.md',
@@ -143,8 +143,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'The Key',
     2013,
     'Eason Chan',
-    'album-02-the-key.jpg',
-    'https://music.apple.com/us/album/the-key/1386714588',
+    '0wWuBzOyOFxzfSPr9HSehB',
+    'https://open.spotify.com/album/0wWuBzOyOFxzfSPr9HSehB',
   ],
   [
     '03-heisei-fuuzoku.md',
@@ -152,8 +152,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'Heisei Fuuzoku - Japanese Manners',
     2007,
     'Sheena Ringo × Neko Saito',
-    'album-03-heisei-fuuzoku.jpg',
-    'https://music.apple.com/us/album/heisei-fuuzoku-japanese-manners/1384785330',
+    '7jl8ThqlDTqSff9Dam29wM',
+    'https://open.spotify.com/album/7jl8ThqlDTqSff9Dam29wM',
   ],
   [
     '04-ok-computer.md',
@@ -161,8 +161,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'OK Computer',
     1997,
     'Radiohead',
-    'album-04-ok-computer.jpg',
-    'https://musicbrainz.org/release/425d8db9-88a3-31e2-bd23-b1a967626dd5/cover-art',
+    '7dxKtc08dYeRVHt3p9CZJn',
+    'https://open.spotify.com/album/7dxKtc08dYeRVHt3p9CZJn',
   ],
   [
     '05-karuki-zahmen-kuri-no-hana.md',
@@ -170,8 +170,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'Karuki Zahmen Kuri No Hana - Kalk Samen Chestnut Flower',
     2003,
     'Sheena Ringo',
-    'album-05-karuki-zahmen-kuri-no-hana.jpg',
-    'https://music.apple.com/jp/album/karuki-zahmen-kuri-no-hana-kalk-samen-chestnut-flower/1385320232',
+    '2i4fy6a51XTaZOYA8rIdRK',
+    'https://open.spotify.com/album/2i4fy6a51XTaZOYA8rIdRK',
   ],
   [
     '06-inside-the-cable-temple.md',
@@ -179,8 +179,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'Inside the Cable Temple',
     2020,
     'Omnipotent Youth Society',
-    'album-06-inside-the-cable-temple.jpg',
-    'https://music.apple.com/tw/album/%E5%86%80%E8%A5%BF%E5%8D%97%E6%9E%97%E8%B7%AF%E8%A1%8C/1545534900',
+    '6ValxpcsrkQP2ugCU2Kxwy',
+    'https://open.spotify.com/album/6ValxpcsrkQP2ugCU2Kxwy',
   ],
   [
     '07-siamese-dream.md',
@@ -188,8 +188,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'Siamese Dream',
     1993,
     'The Smashing Pumpkins',
-    'album-07-siamese-dream.jpg',
-    'https://musicbrainz.org/release/8d967bcd-02e3-380f-8e0d-2f3cfb79561d/cover-art',
+    '4UVERYsIzs6xbDYO8srlqd',
+    'https://open.spotify.com/album/4UVERYsIzs6xbDYO8srlqd',
   ],
   [
     '08-crimson.md',
@@ -197,8 +197,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'CRIMSON',
     1986,
     'Akina Nakamori',
-    'album-08-crimson.jpg',
-    'https://music.apple.com/jp/album/crimson/903270513',
+    '6QOn35uhhnotiad01xwGaN',
+    'https://open.spotify.com/album/6QOn35uhhnotiad01xwGaN',
   ],
   [
     '09-selling-england-by-the-pound.md',
@@ -206,8 +206,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'Selling England by the Pound',
     1973,
     'Genesis',
-    'album-09-selling-england-by-the-pound.jpg',
-    'https://musicbrainz.org/release/b20fe9b2-ffdb-4765-8d1b-60e4c91577eb/cover-art',
+    '7xaM3ah9ZO4BjrcFj5vOZe',
+    'https://open.spotify.com/album/7xaM3ah9ZO4BjrcFj5vOZe',
   ],
   [
     '10-good-kid-maad-city.md',
@@ -215,8 +215,8 @@ const approvedAlbumRecords: ApprovedFavorite[] = [
     'good kid, m.A.A.d city',
     2012,
     'Kendrick Lamar',
-    'album-10-good-kid-maad-city.jpg',
-    'https://musicbrainz.org/release/5d850f71-e51e-44be-96c8-51cc305f3596/cover-art',
+    '6PBZN8cbwkqm1ERj2BGXJ1',
+    'https://open.spotify.com/album/6PBZN8cbwkqm1ERj2BGXJ1',
   ],
 ];
 
@@ -245,7 +245,7 @@ describe('public source contracts', () => {
     expect(markdownFiles(join(contentRoot, 'elsewhere'))).toHaveLength(1);
   });
 
-  it('contains the approved Top 10 films and albums with local covers', () => {
+  it('contains the approved Top 10 films and albums with provider references', () => {
     const filmRoot = join(contentRoot, 'favorites', 'film');
     const albumRoot = join(contentRoot, 'favorites', 'album');
     const imageRoot = join(projectRoot, 'src', 'assets', 'images', 'favorites');
@@ -267,27 +267,54 @@ describe('public source contracts', () => {
 
     expect(films).toEqual(approvedFilmRecords.map(([file]) => file));
     expect(albums).toEqual(approvedAlbumRecords.map(([file]) => file));
-    expect(favoriteImages.map((file) => file.split(/[\\/]/).at(-1)).sort()).toEqual(
-      approvedRecords.map(([, , [, , , , , coverFile]]) => coverFile).sort(),
-    );
+    expect(favoriteImages).toHaveLength(0);
 
     approvedRecords.forEach(([kind, root, record]) => {
-      const [file, rank, title, year, creator, coverFile, sourceUrl] = record;
+      const [file, rank, title, year, creator, providerId, sourceUrl] = record;
       const content = readFileSync(join(root, file), 'utf8');
       expect(content).toContain(`title: ${title}`);
       expect(content).toContain(`kind: ${kind}`);
       expect(content).toContain(`rank: ${rank}`);
       expect(content).toContain(`year: ${year}`);
       expect(content).toContain(`creator: ${creator}`);
-      expect(content).toContain(
-        `cover: ../../../assets/images/favorites/${kind === 'film' ? 'films' : 'albums'}/${coverFile}`,
-      );
-      expect(content).toContain(`coverSourceUrl: ${sourceUrl}`);
-      expect(content).toMatch(/^coverCredit:\s+\S/m);
-      expect(content).toMatch(/editionNote:\s+\S/);
+      if (kind === 'film') {
+        expect(content).toContain(`tmdbId: ${providerId}`);
+        expect(sourceUrl).toBe(`https://www.themoviedb.org/movie/${providerId}`);
+      } else {
+        expect(content).toContain(`spotifyUrl: ${sourceUrl}`);
+        expect(sourceUrl).toBe(`https://open.spotify.com/album/${providerId}`);
+      }
+      expect(content).not.toMatch(/^cover:/m);
+      expect(content).not.toMatch(/^coverSourceUrl:/m);
+      expect(content).not.toMatch(/^coverCredit:/m);
+      expect(content).not.toMatch(/^editionNote:/m);
       expect(content).not.toMatch(/^review:/m);
       expect(content).not.toContain('.invalid');
     });
+  });
+
+  it('publishes linked provider credits and keeps favorite artwork remote', () => {
+    const stage = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoritesStage.astro'),
+      'utf8',
+    );
+    const copy = readFileSync(join(projectRoot, 'src', 'i18n', 'en.ts'), 'utf8');
+    const notices = readFileSync(join(projectRoot, 'THIRD_PARTY_NOTICES.md'), 'utf8');
+    const favoriteImageRoot = join(projectRoot, 'src', 'assets', 'images', 'favorites');
+
+    expect(stage).toContain('class="favorites-stage__credits"');
+    expect(stage).toContain('href="https://www.themoviedb.org"');
+    expect(stage).toContain('src="/brands/tmdb.svg"');
+    expect(stage).toContain('href="https://open.spotify.com"');
+    expect(stage).toContain('src="/brands/spotify.svg"');
+    expect(copy).toContain(
+      'This product uses the TMDB API but is not endorsed or certified by TMDB.',
+    );
+    expect(existsSync(join(projectRoot, 'public', 'brands', 'tmdb.svg'))).toBe(true);
+    expect(existsSync(join(projectRoot, 'public', 'brands', 'spotify.svg'))).toBe(true);
+    expect(notices).toContain('https://developer.themoviedb.org/docs/faq');
+    expect(notices).toContain('https://developer.spotify.com/documentation/design');
+    expect(existsSync(favoriteImageRoot) ? projectFiles(favoriteImageRoot) : []).toHaveLength(0);
   });
 
   it('retains the two verified project repositories', () => {
@@ -501,12 +528,15 @@ describe('public source contracts', () => {
     );
 
     expect(contentConfig).toContain('const favorites = defineCollection');
-    expect(contentConfig).toContain("kind: z.enum(['film', 'album'])");
+    expect(contentConfig).toContain("z.discriminatedUnion('kind'");
+    expect(contentConfig).toContain("kind: z.literal('film')");
+    expect(contentConfig).toContain('tmdbId: z.number().int().positive()');
+    expect(contentConfig).toContain("kind: z.literal('album')");
+    expect(contentConfig).toContain('spotifyUrl: z');
     expect(contentConfig).toMatch(/rank:\s*z\.number\(\)\.int\(\)\.min\(1\)\.max\(10\)/);
     expect(contentConfig).toMatch(/year:\s*z\.number\(\)\.int\(\)\.min\(1900\)\.max\(9999\)/);
-    expect(contentConfig).toContain('cover: image()');
-    expect(contentConfig).toContain('coverSourceUrl: z.url()');
-    expect(contentConfig).toContain('editionNote: z.string().trim().min(1)');
+    expect(contentConfig).not.toContain('coverSourceUrl: z.url()');
+    expect(contentConfig).not.toContain('editionNote: z.string().trim().min(1)');
     expect(contentConfig).toMatch(
       /review:\s*z\.string\(\)\.trim\(\)\.min\(1\)\.max\(180\)\.optional\(\)/,
     );

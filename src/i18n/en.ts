@@ -54,6 +54,11 @@ export const en = {
     close: 'Close',
     selectedWork: 'Selected favorite',
     artworkSource: 'Artwork source',
+    credits: 'Artwork credits',
+    tmdbLogoAlt: 'The Movie Database',
+    tmdbNotice: 'This product uses the TMDB API but is not endorsed or certified by TMDB.',
+    spotifyLogoAlt: 'Spotify',
+    spotifyAttribution: 'Album artwork and metadata from Spotify.',
   },
   metadata: {
     year: 'Year',
