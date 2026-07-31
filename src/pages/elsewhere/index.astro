@@ -2,15 +2,30 @@
 import { getCollection, render } from 'astro:content';
 import FavoritesStage from '../../components/elsewhere/FavoritesStage.astro';
 import { site } from '../../config/site';
+import favoriteArtworkData from '../../data/favorite-artwork.json';
 import { en } from '../../i18n/en';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import { assertUniqueTranslationKeys } from '../../lib/content';
-import { assertCompleteFavoriteSet, sortFavorites } from '../../lib/favorites';
+import {
+  assertFavoriteArtworkManifest,
+  favoriteArtworkFor,
+  type FavoriteArtworkManifest,
+} from '../../lib/favorite-artwork';
+import {
+  assertCompleteFavoriteSet,
+  favoriteCardModel,
+  sortFavorites,
+} from '../../lib/favorites';
 
 const elsewhere = await getCollection('elsewhere');
 assertUniqueTranslationKeys(elsewhere, 'elsewhere');
 const favorites = await getCollection('favorites');
 assertCompleteFavoriteSet(favorites, 'en');
+const favoriteArtwork = favoriteArtworkData as FavoriteArtworkManifest;
+assertFavoriteArtworkManifest(
+  favorites.map(({ data }) => data),
+  favoriteArtwork,
+);
 
 const publishedElsewhere = elsewhere
   .filter((entry) => entry.data.lang === 'en')
@@ -18,8 +33,12 @@ const publishedElsewhere = elsewhere
 const entries = await Promise.all(
   publishedElsewhere.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
 );
-const films = sortFavorites(favorites, 'film', 'en');
-const albums = sortFavorites(favorites, 'album', 'en');
+const films = sortFavorites(favorites, 'film', 'en').map((entry) =>
+  favoriteCardModel(entry, favoriteArtworkFor(entry.data.translationKey, favoriteArtwork)),
+);
+const albums = sortFavorites(favorites, 'album', 'en').map((entry) =>
+  favoriteCardModel(entry, favoriteArtworkFor(entry.data.translationKey, favoriteArtwork)),
+);
 ---
 
 <ContentLayout

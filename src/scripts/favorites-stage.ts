@@ -101,12 +101,10 @@ class FavoritesStageElement extends HTMLElement {
     this.#restoreFocusAfterClose = true;
 
     const art = this.#dialog.querySelector<HTMLElement>('[data-favorite-dialog-art]');
-    const picture = trigger.querySelector('picture')?.cloneNode(true) as HTMLElement | undefined;
-    if (art && picture) {
-      picture.querySelectorAll<HTMLElement>('[sizes]').forEach((element) => {
-        element.setAttribute('sizes', '(max-width: 48rem) 92vw, 30rem');
-      });
-      art.replaceChildren(picture);
+    const image = trigger.querySelector('img')?.cloneNode(true) as HTMLImageElement | undefined;
+    if (art && image) {
+      image.setAttribute('sizes', '(max-width: 48rem) 92vw, 30rem');
+      art.replaceChildren(image);
     }
 
     const setText = (selector: string, value: string | undefined): void => {
@@ -125,11 +123,9 @@ class FavoritesStageElement extends HTMLElement {
 
     const original = this.#dialog.querySelector<HTMLElement>('[data-favorite-dialog-original]');
     const review = this.#dialog.querySelector<HTMLElement>('[data-favorite-dialog-review]');
-    const credit = this.#dialog.querySelector<HTMLElement>('[data-favorite-dialog-credit]');
     for (const [element, value] of [
       [original, trigger.dataset.favoriteOriginalTitle],
       [review, trigger.dataset.favoriteReview],
-      [credit, trigger.dataset.favoriteCoverCredit],
     ] as const) {
       if (!element) continue;
       element.textContent = value ?? '';
@@ -137,12 +133,14 @@ class FavoritesStageElement extends HTMLElement {
     }
 
     const source = this.#dialog.querySelector<HTMLAnchorElement>('[data-favorite-dialog-source]');
-    const sourceUrl = trigger.dataset.favoriteCoverSource;
+    const sourceUrl = trigger.dataset.favoriteSource;
     if (source && sourceUrl) {
       source.href = sourceUrl;
+      source.textContent = trigger.dataset.favoriteProviderLabel ?? '';
       source.removeAttribute('hidden');
     } else if (source) {
       source.removeAttribute('href');
+      source.textContent = '';
       source.setAttribute('hidden', '');
     }
 

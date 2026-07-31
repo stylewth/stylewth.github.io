@@ -1,10 +1,10 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { FavoriteCardModel } from '../../lib/favorites';
 import FavoriteFan from './FavoriteFan.astro';
 
 interface Props {
-  films: CollectionEntry<'favorites'>[];
-  albums: CollectionEntry<'favorites'>[];
+  films: FavoriteCardModel[];
+  albums: FavoriteCardModel[];
   copy: {
     topTens: string;
     movies: string;
@@ -71,7 +71,6 @@ const { films, albums, copy } = Astro.props;
         <p class="favorite-dialog__original" data-favorite-dialog-original hidden></p>
         <p class="favorite-dialog__meta" data-favorite-dialog-meta></p>
         <p class="favorite-dialog__review" data-favorite-dialog-review hidden></p>
-        <p class="favorite-dialog__credit" data-favorite-dialog-credit hidden></p>
         <a
           class="favorite-dialog__source"
           data-favorite-dialog-source
@@ -163,19 +162,16 @@ const { films, albums, copy } = Astro.props;
 
   .favorite-dialog__card {
     display: grid;
+    grid-template-rows: auto auto;
   }
 
   .favorite-dialog__art {
-    grid-area: 1 / 1;
+    grid-row: 1;
     align-self: start;
   }
 
-  .favorite-dialog__art :global(picture),
   .favorite-dialog__art :global(img) {
     width: 100%;
-  }
-
-  .favorite-dialog__art :global(img) {
     height: auto;
     max-height: 78dvh;
     object-fit: contain;
@@ -183,12 +179,10 @@ const { films, albums, copy } = Astro.props;
   }
 
   .favorite-dialog__caption {
-    z-index: 1;
-    grid-area: 1 / 1;
-    align-self: end;
+    grid-row: 2;
     padding: 1.15rem;
-    background: rgb(17 17 15 / 0.86);
-    color: #f7f5ef;
+    background: var(--color-paper);
+    color: var(--color-text);
   }
 
   .favorite-dialog__caption h3 {
@@ -199,44 +193,38 @@ const { films, albums, copy } = Astro.props;
   .favorite-dialog__rank,
   .favorite-dialog__original,
   .favorite-dialog__meta,
-  .favorite-dialog__review,
-  .favorite-dialog__credit {
+  .favorite-dialog__review {
     margin: 0;
   }
 
   .favorite-dialog__rank,
   .favorite-dialog__meta {
-    color: rgb(247 245 239 / 0.72);
+    color: var(--color-muted);
     font: 600 0.76rem/1.4 var(--font-body);
   }
 
   .favorite-dialog__original {
     margin-block-start: 0.25rem;
-    color: rgb(247 245 239 / 0.82);
+    color: var(--color-muted);
     font-size: 0.86rem;
   }
 
   .favorite-dialog__review {
     margin-block-start: 0.9rem;
     padding-block-start: 0.8rem;
-    border-top: 1px solid rgb(247 245 239 / 0.28);
+    border-top: 1px solid var(--color-rule);
     font-family: var(--font-display);
     font-size: 1rem;
     line-height: 1.45;
   }
 
-  .favorite-dialog__credit,
   .favorite-dialog__source {
-    color: rgb(247 245 239 / 0.76);
+    color: var(--color-muted);
     font: 500 0.68rem/1.4 var(--font-body);
   }
 
-  .favorite-dialog__credit {
-    margin-block-start: 0.8rem;
-  }
-
   .favorite-dialog__source {
-    margin-block-start: 0.35rem;
+    margin-block-start: 0.8rem;
     text-underline-offset: 0.16em;
   }
 

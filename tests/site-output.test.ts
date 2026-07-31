@@ -329,8 +329,25 @@ describe('content archive output', () => {
     expect(elsewhere).toContain('The Dark Side of the Moon');
     expect(elsewhere).toContain('1976');
     expect(elsewhere).toContain('Martin Scorsese');
-    expect(elsewhere).toContain('Artwork by Guy Peellaert');
-    expect(elsewhere).not.toMatch(/<(?:img|source)[^>]+(?:src|srcset)="https:/);
+    expect(
+      elsewhere.match(
+        /<img(?=[^>]+src="https:\/\/(?:image\.tmdb\.org|i\.scdn\.co|image-cdn-[a-z0-9-]+\.spotifycdn\.com)\/)[^>]*>/g,
+      ) ?? [],
+    ).toHaveLength(20);
+    expect(
+      elsewhere.match(/data-favorite-source="https:\/\/www\.themoviedb\.org\/movie\//g) ?? [],
+    ).toHaveLength(10);
+    expect(
+      elsewhere.match(/data-favorite-source="https:\/\/open\.spotify\.com\/album\//g) ?? [],
+    ).toHaveLength(10);
+    expect(
+      elsewhere.match(
+        /<img(?=[^>]+src="https:\/\/image\.tmdb\.org\/t\/p\/w500\/)(?=[^>]+srcset="https:\/\/image\.tmdb\.org\/t\/p\/w342\/)[^>]*>/g,
+      ) ?? [],
+    ).toHaveLength(10);
+    expect(elsewhere).toMatch(
+      /<div class="favorite-dialog__art" data-favorite-dialog-art[^>]*><\/div>\s*<div class="favorite-dialog__caption"[^>]*>/,
+    );
     expect(elsewhere).not.toContain('One-line review');
     expect(elsewhere).not.toMatch(/data-favorite-review="[^"]+"/);
     expect(elsewhere.indexOf('Top tens')).toBeLessThan(elsewhere.indexOf('>Notes<'));
@@ -371,6 +388,22 @@ describe('content archive output', () => {
       ) ?? [],
     ).toHaveLength(20);
     expect(elsewhere.match(/<favorites-stage\b[^>]*>/)?.[0]).not.toContain('data-enhanced');
+  });
+
+  it('places dialog captions in a separate row below unmodified artwork', () => {
+    const stage = readFileSync(
+      join(process.cwd(), 'src', 'components', 'elsewhere', 'FavoritesStage.astro'),
+      'utf8',
+    );
+    const cardRule = stage.match(/\.favorite-dialog__card\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const artRule = stage.match(/\.favorite-dialog__art\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const captionRule = stage.match(/\.favorite-dialog__caption\s*\{([^}]*)\}/s)?.[1] ?? '';
+
+    expect(cardRule).toMatch(/grid-template-rows:\s*auto auto;/);
+    expect(artRule).toMatch(/grid-row:\s*1;/);
+    expect(captionRule).toMatch(/grid-row:\s*2;/);
+    expect(captionRule).toMatch(/background:\s*var\(--color-paper\);/);
+    expect(captionRule).not.toMatch(/grid-area:\s*1\s*\/\s*1|rgb\([^)]*\/\s*0\./);
   });
 
   it('uses the approved Elsewhere description', () => {

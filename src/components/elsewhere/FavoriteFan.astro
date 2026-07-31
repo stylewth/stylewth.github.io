@@ -1,14 +1,13 @@
 ---
-import { Picture } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import {
   favoriteCreatorLabel,
   getFavoriteFanPosition,
+  type FavoriteCardModel,
   type FavoriteKind,
 } from '../../lib/favorites';
 
 interface Props {
-  favorites: CollectionEntry<'favorites'>[];
+  favorites: FavoriteCardModel[];
   kind: FavoriteKind;
   title: string;
 }
@@ -31,9 +30,10 @@ const tabId = `favorite-tab-${kind}`;
     <ol class="favorite-fan" data-favorite-list={kind}>
       {
         favorites.map((favorite) => {
-          const position = getFavoriteFanPosition(favorite.data.rank);
-          const rank = String(favorite.data.rank).padStart(2, '0');
-          const accessibleName = `${rank}. ${favorite.data.title}, ${favorite.data.year}, ${creatorLabel}: ${favorite.data.creator}`;
+          const entry = favorite.entry;
+          const position = getFavoriteFanPosition(entry.data.rank);
+          const rank = String(entry.data.rank).padStart(2, '0');
+          const accessibleName = `${rank}. ${entry.data.title}, ${entry.data.year}, ${creatorLabel}: ${entry.data.creator}`;
           const style = [
             `--fan-x:${position.xRem}rem`,
             `--fan-y:${position.yRem}rem`,
@@ -50,29 +50,32 @@ const tabId = `favorite-tab-${kind}`;
                 aria-label={accessibleName}
                 data-favorite-trigger
                 data-favorite-kind={kind}
-                data-favorite-rank={favorite.data.rank}
-                data-favorite-title={favorite.data.title}
-                data-favorite-original-title={favorite.data.originalTitle}
-                data-favorite-year={favorite.data.year}
-                data-favorite-creator={favorite.data.creator}
+                data-favorite-rank={entry.data.rank}
+                data-favorite-title={entry.data.title}
+                data-favorite-original-title={entry.data.originalTitle}
+                data-favorite-year={entry.data.year}
+                data-favorite-creator={entry.data.creator}
                 data-favorite-creator-label={creatorLabel}
-                data-favorite-review={favorite.data.review}
-                data-favorite-cover-credit={favorite.data.coverCredit}
-                data-favorite-cover-source={favorite.data.coverSourceUrl}
+                data-favorite-review={entry.data.review}
+                data-favorite-provider={favorite.provider}
+                data-favorite-provider-label={favorite.providerLabel}
+                data-favorite-source={favorite.sourceUrl}
               >
-                <Picture
-                  src={favorite.data.cover}
-                  alt={favorite.data.coverAlt}
-                  widths={[160, 240, 360, 520, 720, 960]}
+                <img
+                  src={favorite.imageSrc}
+                  srcset={favorite.imageSrcset}
                   sizes="(max-width: 48rem) 8.5rem, 9.25rem"
-                  formats={['avif', 'webp']}
+                  width={favorite.imageWidth}
+                  height={favorite.imageHeight}
+                  alt={entry.data.coverAlt}
                   loading="lazy"
+                  referrerpolicy="no-referrer"
                 />
                 <span class="favorite-card__foot">
                   <span class="favorite-card__rank" aria-hidden="true">{rank}</span>
-                  <span>{favorite.data.year}</span>
+                  <span>{entry.data.year}</span>
                   <span aria-hidden="true">·</span>
-                  <span>{favorite.data.creator}</span>
+                  <span>{entry.data.creator}</span>
                 </span>
               </button>
             </li>
@@ -112,12 +115,8 @@ const tabId = `favorite-tab-${kind}`;
     opacity: 1;
   }
 
-  .favorite-card__trigger :global(picture),
   .favorite-card__trigger :global(img) {
     width: 100%;
-  }
-
-  .favorite-card__trigger :global(img) {
     height: auto;
     aspect-ratio: 2 / 3;
     object-fit: contain;

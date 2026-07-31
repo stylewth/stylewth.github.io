@@ -15,12 +15,12 @@ function fixture(): HTMLElement {
         data-favorite-rank="1" data-favorite-title="Taxi Driver"
         data-favorite-year="1976" data-favorite-creator="Martin Scorsese"
         data-favorite-creator-label="Director"
-        data-favorite-cover-credit="Artwork by Guy Peellaert."
-        data-favorite-cover-source="https://example.com/taxi">
-        <picture>
-          <source sizes="9rem" srcset="/taxi-360.avif 360w, /taxi-960.avif 960w">
-          <img src="/taxi.jpg" sizes="9rem" alt="Taxi Driver poster">
-        </picture>
+        data-favorite-provider-label="TMDB"
+        data-favorite-source="https://www.themoviedb.org/movie/103">
+        <img src="https://image.tmdb.org/t/p/w500/taxi.jpg"
+          srcset="https://image.tmdb.org/t/p/w342/taxi.jpg 342w, https://image.tmdb.org/t/p/w500/taxi.jpg 500w, https://image.tmdb.org/t/p/w780/taxi.jpg 780w"
+          sizes="9rem" width="500" height="750" alt="Taxi Driver poster"
+          loading="lazy" referrerpolicy="no-referrer">
       </button>
     </section>
     <section id="favorite-panel-album" role="tabpanel" data-favorite-panel="album">
@@ -28,9 +28,10 @@ function fixture(): HTMLElement {
         data-favorite-rank="4" data-favorite-title="OK Computer"
         data-favorite-year="1997" data-favorite-creator="Radiohead"
         data-favorite-creator-label="Artist" data-favorite-review="A written note."
-        data-favorite-cover-credit="Artwork by Stanley Donwood and Thom Yorke."
-        data-favorite-cover-source="https://example.com/ok-computer">
-        <picture><img src="/ok-computer.jpg" sizes="9rem" alt="OK Computer cover"></picture>
+        data-favorite-provider-label="Spotify"
+        data-favorite-source="https://open.spotify.com/album/7dxKtc08dYeRVHt3p9CZJn">
+        <img src="https://i.scdn.co/image/ok-computer" sizes="9rem" width="300"
+          height="300" alt="OK Computer cover" loading="lazy" referrerpolicy="no-referrer">
       </button>
     </section>
     <dialog data-favorite-dialog aria-labelledby="favorite-dialog-title">
@@ -41,7 +42,6 @@ function fixture(): HTMLElement {
       <p data-favorite-dialog-original hidden></p>
       <p data-favorite-dialog-meta></p>
       <p data-favorite-dialog-review hidden></p>
-      <p data-favorite-dialog-credit hidden></p>
       <a data-favorite-dialog-source hidden>Artwork source</a>
     </dialog>
   `;
@@ -113,9 +113,19 @@ describe('favorites-stage', () => {
 
     const dialog = host.querySelector<HTMLDialogElement>('[data-favorite-dialog]')!;
     expect(dialog.hasAttribute('open')).toBe(true);
-    expect(dialog.querySelector('[data-favorite-dialog-art] img')?.getAttribute('src')).toBe(
-      '/taxi.jpg',
+    const dialogImage = dialog.querySelector<HTMLImageElement>('[data-favorite-dialog-art] img')!;
+    expect(dialogImage.getAttribute('src')).toBe(
+      'https://image.tmdb.org/t/p/w500/taxi.jpg',
     );
+    expect(dialogImage.getAttribute('srcset')).toBe(
+      'https://image.tmdb.org/t/p/w342/taxi.jpg 342w, https://image.tmdb.org/t/p/w500/taxi.jpg 500w, https://image.tmdb.org/t/p/w780/taxi.jpg 780w',
+    );
+    expect(dialogImage.getAttribute('sizes')).toBe('(max-width: 48rem) 92vw, 30rem');
+    expect(dialogImage.getAttribute('width')).toBe('500');
+    expect(dialogImage.getAttribute('height')).toBe('750');
+    expect(dialogImage.getAttribute('alt')).toBe('Taxi Driver poster');
+    expect(dialogImage.getAttribute('referrerpolicy')).toBe('no-referrer');
+    expect(dialog.querySelector('[data-favorite-dialog-art] picture')).toBeNull();
     expect(dialog.querySelector('[data-favorite-dialog-title]')?.textContent).toBe('Taxi Driver');
     expect(dialog.querySelector('[data-favorite-dialog-rank]')?.textContent).toBe('01');
     expect(dialog.querySelector('[data-favorite-dialog-meta]')?.textContent).toBe(
@@ -124,17 +134,9 @@ describe('favorites-stage', () => {
     expect(
       dialog.querySelector('[data-favorite-dialog-review]')?.hasAttribute('hidden'),
     ).toBe(true);
-    expect(
-      [...dialog.querySelectorAll<HTMLElement>('[data-favorite-dialog-art] [sizes]')].every(
-        (element) => element.getAttribute('sizes') === '(max-width: 48rem) 92vw, 30rem',
-      ),
-    ).toBe(true);
-    expect(dialog.querySelector('[data-favorite-dialog-credit]')?.textContent).toBe(
-      'Artwork by Guy Peellaert.',
-    );
-    expect(
-      dialog.querySelector<HTMLAnchorElement>('[data-favorite-dialog-source]')?.href,
-    ).toBe('https://example.com/taxi');
+    const source = dialog.querySelector<HTMLAnchorElement>('[data-favorite-dialog-source]')!;
+    expect(source.href).toBe('https://www.themoviedb.org/movie/103');
+    expect(source.textContent).toBe('TMDB');
   });
 
   it('reveals a written review inside the enlarged card', async () => {

@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import type { CollectionEntry } from 'astro:content';
 import {
   assertCompleteFavoriteSet,
+  favoriteCardModel,
   favoriteCreatorLabel,
   getFavoriteFanPosition,
   sortFavorites,
   type FavoriteInvariantEntry,
 } from './favorites';
+import type { FavoriteArtwork } from './favorite-artwork';
 
 function entries(
   kind: 'film' | 'album',
@@ -24,6 +27,80 @@ function entries(
 }
 
 describe('favorites', () => {
+  const favoriteEntry = (
+    kind: 'film' | 'album',
+  ): CollectionEntry<'favorites'> =>
+    ({
+      id: `${kind}/favorite.md`,
+      collection: 'favorites',
+      data: {
+        kind,
+        title: 'Favorite',
+        translationKey: 'favorite',
+        rank: 1,
+        year: 2000,
+        creator: 'Creator',
+        coverAlt: 'Favorite artwork',
+        lang: 'en',
+        ...(kind === 'film'
+          ? { tmdbId: 103 }
+          : { spotifyUrl: 'https://open.spotify.com/album/album123' }),
+      },
+    }) as CollectionEntry<'favorites'>;
+
+  const tmdbArtwork: FavoriteArtwork = {
+    provider: 'tmdb',
+    providerId: 103,
+    posterPath: '/poster.jpg',
+    sourceUrl: 'https://www.themoviedb.org/movie/103',
+  };
+
+  const spotifyArtwork: FavoriteArtwork = {
+    provider: 'spotify',
+    providerId: 'album123',
+    imageUrl: 'https://i.scdn.co/image/album123',
+    imageWidth: 300,
+    imageHeight: 300,
+    sourceUrl: 'https://open.spotify.com/album/album123',
+    embedUrl: 'https://open.spotify.com/embed/album/album123',
+  };
+
+  it('builds a TMDB card with responsive provider artwork', () => {
+    expect(favoriteCardModel(favoriteEntry('film'), tmdbArtwork)).toMatchObject({
+      provider: 'tmdb',
+      imageSrc: 'https://image.tmdb.org/t/p/w500/poster.jpg',
+      imageSrcset:
+        'https://image.tmdb.org/t/p/w342/poster.jpg 342w, https://image.tmdb.org/t/p/w500/poster.jpg 500w, https://image.tmdb.org/t/p/w780/poster.jpg 780w',
+      imageWidth: 500,
+      imageHeight: 750,
+      sourceUrl: 'https://www.themoviedb.org/movie/103',
+      providerLabel: 'TMDB',
+    });
+  });
+
+  it('builds a Spotify card with the exact oEmbed image and no variants', () => {
+    const card = favoriteCardModel(favoriteEntry('album'), spotifyArtwork);
+
+    expect(card).toMatchObject({
+      provider: 'spotify',
+      imageSrc: 'https://i.scdn.co/image/album123',
+      imageWidth: 300,
+      imageHeight: 300,
+      sourceUrl: 'https://open.spotify.com/album/album123',
+      providerLabel: 'Spotify',
+    });
+    expect(card).not.toHaveProperty('imageSrcset');
+  });
+
+  it('rejects provider artwork that does not match the content kind', () => {
+    expect(() => favoriteCardModel(favoriteEntry('film'), spotifyArtwork)).toThrow(
+      'Film favorites must use TMDB artwork',
+    );
+    expect(() => favoriteCardModel(favoriteEntry('album'), tmdbArtwork)).toThrow(
+      'Album favorites must use Spotify artwork',
+    );
+  });
+
   it('sorts one language and kind by rank', () => {
     const input = [
       ...entries('film', [3, 1, 2]),

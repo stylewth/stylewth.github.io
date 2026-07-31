@@ -128,7 +128,12 @@ describe('favorite artwork providers', () => {
       },
     ],
   ])('rejects %s', (_label, invalidEntries, invalidManifest) => {
-    expect(() => assertFavoriteArtworkManifest(invalidEntries, invalidManifest)).toThrow();
+    expect(() =>
+      assertFavoriteArtworkManifest(
+        invalidEntries,
+        invalidManifest as FavoriteArtworkManifest,
+      ),
+    ).toThrow();
   });
 
   it('accepts matching provider entries and manifest items', () => {
@@ -147,7 +152,7 @@ describe('favorite artwork providers', () => {
   it('matches every repository favorite to one complete manifest item', () => {
     const repositoryEntries = readFavoriteProviderEntries(
       join(process.cwd(), 'src', 'content', 'favorites'),
-    );
+    ) as unknown as FavoriteProviderEntry[];
     const repositoryManifest = JSON.parse(
       readFileSync(join(process.cwd(), 'src', 'data', 'favorite-artwork.json'), 'utf8'),
     ) as FavoriteArtworkManifest;

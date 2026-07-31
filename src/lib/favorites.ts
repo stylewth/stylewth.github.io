@@ -1,3 +1,10 @@
+import type { CollectionEntry } from 'astro:content';
+import {
+  tmdbImageSrcset,
+  tmdbImageUrl,
+  type FavoriteArtwork,
+} from './favorite-artwork';
+
 export type FavoriteKind = 'film' | 'album';
 
 export type FavoriteInvariantEntry = {
@@ -16,6 +23,53 @@ export type FavoriteFanPosition = {
   rotationDeg: number;
   zIndex: number;
 };
+
+export type FavoriteCardModel = {
+  entry: CollectionEntry<'favorites'>;
+  provider: 'tmdb' | 'spotify';
+  imageSrc: string;
+  imageSrcset?: string;
+  imageWidth: number;
+  imageHeight: number;
+  sourceUrl: string;
+  providerLabel: 'TMDB' | 'Spotify';
+};
+
+export function favoriteCardModel(
+  entry: CollectionEntry<'favorites'>,
+  artwork: FavoriteArtwork,
+): FavoriteCardModel {
+  if (entry.data.kind === 'film') {
+    if (artwork.provider !== 'tmdb') {
+      throw new Error('Film favorites must use TMDB artwork');
+    }
+
+    return {
+      entry,
+      provider: artwork.provider,
+      imageSrc: tmdbImageUrl(artwork.posterPath, 'w500'),
+      imageSrcset: tmdbImageSrcset(artwork.posterPath),
+      imageWidth: 500,
+      imageHeight: 750,
+      sourceUrl: artwork.sourceUrl,
+      providerLabel: 'TMDB',
+    };
+  }
+
+  if (artwork.provider !== 'spotify') {
+    throw new Error('Album favorites must use Spotify artwork');
+  }
+
+  return {
+    entry,
+    provider: artwork.provider,
+    imageSrc: artwork.imageUrl,
+    imageWidth: artwork.imageWidth,
+    imageHeight: artwork.imageHeight,
+    sourceUrl: artwork.sourceUrl,
+    providerLabel: 'Spotify',
+  };
+}
 
 export function sortFavorites<T extends FavoriteInvariantEntry>(
   entries: readonly T[],
