@@ -155,7 +155,19 @@ const tabId = `favorite-tab-${kind}`;
   }
 
   :global(favorites-stage[data-enhanced]) .favorite-card__trigger {
+    --favorite-lift: 0rem;
+    --favorite-scale: 1;
+    --favorite-visual-rotation: var(--fan-rotation);
     cursor: pointer;
+    transform:
+      translate3d(0, var(--favorite-lift), 0)
+      rotate(calc(var(--favorite-visual-rotation) - var(--fan-rotation)))
+      scale(var(--favorite-scale));
+    transform-origin: 50% 85%;
+    transition:
+      transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 180ms ease,
+      box-shadow 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   :global(favorites-stage[data-enhanced]) .favorite-card__trigger:focus-visible {
@@ -187,16 +199,28 @@ const tabId = `favorite-tab-${kind}`;
       translate3d(calc(-50% + var(--fan-x)), var(--fan-y), 0)
       rotate(var(--fan-rotation));
     transform-origin: 50% 145%;
-    transition:
-      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 180ms ease;
   }
 
   :global(favorites-stage[data-enhanced]) .favorite-card:hover {
     z-index: 30;
-    transform:
-      translate3d(calc(-50% + var(--fan-x)), calc(var(--fan-y) - 1rem), 0)
-      rotate(0deg);
+  }
+
+  :global(favorites-stage[data-enhanced]) .favorite-card:hover .favorite-card__trigger {
+    --favorite-lift: -0.7rem;
+    --favorite-scale: 1.018;
+    --favorite-visual-rotation: calc(var(--fan-rotation) * 0.18);
+    border-color: var(--favorite-accent);
+    box-shadow:
+      0 1.1rem 1.8rem rgb(16 17 15 / 0.18),
+      0 0.22rem 0.55rem rgb(16 17 15 / 0.12);
+  }
+
+  :global(favorites-stage[data-enhanced]) .favorite-card:active .favorite-card__trigger {
+    --favorite-lift: -0.32rem;
+    --favorite-scale: 0.995;
+    box-shadow:
+      0 0.55rem 0.9rem rgb(16 17 15 / 0.14),
+      0 0.12rem 0.28rem rgb(16 17 15 / 0.10);
   }
 
   @media (max-width: 48rem) {
@@ -210,14 +234,13 @@ const tabId = `favorite-tab-${kind}`;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(favorites-stage[data-enhanced]) .favorite-card {
+    :global(favorites-stage[data-enhanced]) .favorite-card__trigger {
       transition: none;
     }
 
-    :global(favorites-stage[data-enhanced]) .favorite-card:hover {
-      transform:
-        translate3d(calc(-50% + var(--fan-x)), var(--fan-y), 0)
-        rotate(var(--fan-rotation));
+    :global(favorites-stage[data-enhanced]) .favorite-card:hover .favorite-card__trigger,
+    :global(favorites-stage[data-enhanced]) .favorite-card:active .favorite-card__trigger {
+      transform: none;
     }
   }
 </style>

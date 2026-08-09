@@ -752,7 +752,7 @@ describe('public source contracts', () => {
     expect(source).toContain('var(--fan-rotation)');
     expect(source).toContain('@media (prefers-reduced-motion: reduce)');
     expect(source).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?favorite-card:hover[\s\S]*?var\(--fan-y\)[\s\S]*?var\(--fan-rotation\)/,
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?favorite-card:hover \.favorite-card__trigger,[\s\S]*?favorite-card:active \.favorite-card__trigger\s*\{[^}]*transform:\s*none;/,
     );
     expect(source).not.toContain('gradient(');
     expect(source).not.toMatch(/\bfilter\s*:/);
@@ -780,6 +780,49 @@ describe('public source contracts', () => {
     );
   });
 
+  it('animates the focus dialog while honoring reduced-motion preferences', () => {
+    const stage = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoritesStage.astro'),
+      'utf8',
+    );
+    const dialogOpenRule = stage.match(/\.favorite-dialog\[open\]\s*\{([^}]*)\}/)?.[1] ?? '';
+    const backdropOpenRule =
+      stage.match(/\.favorite-dialog\[open\]::backdrop\s*\{([^}]*)\}/)?.[1] ?? '';
+    const dialogKeyframes = stage.slice(
+      stage.indexOf('@keyframes favorite-dialog-enter'),
+      stage.indexOf('@keyframes favorite-dialog-backdrop-enter'),
+    );
+    const backdropKeyframesStart = stage.indexOf('@keyframes favorite-dialog-backdrop-enter');
+    const backdropKeyframes = stage.slice(
+      backdropKeyframesStart,
+      stage.indexOf('.favorite-dialog__close {', backdropKeyframesStart),
+    );
+    const reducedMotion = stage.slice(stage.indexOf('@media (prefers-reduced-motion: reduce)'));
+
+    expect(dialogOpenRule).toMatch(
+      /animation:\s*favorite-dialog-enter 240ms cubic-bezier\(0\.2, 0\.8, 0\.2, 1\) both;/,
+    );
+    expect(dialogKeyframes).toMatch(/@keyframes favorite-dialog-enter\s*\{/);
+    expect(dialogKeyframes).toMatch(
+      /from\s*\{[^}]*opacity:\s*0;[^}]*transform:\s*translateY\(0\.55rem\) scale\(0\.985\);/,
+    );
+    expect(dialogKeyframes).toMatch(
+      /to\s*\{[^}]*opacity:\s*1;[^}]*transform:\s*translateY\(0\) scale\(1\);/,
+    );
+    expect(backdropOpenRule).toMatch(
+      /animation:\s*favorite-dialog-backdrop-enter 180ms ease-out both;/,
+    );
+    expect(backdropKeyframes).toMatch(/@keyframes favorite-dialog-backdrop-enter\s*\{/);
+    expect(backdropKeyframes).toMatch(/from\s*\{[^}]*opacity:\s*0;/);
+    expect(backdropKeyframes).toMatch(/to\s*\{[^}]*opacity:\s*1;/);
+    expect(reducedMotion).toMatch(
+      /\.favorite-dialog\[open\]\s*\{[^}]*animation:\s*none;/,
+    );
+    expect(reducedMotion).toMatch(
+      /\.favorite-dialog\[open\]::backdrop\s*\{[^}]*animation:\s*none;/,
+    );
+  });
+
   it('restores focused cards to the fan and keeps every caption the same height', () => {
     const fan = readFileSync(
       join(projectRoot, 'src', 'components', 'elsewhere', 'FavoriteFan.astro'),
@@ -794,6 +837,65 @@ describe('public source contracts', () => {
       /\.favorite-card__foot\s*\{[^}]*box-sizing:\s*border-box;[^}]*height:\s*5\.6rem;[^}]*\}/,
     );
     expect(fan).not.toMatch(/\.favorite-card__foot\s*\{[^}]*min-height:/);
+  });
+
+  it('keeps enhanced favorite card placement fixed while the trigger owns hover motion', () => {
+    const fan = readFileSync(
+      join(projectRoot, 'src', 'components', 'elsewhere', 'FavoriteFan.astro'),
+      'utf8',
+    );
+    const triggerRule =
+      fan.match(
+        /:global\(favorites-stage\[data-enhanced\]\) \.favorite-card__trigger\s*\{([^}]*)\}/,
+      )?.[1] ?? '';
+    const hoverTriggerRule =
+      fan.match(/\.favorite-card:hover \.favorite-card__trigger\s*\{([^}]*)\}/)?.[1] ?? '';
+    const activeTriggerRule =
+      fan.match(/\.favorite-card:active \.favorite-card__trigger\s*\{([^}]*)\}/)?.[1] ?? '';
+    const reducedMotion = fan.slice(fan.indexOf('@media (prefers-reduced-motion: reduce)'));
+
+    expect(fan).toMatch(
+      /:global\(favorites-stage\[data-enhanced\]\) \.favorite-card\s*\{[^}]*transform:\s*[\s\S]*?var\(--fan-x\)[\s\S]*?var\(--fan-y\)[\s\S]*?var\(--fan-rotation\)[\s\S]*?;[^}]*\}/,
+    );
+    expect(fan).not.toMatch(
+      /:global\(favorites-stage\[data-enhanced\]\) \.favorite-card\s*\{[^}]*transition\s*:/,
+    );
+    expect(fan).not.toMatch(
+      /:global\(favorites-stage\[data-enhanced\]\) \.favorite-card:hover\s*\{[^}]*transform\s*:/,
+    );
+    expect(triggerRule).toMatch(/--favorite-lift:\s*0rem;/);
+    expect(triggerRule).toMatch(/--favorite-scale:\s*1;/);
+    expect(triggerRule).toMatch(/--favorite-visual-rotation:\s*var\(--fan-rotation\);/);
+    expect(triggerRule).toMatch(
+      /transform:\s*translate3d\(0,\s*var\(--favorite-lift\),\s*0\)\s*rotate\(calc\(var\(--favorite-visual-rotation\) - var\(--fan-rotation\)\)\)\s*scale\(var\(--favorite-scale\)\);/,
+    );
+    expect(triggerRule).toMatch(/transform-origin:\s*50% 85%;/);
+    expect(triggerRule).toContain('transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1)');
+    expect(triggerRule).toContain('border-color 180ms ease');
+    expect(triggerRule).toContain('box-shadow 320ms cubic-bezier(0.2, 0.8, 0.2, 1)');
+    expect(triggerRule).not.toMatch(/will-change\s*:/);
+    expect(fan).toMatch(/\.favorite-card:hover\s*\{[^}]*z-index:\s*30;/);
+
+    expect(hoverTriggerRule).toMatch(/--favorite-lift:\s*-0\.7rem;/);
+    expect(hoverTriggerRule).toMatch(/--favorite-scale:\s*1\.018;/);
+    expect(hoverTriggerRule).toMatch(
+      /--favorite-visual-rotation:\s*calc\(var\(--fan-rotation\) \* 0\.18\);/,
+    );
+    expect(hoverTriggerRule).toMatch(/border-color:\s*var\(--favorite-accent\);/);
+    expect(hoverTriggerRule).toMatch(/rgb\(16 17 15 \/ 0\.18\)/);
+    expect(hoverTriggerRule).toMatch(/rgb\(16 17 15 \/ 0\.12\)/);
+
+    expect(activeTriggerRule).toMatch(/--favorite-lift:\s*-0\.32rem;/);
+    expect(activeTriggerRule).toMatch(/--favorite-scale:\s*0\.995;/);
+    expect(activeTriggerRule).toMatch(/rgb\(16 17 15 \/ 0\.14\)/);
+    expect(activeTriggerRule).toMatch(/rgb\(16 17 15 \/ 0\.10\)/);
+
+    expect(reducedMotion).toMatch(
+      /\.favorite-card__trigger\s*\{[^}]*transition:\s*none;/,
+    );
+    expect(reducedMotion).toMatch(
+      /\.favorite-card:hover \.favorite-card__trigger,[\s\S]*?\.favorite-card:active \.favorite-card__trigger\s*\{[^}]*transform:\s*none;/,
+    );
   });
 
   it('keeps visual effects restrained and requires no client framework', () => {

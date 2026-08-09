@@ -225,8 +225,38 @@ const { films, albums, copy } = Astro.props;
     box-shadow: 0.75rem 0.85rem 0 rgb(17 17 15 / 0.12);
   }
 
+  .favorite-dialog[open] {
+    animation: favorite-dialog-enter 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
   .favorite-dialog::backdrop {
     background: rgb(17 17 15 / 0.42);
+  }
+
+  .favorite-dialog[open]::backdrop {
+    animation: favorite-dialog-backdrop-enter 180ms ease-out both;
+  }
+
+  @keyframes favorite-dialog-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.55rem) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes favorite-dialog-backdrop-enter {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   .favorite-dialog__close {
@@ -334,6 +364,14 @@ const { films, albums, copy } = Astro.props;
     favorites-stage[data-enhanced] .favorites-stage__tabs button,
     .favorite-dialog {
       scroll-behavior: auto;
+    }
+
+    .favorite-dialog[open] {
+      animation: none;
+    }
+
+    .favorite-dialog[open]::backdrop {
+      animation: none;
     }
   }
 </style>
