@@ -31,6 +31,8 @@ The visual direction remains warm white, bone, and light gray, with soft natural
 
 ## Static Composition Gate
 
+Approved visual master: [`../assets/home-research-motion-preview.png`](../assets/home-research-motion-preview.png).
+
 Before animation implementation, create one static composite preview that proves:
 
 - the apparatus and rabbit read clearly at desktop width;
@@ -39,7 +41,7 @@ Before animation implementation, create one static composite preview that proves
 - the composition still feels calm when viewed without motion;
 - a mobile crop can retain the subject and title without overlap.
 
-The preview must be reviewed before deriving final layers or changing website code.
+The preview was reviewed and approved on 2026-08-29. Final layers must preserve its composition, lighting, palette, subject count, apparatus geometry, and left-side negative space.
 
 ## Motion Behavior
 
