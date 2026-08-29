@@ -239,6 +239,27 @@ function projectFiles(directory: string): string[] {
 }
 
 describe('public source contracts', () => {
+  it('stores the approved research scene as two explicit production layers', () => {
+    const imageRoot = join(projectRoot, 'src', 'assets', 'images');
+    const approvedPreview = join(
+      projectRoot,
+      'docs',
+      'superpowers',
+      'assets',
+      'home-research-motion-preview.png',
+    );
+    const base = join(imageRoot, 'research-world-model-base.png');
+    const rabbit = join(imageRoot, 'research-world-model-rabbit-layer.svg');
+
+    expect(existsSync(approvedPreview)).toBe(true);
+    expect(existsSync(base)).toBe(true);
+    expect(existsSync(rabbit)).toBe(true);
+    expect(readFileSync(base).byteLength).toBeGreaterThan(10_000);
+    expect(readFileSync(rabbit).byteLength).toBeGreaterThan(1_000);
+    expect(readFileSync(rabbit, 'utf8')).toContain('<svg');
+    expect(readFileSync(rabbit, 'utf8')).not.toContain('<text');
+  });
+
   it('contains exactly the approved initial content records', () => {
     expect(markdownFiles(join(contentRoot, 'projects'))).toHaveLength(2);
     expect(markdownFiles(join(contentRoot, 'updates'))).toHaveLength(3);
