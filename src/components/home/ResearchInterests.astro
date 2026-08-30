@@ -3,118 +3,73 @@ import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  copy: {
-    eyebrow: string;
-    statement: string;
-    description: string;
-    interests: readonly string[];
-    interestsLabel: string;
-  };
-  image: ImageMetadata;
+  copy: { eyebrow: string; statement: string; description: string; interests: readonly string[]; interestsLabel: string };
+  baseImage: ImageMetadata;
+  subjectImage: ImageMetadata;
 }
-
-const { copy, image } = Astro.props;
+const { copy, baseImage, subjectImage } = Astro.props;
 ---
 
-<section
-  id="research-interests"
-  class="research-field"
-  aria-labelledby="research-interests-title"
->
-  <div class="research-field__image" data-rabbit-field aria-hidden="true">
-    <Picture
-      src={image}
-      formats={['avif', 'webp']}
-      fallbackFormat="png"
-      widths={[768, 1280, 1920]}
-      sizes="100vw"
-      alt=""
-      loading="lazy"
-    />
-  </div>
-  <div class="research-field__content shell">
-    <p class="eyebrow">{copy.eyebrow}</p>
-    <h2 id="research-interests-title" class="research-field__statement">
-      {copy.statement}
-    </h2>
-    <p class="research-field__description">{copy.description}</p>
-    <ul class="interest-list" aria-label={copy.interestsLabel}>
-      {copy.interests.map((interest) => <li>{interest}</li>)}
-    </ul>
-  </div>
-</section>
+<research-motion class="research-motion" data-research-motion>
+  <section id="research-interests" class="research-field" aria-labelledby="research-interests-title">
+    <div class="research-field__scene" aria-hidden="true">
+      <div class="research-field__base" data-research-base data-motion-layer="base">
+        <Picture src={baseImage} formats={['avif', 'webp']} fallbackFormat="jpeg" widths={[768, 1280, 1920]} sizes="100vw" alt="" loading="lazy" />
+      </div>
+      <div class="research-field__slices">
+        <span class="research-field__slice" data-research-slice data-motion-layer="slice-1"><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span></span>
+        <span class="research-field__slice" data-research-slice data-motion-layer="slice-2"><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span></span>
+        <span class="research-field__slice" data-research-slice data-motion-layer="slice-3"><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span><span class="research-field__mark"></span></span>
+      </div>
+      <div class="research-field__subject" data-research-subject data-motion-layer="subject">
+        <img src={subjectImage.src} width={subjectImage.width} height={subjectImage.height} alt="" loading="lazy" decoding="async" />
+      </div>
+    </div>
+    <div class="research-field__content shell" data-motion-copy>
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h2 id="research-interests-title" class="research-field__statement">{copy.statement}</h2>
+      <p class="research-field__description">{copy.description}</p>
+      <ul class="interest-list" aria-label={copy.interestsLabel}>{copy.interests.map((interest) => <li>{interest}</li>)}</ul>
+    </div>
+  </section>
+</research-motion>
+
+<script>
+  import '../../scripts/research-motion';
+</script>
 
 <style>
-  .research-field {
-    position: relative;
-    overflow: hidden;
-    min-height: 42rem;
-    background: var(--color-bone);
-  }
-
-  .research-field__image {
-    position: absolute;
-    inset: 0;
-    opacity: 0.34;
-  }
-
-  .research-field__image :global(picture),
-  .research-field__image :global(img) {
-    width: 100%;
-    height: 100%;
-  }
-
-  .research-field__image :global(img) {
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .research-field__content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    min-height: 42rem;
-    flex-direction: column;
-    justify-content: center;
-    padding-block: var(--space-section);
-  }
-
-  .research-field__statement {
-    max-width: 13ch;
-    margin-block-end: 2rem;
-    font-size: clamp(2.6rem, 6.4vw, 5.8rem);
-  }
-
-  .research-field__description {
-    max-width: 50ch;
-    margin-block-end: 3rem;
-  }
-
-  .interest-list {
-    display: grid;
-    max-width: 50rem;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--color-text);
-    grid-template-columns: repeat(3, 1fr);
-    list-style: none;
-  }
-
-  .interest-list li {
-    padding: 1rem 1rem 1rem 0;
-    border-bottom: 1px solid var(--color-text);
-    font-size: 0.88rem;
-    font-weight: 600;
-  }
-
-  @media (max-width: 48rem) {
-    .research-field,
-    .research-field__content {
-      min-height: 38rem;
-    }
-
-    .interest-list {
-      grid-template-columns: 1fr;
-    }
-  }
+  .research-motion { display: block; }
+  .research-field { position: relative; overflow: hidden; min-height: 42rem; background: var(--color-bone); isolation: isolate; }
+  .research-field__scene, .research-field__base { position: absolute; inset: 0; }
+  .research-field__scene { z-index: 0; }
+  .research-field__base { opacity: 0.46; }
+  .research-field__base :global(picture), .research-field__base :global(img) { width: 100%; height: 100%; }
+  .research-field__base :global(img) { object-fit: cover; object-position: center; }
+  .research-field__subject { position: absolute; z-index: 2; top: 43%; left: 65%; width: clamp(7rem, 12vw, 11rem); opacity: 0.72; }
+  .research-field__subject :global(picture), .research-field__subject :global(img) { width: 100%; height: auto; }
+  .research-field__slice { position: absolute; top: 24%; width: 4.25%; height: 52%; border: 1px solid rgb(88 124 132 / 38%); background: rgb(255 255 255 / 10%); color: rgb(88 124 132 / 55%); }
+  .research-field__slice:nth-child(1) { z-index: 1; left: 67%; }
+  .research-field__slice:nth-child(2), .research-field__slice:nth-child(3) { z-index: 3; border-color: rgb(177 116 73 / 32%); color: rgb(177 116 73 / 50%); }
+  .research-field__slice:nth-child(2) { left: 74%; } .research-field__slice:nth-child(3) { left: 81%; }
+  .research-field__mark { position: absolute; width: 0.24rem; height: 0.24rem; border: 1px solid currentColor; border-radius: 50%; }
+  .research-field__mark:nth-child(1) { top: 16%; left: 28%; } .research-field__mark:nth-child(2) { top: 31%; left: 62%; } .research-field__mark:nth-child(3) { top: 49%; left: 35%; } .research-field__mark:nth-child(4) { top: 66%; left: 68%; } .research-field__mark:nth-child(5) { top: 82%; left: 42%; }
+  .research-field__content { position: relative; z-index: 4; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
+  .research-field__statement { max-width: 11ch; margin-block-end: 2rem; font-size: clamp(2.6rem, 6.1vw, 5.5rem); }
+  .research-field__description { max-width: 46ch; margin-block-end: 3rem; }
+  .interest-list { display: grid; max-width: 50rem; margin: 0; padding: 0; border-top: 1px solid var(--color-text); grid-template-columns: repeat(3, 1fr); list-style: none; }
+  .interest-list li { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--color-text); font-size: 0.88rem; font-weight: 600; }
+  .research-motion[data-motion-ready] :is(.research-field__base, .research-field__subject, .research-field__slice, .research-field__content > *) { transition-property: transform, opacity; transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__base { opacity: 0.2; transform: translateY(3%); }
+  .research-motion[data-motion-ready] .research-field__base { transition-duration: 520ms; }
+  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__subject { opacity: 0; transform: translateY(18px); }
+  .research-motion[data-motion-ready] .research-field__subject { transition-duration: 480ms; transition-delay: 50ms; }
+  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__slice { opacity: 0; transform: translateX(-12px); }
+  .research-motion[data-motion-ready] .research-field__slice { transition-duration: 400ms; }
+  .research-motion[data-motion-ready] .research-field__slice:nth-child(1) { transition-delay: 80ms; } .research-motion[data-motion-ready] .research-field__slice:nth-child(2) { transition-delay: 120ms; } .research-motion[data-motion-ready] .research-field__slice:nth-child(3) { transition-delay: 160ms; }
+  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__content > * { opacity: 0; transform: translateY(16px); }
+  .research-motion[data-motion-ready] .research-field__content > * { transition-duration: 420ms; }
+  .research-motion[data-motion-ready] .research-field__content > :nth-child(1) { transition-delay: 100ms; } .research-motion[data-motion-ready] .research-field__content > :nth-child(2) { transition-delay: 140ms; } .research-motion[data-motion-ready] .research-field__content > :nth-child(3) { transition-delay: 180ms; } .research-motion[data-motion-ready] .research-field__content > :nth-child(4) { transition-delay: 220ms; }
+  @media (max-width: 48rem) { .research-field, .research-field__content { min-height: 38rem; } .research-field__base :global(img) { object-position: 68% center; } .research-field__subject { top: 44%; left: 52%; width: clamp(6rem, 28vw, 8.5rem); } .research-field__slice { top: 28%; width: 8%; height: 44%; } .research-field__slice:nth-child(1) { left: 59%; } .research-field__slice:nth-child(2) { left: 70%; } .research-field__slice:nth-child(3) { left: 81%; } .interest-list { grid-template-columns: 1fr; } .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__base { transform: none; } .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__subject { transform: translateY(12px); } }
+  @media (prefers-reduced-motion: reduce) { .research-motion :is(.research-field__base, .research-field__subject, .research-field__slice, .research-field__content > *) { opacity: 1; transform: none; transition: none; } }
 </style>

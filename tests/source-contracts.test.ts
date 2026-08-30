@@ -633,7 +633,7 @@ describe('public source contracts', () => {
       /<ProfileIntro\s+identity=\{site\}\s+copy=\{en\.profile\}\s+portrait=\{portrait\}\s*\/>/,
     );
     expect(indexPage).toMatch(
-      /<ResearchInterests\s+copy=\{en\.research\}\s+image=\{researchImage\}\s*\/>/,
+      /<ResearchInterests[\s\S]*?copy=\{en\.research\}[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?\/>/,
     );
     expect(indexPage).toMatch(
       /<LatestWork[\s\S]*?title=\{en\.work\.title\}[\s\S]*?allProjectsLabel=\{en\.work\.allProjects\}[\s\S]*?codeLabel=\{en\.links\.code\}[\s\S]*?\/>/,
@@ -649,6 +649,31 @@ describe('public source contracts', () => {
     expect(profile).toContain('emailLabel: string');
     expect(profile).toContain('githubLabel: string');
     expect(research).toContain('interestsLabel: string');
+  });
+
+  it('owns the layered research scene and restrained motion inside its component', () => {
+    const indexPage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
+    const research = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ResearchInterests.astro'),
+      'utf8',
+    );
+
+    expect(indexPage).toContain('research-world-model-base.png');
+    expect(indexPage).toContain('research-world-model-rabbit-layer.svg');
+    expect(indexPage).not.toContain('research-world-model-rabbit.png');
+    expect(indexPage).toMatch(
+      /<ResearchInterests[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?\/>/,
+    );
+    expect(research).toContain('baseImage: ImageMetadata');
+    expect(research).toContain('subjectImage: ImageMetadata');
+    expect(research).toContain('<research-motion');
+    expect(research).toContain('data-research-base');
+    expect(research).toContain('data-research-subject');
+    expect(research.match(/data-research-slice/g) ?? []).toHaveLength(3);
+    expect(research).toContain("import '../../scripts/research-motion'");
+    expect(research).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+    expect(research).not.toContain('gradient(');
+    expect(research).not.toMatch(/\bfilter\s*:/);
   });
 
   it('uses the content-width shell for wide archive pages and metadata config values', () => {

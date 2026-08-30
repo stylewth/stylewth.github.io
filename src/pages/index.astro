@@ -14,7 +14,8 @@ import {
 import { site } from '../config/site';
 import { en } from '../i18n/en';
 import portrait from '../assets/images/tenghao-wang-portrait.png';
-import researchImage from '../assets/images/research-world-model-rabbit.png';
+import researchBaseImage from '../assets/images/research-world-model-base.png';
+import researchSubjectImage from '../assets/images/research-world-model-rabbit-layer.svg';
 
 const projects = await getCollection('projects');
 const updates = await getCollection('updates');
@@ -47,7 +48,11 @@ const personJsonLd = {
   jsonLd={personJsonLd}
 >
   <ProfileIntro identity={site} copy={en.profile} portrait={portrait} />
-  <ResearchInterests copy={en.research} image={researchImage} />
+  <ResearchInterests
+    copy={en.research}
+    baseImage={researchBaseImage}
+    subjectImage={researchSubjectImage}
+  />
   <LatestWork
     projects={featuredProjects}
     eyebrow={en.work.eyebrow}
