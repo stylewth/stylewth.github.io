@@ -249,21 +249,26 @@ describe('public source contracts', () => {
       'home-research-motion-preview.png',
     );
     const base = join(imageRoot, 'research-world-model-base.png');
-    const rabbit = join(imageRoot, 'research-world-model-rabbit-layer.svg');
+    const rabbit = join(imageRoot, 'research-world-model-rabbit-layer.png');
+    const oldRabbitSvg = join(imageRoot, 'research-world-model-rabbit-layer.svg');
 
     expect(existsSync(approvedPreview)).toBe(true);
     expect(existsSync(base)).toBe(true);
     expect(existsSync(rabbit)).toBe(true);
+    expect(existsSync(oldRabbitSvg)).toBe(false);
     expect(readFileSync(base).byteLength).toBeGreaterThan(10_000);
     expect(readFileSync(rabbit).byteLength).toBeGreaterThan(1_000);
-    const rabbitSource = readFileSync(rabbit, 'utf8');
+    const rabbitSource = readFileSync(rabbit);
 
-    expect(rabbitSource).toContain('<svg');
-    expect(rabbitSource).not.toContain('<text');
-    expect(rabbitSource).toMatch(/fill:(?:#f[0-9a-f]{5}|#e[89a-f][0-9a-f]{4})/i);
-    expect(rabbitSource).not.toMatch(
-      /(?:fill|stroke)(?::|=")\s*(?:black\b|#000(?:000)?\b|rgb\(\s*0\s+0\s+0)/i,
+    expect(rabbitSource.subarray(0, 8)).toEqual(
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     );
+    const colorType = rabbitSource[25];
+    const hasEmbeddedAlpha = colorType === 4 || colorType === 6;
+    const hasIndexedTransparency =
+      colorType === 3 && rabbitSource.includes(Buffer.from('tRNS', 'ascii'));
+
+    expect(hasEmbeddedAlpha || hasIndexedTransparency).toBe(true);
   });
 
   it('contains exactly the approved initial content records', () => {
@@ -665,7 +670,8 @@ describe('public source contracts', () => {
     );
 
     expect(indexPage).toContain('research-world-model-base.png');
-    expect(indexPage).toContain('research-world-model-rabbit-layer.svg');
+    expect(indexPage).toContain('research-world-model-rabbit-layer.png');
+    expect(indexPage).not.toContain('research-world-model-rabbit-layer.svg');
     expect(indexPage).not.toContain('research-world-model-rabbit.png');
     expect(indexPage).toMatch(
       /<ResearchInterests[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?\/>/,

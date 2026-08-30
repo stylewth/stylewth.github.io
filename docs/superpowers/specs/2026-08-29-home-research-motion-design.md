@@ -15,7 +15,7 @@ This iteration does not add content or new routes. It preserves the current home
 Use a hybrid layered composition:
 
 1. a wide editorial-photographic base image containing the environment, ground, and scientific apparatus;
-2. a separate transparent rabbit subject layer; the SVG is sourced from [Openclipart's “hare”](https://openclipart.org/detail/338262/hare) and released under CC0 Public Domain.
+2. a separate transparent rabbit subject layer sourced from [PurePNG's “white rabbit”](https://purepng.com/photo/573/animals-white-rabbit); the source page identifies it as a transparent CC0 PNG and states “Free for commercial use” and “No attribution required”.
 3. observation slices drawn as lightweight HTML and CSS layers;
 4. existing research copy rendered as normal semantic HTML above the artwork.
 

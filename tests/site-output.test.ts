@@ -215,7 +215,9 @@ describe('homepage output', () => {
     expect(basePicture).toContain('type="image/webp"');
     expect(basePicture).toContain('loading="lazy"');
     expect(subjectPicture).toContain('src="/_astro/research-world-model-rabbit-layer.');
-    expect(subjectPicture).toContain('.svg"');
+    expect(subjectPicture).toContain('type="image/avif"');
+    expect(subjectPicture).toContain('type="image/webp"');
+    expect(subjectPicture).toContain('.png"');
     expect(subjectPicture).toContain('loading="lazy"');
     expect(html.match(/data-research-slice/g) ?? []).toHaveLength(3);
     const motionStart = html.indexOf('<research-motion');

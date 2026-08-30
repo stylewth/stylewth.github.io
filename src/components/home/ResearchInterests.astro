@@ -51,13 +51,14 @@ const { copy, baseImage, subjectImage } = Astro.props;
       </div>
 
       <div class="research-field__subject" data-research-subject data-motion-layer="subject">
-        <img
-          src={subjectImage.src}
-          width={subjectImage.width}
-          height={subjectImage.height}
+        <Picture
+          src={subjectImage}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          widths={[192, 320]}
+          sizes="(max-width: 48rem) 6rem, 11rem"
           alt=""
           loading="lazy"
-          decoding="async"
         />
       </div>
     </div>
