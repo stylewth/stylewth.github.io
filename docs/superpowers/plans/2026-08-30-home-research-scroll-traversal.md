@@ -167,7 +167,7 @@ git commit -m "assets: rebuild matched research traversal scene"
 - Create: `src/scripts/research-traversal-progress.ts`
 - Create: `src/scripts/research-traversal-progress.test.ts`
 
-- [ ] **Step 1: Write the failing geometry tests**
+- [x] **Step 1: Write the failing geometry tests**
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -198,7 +198,7 @@ describe('calculateTraversalProgress', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test and verify RED**
+- [x] **Step 2: Run the test and verify RED**
 
 ```powershell
 npx vitest run src/scripts/research-traversal-progress.test.ts
@@ -206,7 +206,7 @@ npx vitest run src/scripts/research-traversal-progress.test.ts
 
 Expected: FAIL because `research-traversal-progress.ts` does not exist.
 
-- [ ] **Step 3: Implement the pure geometry module**
+- [x] **Step 3: Implement the pure geometry module**
 
 ```ts
 export interface TraversalGeometry {
@@ -240,7 +240,7 @@ export function formatProgressPercent(progress: number): string {
 }
 ```
 
-- [ ] **Step 4: Run the focused test and verify GREEN**
+- [x] **Step 4: Run the focused test and verify GREEN**
 
 ```powershell
 npx vitest run src/scripts/research-traversal-progress.test.ts
@@ -248,7 +248,7 @@ npx vitest run src/scripts/research-traversal-progress.test.ts
 
 Expected: 4 tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```powershell
 git add src/scripts/research-traversal-progress.ts src/scripts/research-traversal-progress.test.ts
