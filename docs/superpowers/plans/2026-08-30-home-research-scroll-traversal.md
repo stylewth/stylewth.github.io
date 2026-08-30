@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. It will decide whether each batch should run in parallel or serial subagent mode and will pass only task-local context to each subagent. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the rejected one-time layered entrance with a visually matched photographic scene in which one white rabbit moves left to right through three physical glass panes under direct scroll control.
+**Goal:** Replace the rejected one-time layered entrance with a visually matched scene in which one white rabbit moves left to right through three physical glass panes and progressively becomes a point-based predictive representation under direct scroll control.
 
-**Architecture:** A hard visual gate produces scene-matched raster layers before motion code changes. A pure geometry module maps section position to normalized progress; a small custom element coalesces passive scroll and resize signals into one animation-frame update; component CSS uses the percentage progress inside a fixed travel track while transparent glass and foreground assets supply material and occlusion.
+**Architecture:** A hard visual gate produces scene-matched raster layers before motion code changes. A pure geometry module maps section position to normalized progress; a small custom element coalesces passive scroll and resize signals into one animation-frame update. Component CSS uses the same percentage both to move the subject and to reveal three lightweight SVG-pattern point layers through the rabbit PNG's alpha mask, so the rabbit exits in a visibly different predictive state without canvas, WebGL, a particle system, or a generated point-cloud PNG. The subject remains clipped to the base image's inner aperture, transparent glass assets supply material, and the base ring is the natural occluder.
 
 **Tech Stack:** Astro 7, TypeScript 6, Vitest 4 with happy-dom, Astro image pipeline, component-scoped CSS, Codex in-app Browser, Lighthouse CLI, imagegen for all generated or edited raster assets.
 
@@ -19,12 +19,11 @@
 | `src/assets/images/research-traversal-pane-1.png` | Transparent photographic material for the first glass pane |
 | `src/assets/images/research-traversal-pane-2.png` | Transparent photographic material for the second glass pane |
 | `src/assets/images/research-traversal-pane-3.png` | Transparent photographic material for the third glass pane |
-| `src/assets/images/research-traversal-foreground.png` | Transparent near rim, bolts, and metal occluder |
 | `src/scripts/research-traversal-progress.ts` | Pure viewport-geometry to progress calculation and percentage formatting |
 | `src/scripts/research-traversal-progress.test.ts` | Boundary, midpoint, clamp, and invalid-geometry tests |
 | `src/scripts/research-traversal.ts` | Passive scroll/resize controller and cleanup |
 | `src/scripts/research-traversal.test.ts` | Coalescing, forward/reverse, reduced-motion, and cleanup tests |
-| `src/components/home/ResearchInterests.astro` | Semantic copy, scene depth groups, travel track, responsive layout, and reduced-motion static state |
+| `src/components/home/ResearchInterests.astro` | Semantic copy, four scene depth groups, aperture-clipped travel track, photographic-to-point transformation, responsive layout, and reduced-motion static state |
 | `src/pages/index.astro` | Explicit image imports and props for the research scene |
 | `tests/source-contracts.test.ts` | Source asset, alpha, component-boundary, and prohibited-old-implementation contracts |
 | `tests/site-output.test.ts` | Production HTML layer order, optimized formats, lazy loading, and script count |
@@ -37,25 +36,33 @@
 - Create: `src/assets/images/research-traversal-pane-1.png`
 - Create: `src/assets/images/research-traversal-pane-2.png`
 - Create: `src/assets/images/research-traversal-pane-3.png`
-- Create: `src/assets/images/research-traversal-foreground.png`
 - Modify: `tests/source-contracts.test.ts`
 - Reference: `docs/superpowers/assets/home-research-motion-preview.png`
 
-- [ ] **Step 1: Write the failing asset contract**
+- [x] **Step 1: Write the failing asset contract**
 
-Replace the current two-layer research asset test with helpers and expectations for the six approved files:
+Replace the current two-layer research asset test with a pixel-level alpha helper and expectations for the five approved files. The independent foreground file must not exist:
 
 ```ts
-function pngHasAlpha(source: Buffer): boolean {
-  expect(source.subarray(0, 8)).toEqual(
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  );
-  const colorType = source[25];
-  return colorType === 4 || colorType === 6 ||
-    (colorType === 3 && source.includes(Buffer.from('tRNS', 'ascii')));
+async function pngAlphaRange(path: string): Promise<{ min: number; max: number }> {
+  const metadata = await sharp(path).metadata();
+  expect(metadata.format, path).toBe('png');
+  expect(metadata.hasAlpha, path).toBe(true);
+
+  const { data, info } = await sharp(path)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  let min = 255;
+  let max = 0;
+  for (let index = 3; index < data.length; index += info.channels) {
+    min = Math.min(min, data[index]);
+    max = Math.max(max, data[index]);
+  }
+  return { min, max };
 }
 
-it('stores the approved research traversal as matched photographic layers', () => {
+it('stores the approved research traversal as matched photographic layers', async () => {
   const imageRoot = join(projectRoot, 'src', 'assets', 'images');
   const required = [
     'research-traversal-base.png',
@@ -63,7 +70,6 @@ it('stores the approved research traversal as matched photographic layers', () =
     'research-traversal-pane-1.png',
     'research-traversal-pane-2.png',
     'research-traversal-pane-3.png',
-    'research-traversal-foreground.png',
   ];
 
   required.forEach((name) => {
@@ -72,17 +78,20 @@ it('stores the approved research traversal as matched photographic layers', () =
     expect(readFileSync(path).byteLength, name).toBeGreaterThan(1_000);
   });
 
-  const rabbit = readFileSync(join(imageRoot, 'research-traversal-rabbit.png'));
-  expect(pngHasAlpha(rabbit)).toBe(true);
-  expect(rabbit.readUInt32BE(16)).toBeGreaterThan(rabbit.readUInt32BE(20));
+  const transparent = required.slice(1);
+  for (const name of transparent) {
+    const { min, max } = await pngAlphaRange(join(imageRoot, name));
+    expect(min, name).toBeLessThan(255);
+    expect(max, name).toBeGreaterThan(0);
+  }
 
-  ['research-traversal-pane-1.png', 'research-traversal-pane-2.png',
-   'research-traversal-pane-3.png', 'research-traversal-foreground.png']
-    .forEach((name) => expect(pngHasAlpha(readFileSync(join(imageRoot, name))), name).toBe(true));
+  const rabbit = await sharp(join(imageRoot, 'research-traversal-rabbit.png')).metadata();
+  expect(rabbit.width, 'research-traversal-rabbit.png width').toBeGreaterThan(rabbit.height ?? 0);
+  expect(existsSync(join(imageRoot, 'research-traversal-foreground.png'))).toBe(false);
 });
 ```
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run:
 
@@ -90,9 +99,9 @@ Run:
 npx vitest run tests/source-contracts.test.ts -t "matched photographic layers"
 ```
 
-Expected: FAIL because `research-traversal-base.png` and the other new layers do not exist.
+Expected: FAIL because the four required transparent layers do not exist yet.
 
-- [ ] **Step 3: Generate or edit the six raster layers with imagegen**
+- [ ] **Step 3: Generate or edit the five raster layers with imagegen**
 
 Read and use the `imagegen` skill. Inspect the approved master first. Use the master as the reference for every request; do not introduce stock photography.
 
@@ -114,20 +123,16 @@ For each pane, change only the ordinal and position in this prompt:
 From the same referenced scene, extract the [first/second/third] physical observation pane as a separate transparent photographic layer. Preserve its exact perspective, faint tint, edge thickness, reflection, surface variation, and subtle optical material. Output only that pane with genuine transparent alpha; no rabbit, apparatus frame, background, text, UI rectangle, decorative markers, or checkerboard.
 ```
 
-Foreground prompt:
+Each transparent layer may receive further targeted retries. After every attempt, record both the pixel-alpha audit and the crop/canvas audit. If attempts fail consecutively, keep rewriting the prompt specifically around the observed failure and retry that layer; do not create a mask, threshold cutout, stock replacement, CSS material, or other fabricated fallback.
 
-```text
-From the same referenced scene, extract the near circular rim, visible fasteners, and foreground metal parts that should occlude a rabbit moving inside the apparatus window. Preserve exact alignment, dark material, lighting, perspective, and grain. Output only the foreground apparatus parts with genuine transparent alpha; no background, rabbit, glass, text, border, or checkerboard.
-```
-
-If any transparent output is RGB, has alpha fixed at 255, or contains a baked checkerboard, retry that layer once with the failure stated explicitly. If the second attempt also fails, stop the plan at this gate and report the failed layer; do not create a mask, threshold cutout, stock replacement, CSS material, or other fallback.
+The user approved the base image's existing circular ring as the natural occluder. Do not generate, extract, or accept `research-traversal-foreground.png`; the moving subject will be clipped to an ellipse matching the apparatus aperture, with refractions and pane overlays above it.
 
 - [ ] **Step 4: Verify file properties and make the focused test GREEN**
 
 Inspect every layer with `view_image`. Run this exact alpha audit from the repository root; it fails when a transparent layer is fully opaque or fully empty:
 
 ```powershell
-node --input-type=module -e "import sharp from 'sharp'; const root='src/assets/images/'; const files=['research-traversal-rabbit.png','research-traversal-pane-1.png','research-traversal-pane-2.png','research-traversal-pane-3.png','research-traversal-foreground.png']; for (const name of files) { const { data, info } = await sharp(root + name).ensureAlpha().raw().toBuffer({ resolveWithObject: true }); let min=255,max=0; for (let index=3; index<data.length; index+=info.channels) { min=Math.min(min,data[index]); max=Math.max(max,data[index]); } console.log(name, info.width, info.height, info.channels, min, max); if (min === 255 || max === 0) process.exitCode=1; }"
+node --input-type=module -e "import sharp from 'sharp'; const root='src/assets/images/'; const files=['research-traversal-rabbit.png','research-traversal-pane-1.png','research-traversal-pane-2.png','research-traversal-pane-3.png']; for (const name of files) { const { data, info } = await sharp(root + name).ensureAlpha().raw().toBuffer({ resolveWithObject: true }); let min=255,max=0; for (let index=3; index<data.length; index+=info.channels) { min=Math.min(min,data[index]); max=Math.max(max,data[index]); } console.log(name, info.width, info.height, info.channels, min, max); if (min === 255 || max === 0) process.exitCode=1; }"
 ```
 
 Then run:
@@ -136,11 +141,11 @@ Then run:
 npx vitest run tests/source-contracts.test.ts -t "matched photographic layers"
 ```
 
-Expected: PASS. The rabbit is wider than tall; rabbit, panes, and foreground have genuine alpha.
+Expected: PASS. The rabbit is wider than tall; rabbit and panes have genuine pixel alpha; `research-traversal-foreground.png` is absent.
 
 - [ ] **Step 5: Build a temporary static composite and obtain user approval**
 
-Create an ignored visual-companion HTML screen under `.superpowers/brainstorm/` with the layers absolutely aligned over the base. Show desktop and 390-pixel mobile crops side by side. Do not add motion. The user must explicitly approve all of these before proceeding:
+Create an ignored visual-companion HTML screen under `.superpowers/brainstorm/` with the base, aperture-clipped rabbit, refraction regions, and three pane overlays absolutely aligned in that four-group depth order. Show desktop and 390-pixel mobile crops side by side. Do not add motion, an independent foreground image, or CSS-drawn glass material. The user must explicitly approve all of these before proceeding:
 
 - rabbit reads as part of the scene rather than a pasted cutout;
 - three panes read as physical glass without CSS borders;
@@ -472,7 +477,7 @@ git add src/scripts/research-traversal.ts src/scripts/research-traversal.test.ts
 git commit -m "feat: drive research traversal from scroll"
 ```
 
-### Task 4: Rebuild the research component around real depth layers
+### Task 4: Rebuild the research component with depth layers and representation morphing
 
 **Files:**
 - Modify: `src/components/home/ResearchInterests.astro`
@@ -488,24 +493,36 @@ Update the research component contract to require:
 expect(indexPage).toContain('research-traversal-base.png');
 expect(indexPage).toContain('research-traversal-rabbit.png');
 expect(indexPage.match(/research-traversal-pane-[123]\.png/g) ?? []).toHaveLength(3);
-expect(indexPage).toContain('research-traversal-foreground.png');
+expect(indexPage).not.toContain('research-traversal-foreground.png');
 expect(research).toContain('<research-traversal');
 expect(research).toContain("import '../../scripts/research-traversal'");
 expect(research).toContain("const paneNames = ['one', 'two', 'three'] as const;");
 expect(research.match(/data-research-pane/g) ?? []).toHaveLength(1);
 expect(research.match(/data-research-refraction/g) ?? []).toHaveLength(1);
-expect(research).toContain('data-research-foreground');
+expect(research).not.toContain('data-research-foreground');
+expect(research).toContain('clip-path: ellipse(');
 expect(research).toContain('left: var(--research-progress)');
+expect(research).toContain('data-research-photo');
+expect(research).toContain("const pointDepths = ['far', 'middle', 'near'] as const;");
+expect(research).toContain('data-research-point-layer');
+expect(research).toContain('--research-rabbit-mask');
+expect(research).toContain('mask-image: var(--research-rabbit-mask)');
+expect(research).toContain('calc(100% - var(--research-progress))');
+expect(research).toContain('calc(90% - var(--research-progress))');
+expect(research).not.toContain('<canvas');
+expect(research).not.toContain('requestAnimationFrame(draw)');
+expect(indexPage).not.toMatch(/point[-_]cloud|pointcloud/i);
 expect(research).not.toContain('<research-motion');
 expect(research).not.toContain('data-motion-entered');
 expect(research).not.toContain('research-field__slice');
 expect(research).not.toMatch(/\.research-field__pane\s*\{[^}]*border\s*:/);
 expect(research).not.toMatch(/\btransition(?:-[a-z-]+)?\s*:/);
+expect(research).not.toMatch(/@keyframes|\banimation\s*:/);
 expect(indexPage).toMatch(
-  /<ResearchInterests[\s\S]*?copy=\{en\.research\}[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?paneImages=\{researchPaneImages\}[\s\S]*?foregroundImage=\{researchForegroundImage\}[\s\S]*?\/>/,
+  /<ResearchInterests[\s\S]*?copy=\{en\.research\}[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?paneImages=\{researchPaneImages\}[\s\S]*?\/>/,
 );
 expect(research).toContain('paneImages: readonly [ImageMetadata, ImageMetadata, ImageMetadata]');
-expect(research).toContain('foregroundImage: ImageMetadata');
+expect(research).not.toContain('foregroundImage');
 ```
 
 - [ ] **Step 2: Run the focused source contract and verify RED**
@@ -526,7 +543,6 @@ import researchSubjectImage from '../assets/images/research-traversal-rabbit.png
 import researchPane1Image from '../assets/images/research-traversal-pane-1.png';
 import researchPane2Image from '../assets/images/research-traversal-pane-2.png';
 import researchPane3Image from '../assets/images/research-traversal-pane-3.png';
-import researchForegroundImage from '../assets/images/research-traversal-foreground.png';
 
 const researchPaneImages = [researchPane1Image, researchPane2Image, researchPane3Image] as const;
 ```
@@ -539,11 +555,10 @@ Pass:
   baseImage={researchBaseImage}
   subjectImage={researchSubjectImage}
   paneImages={researchPaneImages}
-  foregroundImage={researchForegroundImage}
 />
 ```
 
-Use the exact names `researchBaseImage`, `researchSubjectImage`, `researchPane1Image`, `researchPane2Image`, `researchPane3Image`, and `researchForegroundImage`.
+Use the exact names `researchBaseImage`, `researchSubjectImage`, `researchPane1Image`, `researchPane2Image`, and `researchPane3Image`. Do not import or pass an independent foreground image.
 
 - [ ] **Step 4: Replace the component markup**
 
@@ -555,11 +570,11 @@ interface Props {
   baseImage: ImageMetadata;
   subjectImage: ImageMetadata;
   paneImages: readonly [ImageMetadata, ImageMetadata, ImageMetadata];
-  foregroundImage: ImageMetadata;
 }
 
-const { copy, baseImage, subjectImage, paneImages, foregroundImage } = Astro.props;
+const { copy, baseImage, subjectImage, paneImages } = Astro.props;
 const paneNames = ['one', 'two', 'three'] as const;
+const pointDepths = ['far', 'middle', 'near'] as const;
 ---
 
 <research-traversal class="research-traversal" data-research-traversal>
@@ -579,18 +594,43 @@ const paneNames = ['one', 'two', 'three'] as const;
           widths={[768, 1280, 1920]} sizes="100vw" alt="" loading="lazy" />
       </div>
 
-      <div class="research-field__subject-layer" data-research-subject>
-        <div class="research-field__travel-track"><Picture src={subjectImage}
-          formats={['avif', 'webp']} fallbackFormat="png" widths={[192, 320]}
-          sizes="(max-width: 48rem) 7rem, 10rem" alt="" loading="lazy" /></div>
+      <div class="research-field__subject-layer" data-research-subject data-research-aperture>
+        <div class="research-field__travel-track">
+          <div class="research-field__rabbit">
+            <div class="research-field__rabbit-photo" data-research-photo>
+              <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
+                widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                alt="" loading="lazy" />
+            </div>
+            <div class="research-field__rabbit-points"
+              style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+              {pointDepths.map((depth) => (
+                <span class={`research-field__point-depth research-field__point-depth--${depth}`}
+                  data-research-point-layer></span>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {paneNames.map((name) => (
         <div class={`research-field__refraction research-field__refraction--${name}`}
           data-research-refraction>
           <div class="research-field__travel-track research-field__travel-track--refracted">
-            <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
-              widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem" alt="" loading="lazy" />
+            <div class="research-field__rabbit">
+              <div class="research-field__rabbit-photo" data-research-photo>
+                <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
+                  widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                  alt="" loading="lazy" />
+              </div>
+              <div class="research-field__rabbit-points"
+                style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+                {pointDepths.map((depth) => (
+                  <span class={`research-field__point-depth research-field__point-depth--${depth}`}
+                    data-research-point-layer></span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ))}
@@ -603,10 +643,6 @@ const paneNames = ['one', 'two', 'three'] as const;
         </div>
       ))}
 
-      <div class="research-field__foreground" data-research-foreground>
-        <Picture src={foregroundImage} formats={['avif', 'webp']} fallbackFormat="png"
-          widths={[768, 1280, 1920]} sizes="100vw" alt="" loading="lazy" />
-      </div>
     </div>
   </section>
 </research-traversal>
@@ -625,28 +661,61 @@ Implement these exact structural rules. If the static composite from Task 1 cann
 .research-field { position: relative; overflow: hidden; min-height: 42rem; background: var(--color-bone); isolation: isolate; }
 .research-field__scene { position: absolute; inset: 0; z-index: 0; }
 .research-field__scene :global(picture), .research-field__scene :global(img) { display: block; }
-.research-field__base, .research-field__foreground { position: absolute; inset: 0; width: 100%; height: 100%; }
-.research-field__base :global(picture), .research-field__foreground :global(picture),
-.research-field__base :global(img), .research-field__foreground :global(img) { width: 100%; height: 100%; }
-.research-field__base :global(img), .research-field__foreground :global(img) { object-fit: cover; object-position: center; }
+.research-field__base { position: absolute; inset: 0; width: 100%; height: 100%; }
+.research-field__base :global(picture), .research-field__base :global(img) { width: 100%; height: 100%; }
+.research-field__base :global(img) { object-fit: cover; object-position: center; }
 .research-field__subject-layer, .research-field__refraction { position: absolute; inset: 0; }
-.research-field__subject-layer { z-index: 2; }
+.research-field__subject-layer { z-index: 2; clip-path: ellipse(18% 46% at 72% 49%); overflow: hidden; }
 .research-field__travel-track { position: absolute; top: 46%; left: 60%; width: 27%; height: 20%; }
-.research-field__travel-track :global(picture) { position: absolute; top: 50%; left: var(--research-progress); width: clamp(7rem, 10vw, 10rem); transform: translate(-50%, -50%); }
-.research-field__travel-track :global(img) { width: 100%; height: auto; }
+.research-field__rabbit { position: absolute; top: 50%; left: var(--research-progress); width: clamp(7rem, 10vw, 10rem); aspect-ratio: 3 / 2; transform: translate(-50%, -50%); }
+.research-field__rabbit-photo, .research-field__rabbit-points, .research-field__point-depth { position: absolute; inset: 0; }
+.research-field__rabbit-photo { clip-path: inset(0 var(--research-progress) 0 0); }
+.research-field__rabbit-photo :global(picture), .research-field__rabbit-photo :global(img) { width: 100%; height: 100%; }
+.research-field__rabbit-photo :global(img) { object-fit: contain; }
+.research-field__rabbit-points { clip-path: inset(0 0 0 calc(100% - var(--research-progress))); }
+.research-field__point-depth {
+  background-repeat: repeat;
+  -webkit-mask-image: var(--research-rabbit-mask);
+  mask-image: var(--research-rabbit-mask);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.research-field__point-depth--far {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23'%3E%3Ccircle cx='4' cy='6' r='1.1' fill='%23365062'/%3E%3Ccircle cx='17' cy='15' r='.75' fill='%23365062'/%3E%3C/svg%3E");
+  background-size: 23px 23px;
+  opacity: .58;
+  transform: translate(-1.5px, -1px);
+}
+.research-field__point-depth--middle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='31' height='31' viewBox='0 0 31 31'%3E%3Cellipse cx='7' cy='9' rx='1.35' ry='1' fill='%236ba9b6'/%3E%3Ccircle cx='23' cy='20' r='1.05' fill='%236ba9b6'/%3E%3C/svg%3E");
+  background-size: 31px 31px;
+  opacity: .76;
+  transform: translate(.5px, 0);
+}
+.research-field__point-depth--near {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='43' height='43' viewBox='0 0 43 43'%3E%3Cellipse cx='10' cy='11' rx='2.2' ry='1.45' fill='%23e6dfd1'/%3E%3Ccircle cx='31' cy='29' r='1.7' fill='%23d3a169'/%3E%3Ccircle cx='35' cy='8' r='.9' fill='%23e6dfd1'/%3E%3C/svg%3E");
+  background-size: 43px 43px;
+  opacity: .9;
+  transform: translate(1.5px, .75px);
+}
 .research-field__refraction { z-index: 3; pointer-events: none; }
 .research-field__refraction--one { clip-path: inset(24% 29% 24% 66%); }
 .research-field__refraction--two { clip-path: inset(24% 22% 24% 73%); }
 .research-field__refraction--three { clip-path: inset(24% 15% 24% 80%); }
-.research-field__travel-track--refracted :global(picture) { opacity: .82; transform: translate(calc(-50% + 2px), -50%); }
+.research-field__travel-track--refracted .research-field__rabbit { opacity: .82; transform: translate(calc(-50% + 2px), -50%); }
+.research-field__travel-track--refracted .research-field__rabbit-photo { clip-path: inset(0 calc(var(--research-progress) + 10%) 0 0); }
+.research-field__travel-track--refracted .research-field__rabbit-points { clip-path: inset(0 0 0 calc(90% - var(--research-progress))); }
 .research-field__pane { position: absolute; z-index: 4; top: 24%; width: 5%; height: 52%; }
 .research-field__pane--one { left: 66%; }
 .research-field__pane--two { left: 73%; }
 .research-field__pane--three { left: 80%; }
 .research-field__pane :global(picture), .research-field__pane :global(img) { width: 100%; height: 100%; }
 .research-field__pane :global(img) { object-fit: fill; }
-.research-field__foreground { z-index: 5; pointer-events: none; }
-.research-field__content { position: relative; z-index: 6; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
+.research-field__content { position: relative; z-index: 5; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
 .research-field__statement { max-width: 11ch; margin-block-end: 2rem; font-size: clamp(2.6rem, 6.1vw, 5.5rem); }
 .research-field__description { max-width: 46ch; margin-block-end: 3rem; }
 .interest-list { display: grid; max-width: 50rem; margin: 0; padding: 0; border-top: 1px solid var(--color-text); grid-template-columns: repeat(3, 1fr); list-style: none; }
@@ -656,9 +725,10 @@ Implement these exact structural rules. If the static composite from Task 1 cann
   .research-field { display: grid; min-height: 0; }
   .research-field__content { order: 1; min-height: 0; padding-block: var(--space-section); }
   .research-field__scene { position: relative; inset: auto; order: 2; min-height: 24rem; }
-  .research-field__base :global(img), .research-field__foreground :global(img) { object-position: 70% center; }
+  .research-field__base :global(img) { object-position: 70% center; }
+  .research-field__subject-layer { clip-path: ellipse(26.5% 32% at 73% 49%); }
   .research-field__travel-track { top: 46%; left: 48%; width: 42%; height: 20%; }
-  .research-field__travel-track :global(picture) { width: 7rem; }
+  .research-field__rabbit { width: 7rem; }
   .research-field__refraction--one { clip-path: inset(22% 38% 22% 54%); }
   .research-field__refraction--two { clip-path: inset(22% 26% 22% 66%); }
   .research-field__refraction--three { clip-path: inset(22% 14% 22% 78%); }
@@ -681,13 +751,13 @@ npx vitest run tests/source-contracts.test.ts
 npm run check
 ```
 
-Expected: source contracts pass; Astro reports 0 errors, 0 warnings, 0 hints. With JavaScript disabled or reduced motion enabled, the rabbit is visible between panes two and three.
+Expected: source contracts pass; Astro reports 0 errors, 0 warnings, 0 hints. At `--research-progress: 0%` the rabbit is photographic; at `100%` it is point-based; with JavaScript disabled or reduced motion enabled, the static `70%` state is visible between panes two and three.
 
 - [ ] **Step 7: Commit**
 
 ```powershell
 git add src/components/home/ResearchInterests.astro src/pages/index.astro tests/source-contracts.test.ts
-git commit -m "feat: compose photographic research traversal"
+git commit -m "feat: morph research rabbit into predictive state"
 ```
 
 ### Task 5: Update production-output contracts and remove rejected assets
@@ -706,23 +776,27 @@ const basePosition = html.indexOf('data-research-base');
 const subjectPosition = html.indexOf('data-research-subject');
 const refractionPosition = html.indexOf('data-research-refraction');
 const panePosition = html.indexOf('data-research-pane');
-const foregroundPosition = html.indexOf('data-research-foreground');
 
-const layerPositions = [basePosition, subjectPosition, refractionPosition, panePosition, foregroundPosition];
+const layerPositions = [basePosition, subjectPosition, refractionPosition, panePosition];
 layerPositions.forEach((position) => expect(position).toBeGreaterThan(-1));
 expect(layerPositions)
   .toEqual([...new Set(layerPositions)]
     .sort((a, b) => a - b));
 expect(html.match(/data-research-refraction/g) ?? []).toHaveLength(3);
 expect(html.match(/data-research-pane/g) ?? []).toHaveLength(3);
+expect(html.match(/data-research-photo/g) ?? []).toHaveLength(4);
+expect(html.match(/data-research-point-layer/g) ?? []).toHaveLength(12);
 expect(html).toContain('research-traversal-base.');
 expect(html).toContain('research-traversal-rabbit.');
-expect(html).toContain('research-traversal-foreground.');
+expect(html).not.toContain('research-traversal-foreground.');
+expect(html).not.toMatch(/point[-_]cloud|pointcloud/i);
+expect(html).not.toContain('<canvas');
+expect(html).not.toContain('data-research-foreground');
 expect(html).not.toContain('data-motion-entered');
 expect(html).not.toContain('research-field__slice');
 ```
 
-Add these concrete checks for the nine scene pictures (base, subject, three refraction copies, three panes, foreground):
+Add these concrete checks for the eight scene pictures (base, subject, three refraction copies, and three panes):
 
 ```ts
 const researchStart = html.indexOf('data-research-traversal');
@@ -732,7 +806,7 @@ expect(researchEnd).toBeGreaterThan(researchStart);
 
 const researchHtml = html.slice(researchStart, researchEnd);
 const scenePictures = researchHtml.match(/<picture>[\s\S]*?<\/picture>/g) ?? [];
-expect(scenePictures).toHaveLength(9);
+expect(scenePictures).toHaveLength(8);
 scenePictures.forEach((picture) => {
   expect(picture).toContain('type="image/avif"');
   expect(picture).toContain('type="image/webp"');
