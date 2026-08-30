@@ -256,8 +256,14 @@ describe('public source contracts', () => {
     expect(existsSync(rabbit)).toBe(true);
     expect(readFileSync(base).byteLength).toBeGreaterThan(10_000);
     expect(readFileSync(rabbit).byteLength).toBeGreaterThan(1_000);
-    expect(readFileSync(rabbit, 'utf8')).toContain('<svg');
-    expect(readFileSync(rabbit, 'utf8')).not.toContain('<text');
+    const rabbitSource = readFileSync(rabbit, 'utf8');
+
+    expect(rabbitSource).toContain('<svg');
+    expect(rabbitSource).not.toContain('<text');
+    expect(rabbitSource).toMatch(/fill:(?:#f[0-9a-f]{5}|#e[89a-f][0-9a-f]{4})/i);
+    expect(rabbitSource).not.toMatch(
+      /(?:fill|stroke)(?::|=")\s*(?:black\b|#000(?:000)?\b|rgb\(\s*0\s+0\s+0)/i,
+    );
   });
 
   it('contains exactly the approved initial content records', () => {
@@ -669,11 +675,33 @@ describe('public source contracts', () => {
     expect(research).toContain('<research-motion');
     expect(research).toContain('data-research-base');
     expect(research).toContain('data-research-subject');
-    expect(research.match(/data-research-slice/g) ?? []).toHaveLength(3);
+    expect(research).toContain('observationSlices.map');
+    expect(research).toContain('observationMarks.map');
     expect(research).toContain("import '../../scripts/research-motion'");
     expect(research).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+    const mobileRules = research.slice(
+      research.indexOf('@media (max-width: 48rem)'),
+      research.indexOf('@media (prefers-reduced-motion: reduce)'),
+    );
+
+    expect(research).not.toContain('.research-field__content > *');
     expect(research).toMatch(
-      /@media\s*\(max-width:\s*48rem\)[\s\S]*?\.research-field__subject\s*\{[^}]*top:\s*34%;[^}]*left:\s*70%;[^}]*width:\s*clamp\(4\.5rem,\s*22vw,\s*6rem\);/,
+      /:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)/,
+    );
+    expect(research).toMatch(/\.interest-list li:nth-child\(1\)[^}]*transition-delay:/);
+    expect(research).toMatch(/\.interest-list li:nth-child\(2\)[^}]*transition-delay:/);
+    expect(research).toMatch(/\.interest-list li:nth-child\(3\)[^}]*transition-delay:/);
+    expect(mobileRules).toMatch(
+      /\.research-field__subject\s*\{[^}]*top:[^;}]+;[^}]*left:[^;}]+;[^}]*width:[^;}]+;/,
+    );
+    expect(mobileRules).toMatch(
+      /\.research-motion\[data-motion-ready\]:not\(\[data-motion-entered\]\)\s*:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)\s*\{[^}]*opacity:\s*1;[^}]*transform:\s*none;/,
+    );
+    expect(mobileRules).toMatch(
+      /\.research-motion\[data-motion-ready\]\s*:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)\s*\{[^}]*transition:\s*none;/,
+    );
+    expect(mobileRules).toMatch(
+      /:not\(\[data-motion-entered\]\) \.research-field__base\s*\{[^}]*transform:\s*none;/,
     );
     expect(research).not.toContain('gradient(');
     expect(research).not.toMatch(/\bfilter\s*:/);
