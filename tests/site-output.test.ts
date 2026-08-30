@@ -66,7 +66,7 @@ function elementFragments(page: string, tag: 'article' | 'li', className: string
 }
 
 describe('homepage output', () => {
-  it('publishes complete metadata without executable scripts', () => {
+  it('publishes complete metadata with one route-local motion script', () => {
     expect(html).toContain('<title>Tenghao Wang | Academic Portfolio</title>');
     expect(html).toMatch(
       /<link rel="canonical" href="https:\/\/stylewth\.github\.io\/">/,
@@ -80,7 +80,7 @@ describe('homepage output', () => {
     expect(html).toMatch(/<meta name="twitter:card" content="summary">/);
     expect(html).not.toMatch(/<meta property="og:image"/);
     expect(html).toMatch(/<link rel="icon"[^>]+href="\/favicon\.svg"/);
-    expect(html).not.toMatch(/<script(?![^>]*type="application\/ld\+json")[^>]*>/);
+    expect(executableScripts(html)).toHaveLength(1);
   });
 
   it('publishes a parseable Person JSON-LD record for the public profile', () => {
@@ -190,27 +190,39 @@ describe('homepage output', () => {
     expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>All updates<\/a>/);
   });
 
-  it('emits the portrait before the rabbit field with modern image sources', () => {
+  it('emits the portrait before a lazy layered research scene', () => {
     const portraitPosition = html.indexOf('alt="Portrait of Tenghao Wang"');
-    const rabbitPosition = html.indexOf('data-rabbit-field');
+    const basePosition = html.indexOf('data-research-base');
+    const subjectPosition = html.indexOf('data-research-subject');
     const portraitPictureEnd = html.indexOf('</picture>', portraitPosition);
     const portraitPicture = html.slice(
       html.lastIndexOf('<picture', portraitPosition),
       portraitPictureEnd,
     );
-    const rabbitPictureEnd = html.indexOf('</picture>', rabbitPosition);
-    const rabbitPicture = html.slice(rabbitPosition, rabbitPictureEnd);
+    const basePictureEnd = html.indexOf('</picture>', basePosition);
+    const basePicture = html.slice(basePosition, basePictureEnd);
+    const subjectPictureEnd = html.indexOf('</picture>', subjectPosition);
+    const subjectPicture = html.slice(subjectPosition, subjectPictureEnd);
 
     expect(portraitPosition).toBeGreaterThan(-1);
-    expect(rabbitPosition).toBeGreaterThan(portraitPosition);
+    expect(basePosition).toBeGreaterThan(portraitPosition);
+    expect(subjectPosition).toBeGreaterThan(basePosition);
     expect(portraitPicture).toContain('type="image/avif"');
     expect(portraitPicture).toContain('type="image/webp"');
     expect(portraitPicture).toContain('loading="eager"');
     expect(portraitPicture).toContain('fetchpriority="high"');
-    expect(rabbitPicture).toMatch(/\salt(?:=""|\s)/);
-    expect(rabbitPicture).toContain('type="image/avif"');
-    expect(rabbitPicture).toContain('type="image/webp"');
-    expect(rabbitPicture).toContain('loading="lazy"');
+    expect(basePicture).toContain('type="image/avif"');
+    expect(basePicture).toContain('type="image/webp"');
+    expect(basePicture).toContain('loading="lazy"');
+    expect(subjectPicture).toContain('src="/_astro/research-world-model-rabbit-layer.');
+    expect(subjectPicture).toContain('.svg"');
+    expect(subjectPicture).toContain('loading="lazy"');
+    expect(html.match(/data-research-slice/g) ?? []).toHaveLength(3);
+    const motionStart = html.indexOf('<research-motion');
+    const motionOpeningTag = html.slice(motionStart, html.indexOf('>', motionStart));
+    expect(motionOpeningTag).toContain('data-research-motion');
+    expect(motionOpeningTag).not.toContain('data-motion-ready');
+    expect(motionOpeningTag).not.toContain('data-motion-entered');
   });
 
   it('excludes private details, prohibited effects, and dash glyphs', () => {
@@ -247,12 +259,14 @@ describe('production crawl and script contracts', () => {
     });
   });
 
-  it('ships one route-local interaction script only on Elsewhere', () => {
+  it('ships one route-local script only on Home and Elsewhere', () => {
+    const scriptedRoutes = new Set(['index.html', 'elsewhere/index.html']);
+
     outputHtmlFiles().forEach((file) => {
       const page = readFileSync(file, 'utf8');
       const relativePath = relative(outputDirectory, file).replaceAll('\\', '/');
       expect(executableScripts(page), relativePath).toHaveLength(
-        relativePath === 'elsewhere/index.html' ? 1 : 0,
+        scriptedRoutes.has(relativePath) ? 1 : 0,
       );
     });
   });
