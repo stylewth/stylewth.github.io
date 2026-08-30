@@ -686,48 +686,39 @@ describe('public source contracts', () => {
       'utf8',
     );
 
-    expect(indexPage).toContain('research-world-model-base.png');
-    expect(indexPage).toContain('research-world-model-rabbit-layer.png');
-    expect(indexPage).not.toContain('research-world-model-rabbit-layer.svg');
-    expect(indexPage).not.toContain('research-world-model-rabbit.png');
+    expect(indexPage).toContain('research-traversal-base.png');
+    expect(indexPage).toContain('research-traversal-rabbit.png');
+    expect(indexPage.match(/research-traversal-pane-[123]\.png/g) ?? []).toHaveLength(3);
+    expect(indexPage).not.toContain('research-traversal-foreground.png');
+    expect(research).toContain('<research-traversal');
+    expect(research).toContain("import '../../scripts/research-traversal'");
+    expect(research).toContain("const paneNames = ['one', 'two', 'three'] as const;");
+    expect(research.match(/data-research-pane/g) ?? []).toHaveLength(1);
+    expect(research.match(/data-research-refraction/g) ?? []).toHaveLength(1);
+    expect(research).not.toContain('data-research-foreground');
+    expect(research).toContain('clip-path: ellipse(');
+    expect(research).toContain('left: var(--research-progress)');
+    expect(research).toContain('data-research-photo');
+    expect(research).toContain("const pointDepths = ['far', 'middle', 'near'] as const;");
+    expect(research).toContain('data-research-point-layer');
+    expect(research).toContain('--research-rabbit-mask');
+    expect(research).toContain('mask-image: var(--research-rabbit-mask)');
+    expect(research).toContain('calc(100% - var(--research-progress))');
+    expect(research).toContain('calc(90% - var(--research-progress))');
+    expect(research).not.toContain('<canvas');
+    expect(research).not.toContain('requestAnimationFrame(draw)');
+    expect(indexPage).not.toMatch(/point[-_]cloud|pointcloud/i);
+    expect(research).not.toContain('<research-motion');
+    expect(research).not.toContain('data-motion-entered');
+    expect(research).not.toContain('research-field__slice');
+    expect(research).not.toMatch(/\.research-field__pane\s*\{[^}]*border\s*:/);
+    expect(research).not.toMatch(/\btransition(?:-[a-z-]+)?\s*:/);
+    expect(research).not.toMatch(/@keyframes|\banimation\s*:/);
     expect(indexPage).toMatch(
-      /<ResearchInterests[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?\/>/,
+      /<ResearchInterests[\s\S]*?copy=\{en\.research\}[\s\S]*?baseImage=\{researchBaseImage\}[\s\S]*?subjectImage=\{researchSubjectImage\}[\s\S]*?paneImages=\{researchPaneImages\}[\s\S]*?\/>/,
     );
-    expect(research).toContain('baseImage: ImageMetadata');
-    expect(research).toContain('subjectImage: ImageMetadata');
-    expect(research).toContain('<research-motion');
-    expect(research).toContain('data-research-base');
-    expect(research).toContain('data-research-subject');
-    expect(research).toContain('observationSlices.map');
-    expect(research).toContain('observationMarks.map');
-    expect(research).toContain("import '../../scripts/research-motion'");
-    expect(research).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)/);
-    const mobileRules = research.slice(
-      research.indexOf('@media (max-width: 48rem)'),
-      research.indexOf('@media (prefers-reduced-motion: reduce)'),
-    );
-
-    expect(research).not.toContain('.research-field__content > *');
-    expect(research).toMatch(
-      /:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)/,
-    );
-    expect(research).toMatch(/\.interest-list li:nth-child\(1\)[^}]*transition-delay:/);
-    expect(research).toMatch(/\.interest-list li:nth-child\(2\)[^}]*transition-delay:/);
-    expect(research).toMatch(/\.interest-list li:nth-child\(3\)[^}]*transition-delay:/);
-    expect(mobileRules).toMatch(
-      /\.research-field__subject\s*\{[^}]*top:[^;}]+;[^}]*left:[^;}]+;[^}]*width:[^;}]+;/,
-    );
-    expect(mobileRules).toMatch(
-      /\.research-motion\[data-motion-ready\]:not\(\[data-motion-entered\]\)\s*:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)\s*\{[^}]*opacity:\s*1;[^}]*transform:\s*none;/,
-    );
-    expect(mobileRules).toMatch(
-      /\.research-motion\[data-motion-ready\]\s*:is\(\.research-field__statement,\s*\.research-field__description,\s*\.interest-list li\)\s*\{[^}]*transition:\s*none;/,
-    );
-    expect(mobileRules).toMatch(
-      /:not\(\[data-motion-entered\]\) \.research-field__base\s*\{[^}]*transform:\s*none;/,
-    );
-    expect(research).not.toContain('gradient(');
-    expect(research).not.toMatch(/\bfilter\s*:/);
+    expect(research).toContain('paneImages: readonly [ImageMetadata, ImageMetadata, ImageMetadata]');
+    expect(research).not.toContain('foregroundImage');
   });
 
   it('uses the content-width shell for wide archive pages and metadata config values', () => {

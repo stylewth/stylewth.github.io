@@ -485,7 +485,7 @@ git commit -m "feat: drive research traversal from scroll"
 - Modify: `tests/source-contracts.test.ts`
 - Test: `src/scripts/research-traversal.test.ts`
 
-- [ ] **Step 1: Replace obsolete component contracts with failing traversal contracts**
+- [x] **Step 1: Replace obsolete component contracts with failing traversal contracts**
 
 Update the research component contract to require:
 
@@ -525,7 +525,7 @@ expect(research).toContain('paneImages: readonly [ImageMetadata, ImageMetadata, 
 expect(research).not.toContain('foregroundImage');
 ```
 
-- [ ] **Step 2: Run the focused source contract and verify RED**
+- [x] **Step 2: Run the focused source contract and verify RED**
 
 ```powershell
 npx vitest run tests/source-contracts.test.ts -t "research scene"
@@ -533,7 +533,7 @@ npx vitest run tests/source-contracts.test.ts -t "research scene"
 
 Expected: FAIL because the page still imports old assets and the component still renders CSS slices.
 
-- [ ] **Step 3: Update the page imports and explicit props**
+- [x] **Step 3: Update the page imports and explicit props**
 
 In `src/pages/index.astro`, replace the old research image imports with these exact imports and tuple:
 
@@ -560,7 +560,7 @@ Pass:
 
 Use the exact names `researchBaseImage`, `researchSubjectImage`, `researchPane1Image`, `researchPane2Image`, and `researchPane3Image`. Do not import or pass an independent foreground image.
 
-- [ ] **Step 4: Replace the component markup**
+- [x] **Step 4: Replace the component markup**
 
 Use these props and depth groups:
 
@@ -652,7 +652,7 @@ const pointDepths = ['far', 'middle', 'near'] as const;
 </script>
 ```
 
-- [ ] **Step 5: Replace the component CSS with scroll-travel layout**
+- [x] **Step 5: Replace the component CSS with scroll-travel layout**
 
 Implement these exact structural rules. If the static composite from Task 1 cannot align at these coordinates, return to the asset gate and regenerate the misaligned layer instead of compensating with CSS effects:
 
@@ -744,7 +744,7 @@ Do not add any transition declaration. The mobile text remains in normal flow ab
 
 In reduced motion, keep `--research-progress: 70%` and do not add transitions or animations.
 
-- [ ] **Step 6: Run source tests, Astro diagnostics, and inspect the static states**
+- [x] **Step 6: Run source tests, Astro diagnostics, and inspect the static states**
 
 ```powershell
 npx vitest run tests/source-contracts.test.ts
@@ -753,7 +753,7 @@ npm run check
 
 Expected: source contracts pass; Astro reports 0 errors, 0 warnings, 0 hints. At `--research-progress: 0%` the rabbit is photographic; at `100%` it is point-based; with JavaScript disabled or reduced motion enabled, the static `70%` state is visible between panes two and three.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```powershell
 git add src/components/home/ResearchInterests.astro src/pages/index.astro tests/source-contracts.test.ts

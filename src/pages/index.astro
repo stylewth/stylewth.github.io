@@ -14,8 +14,13 @@ import {
 import { site } from '../config/site';
 import { en } from '../i18n/en';
 import portrait from '../assets/images/tenghao-wang-portrait.png';
-import researchBaseImage from '../assets/images/research-world-model-base.png';
-import researchSubjectImage from '../assets/images/research-world-model-rabbit-layer.png';
+import researchBaseImage from '../assets/images/research-traversal-base.png';
+import researchSubjectImage from '../assets/images/research-traversal-rabbit.png';
+import researchPane1Image from '../assets/images/research-traversal-pane-1.png';
+import researchPane2Image from '../assets/images/research-traversal-pane-2.png';
+import researchPane3Image from '../assets/images/research-traversal-pane-3.png';
+
+const researchPaneImages = [researchPane1Image, researchPane2Image, researchPane3Image] as const;
 
 const projects = await getCollection('projects');
 const updates = await getCollection('updates');
@@ -52,6 +57,7 @@ const personJsonLd = {
     copy={en.research}
     baseImage={researchBaseImage}
     subjectImage={researchSubjectImage}
+    paneImages={researchPaneImages}
   />
   <LatestWork
     projects={featuredProjects}

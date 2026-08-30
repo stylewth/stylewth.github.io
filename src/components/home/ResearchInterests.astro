@@ -14,376 +14,168 @@ interface Props {
   copy: ResearchCopy;
   baseImage: ImageMetadata;
   subjectImage: ImageMetadata;
+  paneImages: readonly [ImageMetadata, ImageMetadata, ImageMetadata];
 }
 
-const observationSlices = ['slice-1', 'slice-2', 'slice-3'] as const;
-const observationMarks = Array.from({ length: 5 });
-const { copy, baseImage, subjectImage } = Astro.props;
+const { copy, baseImage, subjectImage, paneImages } = Astro.props;
+const paneNames = ['one', 'two', 'three'] as const;
+const pointDepths = ['far', 'middle', 'near'] as const;
 ---
 
-<research-motion class="research-motion" data-research-motion>
-  <section
-    id="research-interests"
-    class="research-field"
-    aria-labelledby="research-interests-title"
-  >
-    <div class="research-field__scene" aria-hidden="true">
-      <div class="research-field__base" data-research-base data-motion-layer="base">
-        <Picture
-          src={baseImage}
-          formats={['avif', 'webp']}
-          fallbackFormat="jpeg"
-          widths={[768, 1280, 1920]}
-          sizes="100vw"
-          alt=""
-          loading="lazy"
-        />
-      </div>
-
-      <div class="research-field__slices">
-        {
-          observationSlices.map((slice) => (
-            <span class="research-field__slice" data-research-slice data-motion-layer={slice}>
-              {observationMarks.map(() => <span class="research-field__mark" />)}
-            </span>
-          ))
-        }
-      </div>
-
-      <div class="research-field__subject" data-research-subject data-motion-layer="subject">
-        <Picture
-          src={subjectImage}
-          formats={['avif', 'webp']}
-          fallbackFormat="png"
-          widths={[192, 320]}
-          sizes="(max-width: 48rem) 6rem, 11rem"
-          alt=""
-          loading="lazy"
-        />
-      </div>
-    </div>
-
-    <div class="research-field__content shell" data-motion-copy>
+<research-traversal class="research-traversal" data-research-traversal>
+  <section id="research-interests" class="research-field" aria-labelledby="research-interests-title">
+    <div class="research-field__content shell">
       <p class="eyebrow">{copy.eyebrow}</p>
-      <h2 id="research-interests-title" class="research-field__statement">
-        {copy.statement}
-      </h2>
+      <h2 id="research-interests-title" class="research-field__statement">{copy.statement}</h2>
       <p class="research-field__description">{copy.description}</p>
       <ul class="interest-list" aria-label={copy.interestsLabel}>
         {copy.interests.map((interest) => <li>{interest}</li>)}
       </ul>
     </div>
+
+    <div class="research-field__scene" aria-hidden="true">
+      <div class="research-field__base" data-research-base>
+        <Picture src={baseImage} formats={['avif', 'webp']} fallbackFormat="jpeg"
+          widths={[768, 1280, 1920]} sizes="100vw" alt="" loading="lazy" />
+      </div>
+
+      <div class="research-field__subject-layer" data-research-subject data-research-aperture>
+        <div class="research-field__travel-track">
+          <div class="research-field__rabbit">
+            <div class="research-field__rabbit-photo" data-research-photo>
+              <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
+                widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                alt="" loading="lazy" />
+            </div>
+            <div class="research-field__rabbit-points"
+              style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+              {pointDepths.map((depth) => (
+                <span class={`research-field__point-depth research-field__point-depth--${depth}`}
+                  data-research-point-layer></span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {paneNames.map((name) => (
+        <div class={`research-field__refraction research-field__refraction--${name}`}
+          data-research-refraction>
+          <div class="research-field__travel-track research-field__travel-track--refracted">
+            <div class="research-field__rabbit">
+              <div class="research-field__rabbit-photo" data-research-photo>
+                <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
+                  widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                  alt="" loading="lazy" />
+              </div>
+              <div class="research-field__rabbit-points"
+                style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+                {pointDepths.map((depth) => (
+                  <span class={`research-field__point-depth research-field__point-depth--${depth}`}
+                    data-research-point-layer></span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {paneImages.map((pane, index) => (
+        <div class={`research-field__pane research-field__pane--${paneNames[index]}`}
+          data-research-pane>
+          <Picture src={pane} formats={['avif', 'webp']} fallbackFormat="png"
+            widths={[96, 160]} sizes="8vw" alt="" loading="lazy" />
+        </div>
+      ))}
+
+    </div>
   </section>
-</research-motion>
+</research-traversal>
 
 <script>
-  import '../../scripts/research-motion';
+  import '../../scripts/research-traversal';
 </script>
 
 <style>
-  .research-motion {
-    display: block;
+  .research-traversal { --research-progress: 70%; display: block; }
+  .research-field { position: relative; overflow: hidden; min-height: 42rem; background: var(--color-bone); isolation: isolate; }
+  .research-field__scene { position: absolute; inset: 0; z-index: 0; }
+  .research-field__scene :global(picture), .research-field__scene :global(img) { display: block; }
+  .research-field__base { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .research-field__base :global(picture), .research-field__base :global(img) { width: 100%; height: 100%; }
+  .research-field__base :global(img) { object-fit: cover; object-position: center; }
+  .research-field__subject-layer, .research-field__refraction { position: absolute; inset: 0; }
+  .research-field__subject-layer { z-index: 2; clip-path: ellipse(18% 46% at 72% 49%); overflow: hidden; }
+  .research-field__travel-track { position: absolute; top: 46%; left: 60%; width: 27%; height: 20%; }
+  .research-field__rabbit { position: absolute; top: 50%; left: var(--research-progress); width: clamp(7rem, 10vw, 10rem); aspect-ratio: 3 / 2; transform: translate(-50%, -50%); }
+  .research-field__rabbit-photo, .research-field__rabbit-points, .research-field__point-depth { position: absolute; inset: 0; }
+  .research-field__rabbit-photo { clip-path: inset(0 var(--research-progress) 0 0); }
+  .research-field__rabbit-photo :global(picture), .research-field__rabbit-photo :global(img) { width: 100%; height: 100%; }
+  .research-field__rabbit-photo :global(img) { object-fit: contain; }
+  .research-field__rabbit-points { clip-path: inset(0 0 0 calc(100% - var(--research-progress))); }
+  .research-field__point-depth {
+    background-repeat: repeat;
+    -webkit-mask-image: var(--research-rabbit-mask);
+    mask-image: var(--research-rabbit-mask);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
   }
-
-  .research-field {
-    position: relative;
-    overflow: hidden;
-    min-height: 42rem;
-    background: var(--color-bone);
-    isolation: isolate;
+  .research-field__point-depth--far {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23'%3E%3Ccircle cx='4' cy='6' r='1.1' fill='%23365062'/%3E%3Ccircle cx='17' cy='15' r='.75' fill='%23365062'/%3E%3C/svg%3E");
+    background-size: 23px 23px;
+    opacity: .58;
+    transform: translate(-1.5px, -1px);
   }
-
-  .research-field__scene,
-  .research-field__base {
-    position: absolute;
-    inset: 0;
+  .research-field__point-depth--middle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='31' height='31' viewBox='0 0 31 31'%3E%3Cellipse cx='7' cy='9' rx='1.35' ry='1' fill='%236ba9b6'/%3E%3Ccircle cx='23' cy='20' r='1.05' fill='%236ba9b6'/%3E%3C/svg%3E");
+    background-size: 31px 31px;
+    opacity: .76;
+    transform: translate(.5px, 0);
   }
-
-  .research-field__scene {
-    z-index: 0;
+  .research-field__point-depth--near {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='43' height='43' viewBox='0 0 43 43'%3E%3Cellipse cx='10' cy='11' rx='2.2' ry='1.45' fill='%23e6dfd1'/%3E%3Ccircle cx='31' cy='29' r='1.7' fill='%23d3a169'/%3E%3Ccircle cx='35' cy='8' r='.9' fill='%23e6dfd1'/%3E%3C/svg%3E");
+    background-size: 43px 43px;
+    opacity: .9;
+    transform: translate(1.5px, .75px);
   }
-
-  .research-field__base {
-    opacity: 0.46;
-  }
-
-  .research-field__base :global(picture),
-  .research-field__base :global(img) {
-    width: 100%;
-    height: 100%;
-  }
-
-  .research-field__base :global(img) {
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .research-field__subject {
-    position: absolute;
-    z-index: 2;
-    top: 43%;
-    left: 65%;
-    width: clamp(7rem, 12vw, 11rem);
-    opacity: 0.72;
-  }
-
-  .research-field__subject :global(picture),
-  .research-field__subject :global(img) {
-    width: 100%;
-    height: auto;
-  }
-
-  .research-field__slice {
-    position: absolute;
-    top: 24%;
-    width: 4.25%;
-    height: 52%;
-    border: 1px solid rgb(88 124 132 / 38%);
-    background: rgb(255 255 255 / 10%);
-    color: rgb(88 124 132 / 55%);
-  }
-
-  .research-field__slice:nth-child(1) {
-    z-index: 1;
-    left: 67%;
-  }
-
-  .research-field__slice:nth-child(2),
-  .research-field__slice:nth-child(3) {
-    z-index: 3;
-    border-color: rgb(177 116 73 / 32%);
-    color: rgb(177 116 73 / 50%);
-  }
-
-  .research-field__slice:nth-child(2) {
-    left: 74%;
-  }
-
-  .research-field__slice:nth-child(3) {
-    left: 81%;
-  }
-
-  .research-field__mark {
-    position: absolute;
-    width: 0.24rem;
-    height: 0.24rem;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-  }
-
-  .research-field__mark:nth-child(1) {
-    top: 16%;
-    left: 28%;
-  }
-
-  .research-field__mark:nth-child(2) {
-    top: 31%;
-    left: 62%;
-  }
-
-  .research-field__mark:nth-child(3) {
-    top: 49%;
-    left: 35%;
-  }
-
-  .research-field__mark:nth-child(4) {
-    top: 66%;
-    left: 68%;
-  }
-
-  .research-field__mark:nth-child(5) {
-    top: 82%;
-    left: 42%;
-  }
-
-  .research-field__content {
-    position: relative;
-    z-index: 4;
-    display: flex;
-    min-height: 42rem;
-    flex-direction: column;
-    justify-content: center;
-    padding-block: var(--space-section);
-  }
-
-  .research-field__statement {
-    max-width: 11ch;
-    margin-block-end: 2rem;
-    font-size: clamp(2.6rem, 6.1vw, 5.5rem);
-  }
-
-  .research-field__description {
-    max-width: 46ch;
-    margin-block-end: 3rem;
-  }
-
-  .interest-list {
-    display: grid;
-    max-width: 50rem;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--color-text);
-    grid-template-columns: repeat(3, 1fr);
-    list-style: none;
-  }
-
-  .interest-list li {
-    padding: 1rem 1rem 1rem 0;
-    border-bottom: 1px solid var(--color-text);
-    font-size: 0.88rem;
-    font-weight: 600;
-  }
-
-  .research-motion[data-motion-ready]
-    :is(.research-field__base, .research-field__subject, .research-field__slice),
-  .research-motion[data-motion-ready]
-    :is(.research-field__statement, .research-field__description, .interest-list li) {
-    transition-property: transform, opacity;
-    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__base {
-    opacity: 0.2;
-    transform: translateY(3%);
-  }
-
-  .research-motion[data-motion-ready] .research-field__base {
-    transition-duration: 520ms;
-  }
-
-  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__subject {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  .research-motion[data-motion-ready] .research-field__subject {
-    transition-duration: 480ms;
-    transition-delay: 50ms;
-  }
-
-  .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__slice {
-    opacity: 0;
-    transform: translateX(-12px);
-  }
-
-  .research-motion[data-motion-ready] .research-field__slice {
-    transition-duration: 400ms;
-  }
-
-  .research-motion[data-motion-ready] .research-field__slice:nth-child(1) {
-    transition-delay: 80ms;
-  }
-
-  .research-motion[data-motion-ready] .research-field__slice:nth-child(2) {
-    transition-delay: 120ms;
-  }
-
-  .research-motion[data-motion-ready] .research-field__slice:nth-child(3) {
-    transition-delay: 160ms;
-  }
-
-  .research-motion[data-motion-ready]:not([data-motion-entered])
-    :is(.research-field__statement, .research-field__description, .interest-list li) {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  .research-motion[data-motion-ready]
-    :is(.research-field__statement, .research-field__description, .interest-list li) {
-    transition-duration: 420ms;
-  }
-
-  .research-motion[data-motion-ready] .research-field__statement {
-    transition-delay: 100ms;
-  }
-
-  .research-motion[data-motion-ready] .research-field__description {
-    transition-delay: 140ms;
-  }
-
-  .research-motion[data-motion-ready] .interest-list li:nth-child(1) {
-    transition-delay: 180ms;
-  }
-
-  .research-motion[data-motion-ready] .interest-list li:nth-child(2) {
-    transition-delay: 200ms;
-  }
-
-  .research-motion[data-motion-ready] .interest-list li:nth-child(3) {
-    transition-delay: 220ms;
-  }
+  .research-field__refraction { z-index: 3; pointer-events: none; }
+  .research-field__refraction--one { clip-path: inset(24% 29% 24% 66%); }
+  .research-field__refraction--two { clip-path: inset(24% 22% 24% 73%); }
+  .research-field__refraction--three { clip-path: inset(24% 15% 24% 80%); }
+  .research-field__travel-track--refracted .research-field__rabbit { opacity: .82; transform: translate(calc(-50% + 2px), -50%); }
+  .research-field__travel-track--refracted .research-field__rabbit-photo { clip-path: inset(0 calc(var(--research-progress) + 10%) 0 0); }
+  .research-field__travel-track--refracted .research-field__rabbit-points { clip-path: inset(0 0 0 calc(90% - var(--research-progress))); }
+  .research-field__pane { position: absolute; z-index: 4; top: 24%; width: 5%; height: 52%; }
+  .research-field__pane--one { left: 66%; }
+  .research-field__pane--two { left: 73%; }
+  .research-field__pane--three { left: 80%; }
+  .research-field__pane :global(picture), .research-field__pane :global(img) { width: 100%; height: 100%; }
+  .research-field__pane :global(img) { object-fit: fill; }
+  .research-field__content { position: relative; z-index: 5; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
+  .research-field__statement { max-width: 11ch; margin-block-end: 2rem; font-size: clamp(2.6rem, 6.1vw, 5.5rem); }
+  .research-field__description { max-width: 46ch; margin-block-end: 3rem; }
+  .interest-list { display: grid; max-width: 50rem; margin: 0; padding: 0; border-top: 1px solid var(--color-text); grid-template-columns: repeat(3, 1fr); list-style: none; }
+  .interest-list li { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--color-text); font-size: .88rem; font-weight: 600; }
 
   @media (max-width: 48rem) {
-    .research-field,
-    .research-field__content {
-      min-height: 38rem;
-    }
-
-    .research-field__base :global(img) {
-      object-position: 68% center;
-    }
-
-    .research-field__subject {
-      top: 34%;
-      left: 70%;
-      width: clamp(4.5rem, 22vw, 6rem);
-    }
-
-    .research-field__slice {
-      top: 28%;
-      width: 8%;
-      height: 44%;
-    }
-
-    .research-field__slice:nth-child(1) {
-      left: 59%;
-    }
-
-    .research-field__slice:nth-child(2) {
-      left: 70%;
-    }
-
-    .research-field__slice:nth-child(3) {
-      left: 81%;
-    }
-
-    .interest-list {
-      grid-template-columns: 1fr;
-    }
-
-    .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__base {
-      transform: none;
-    }
-
-    .research-motion[data-motion-ready]:not([data-motion-entered]) .research-field__subject {
-      transform: translateY(12px);
-    }
-
-    .research-motion[data-motion-ready]:not([data-motion-entered])
-      :is(.research-field__statement, .research-field__description, .interest-list li) {
-      opacity: 1;
-      transform: none;
-    }
-
-    .research-motion[data-motion-ready]
-      :is(.research-field__statement, .research-field__description, .interest-list li) {
-      transition: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .research-motion
-      :is(
-        .research-field__base,
-        .research-field__subject,
-        .research-field__slice,
-        .research-field__statement,
-        .research-field__description,
-        .interest-list li
-      ) {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
+    .research-field { display: grid; min-height: 0; }
+    .research-field__content { order: 1; min-height: 0; padding-block: var(--space-section); }
+    .research-field__scene { position: relative; inset: auto; order: 2; min-height: 24rem; }
+    .research-field__base :global(img) { object-position: 70% center; }
+    .research-field__subject-layer { clip-path: ellipse(26.5% 32% at 73% 49%); }
+    .research-field__travel-track { top: 46%; left: 48%; width: 42%; height: 20%; }
+    .research-field__rabbit { width: 7rem; }
+    .research-field__refraction--one { clip-path: inset(22% 38% 22% 54%); }
+    .research-field__refraction--two { clip-path: inset(22% 26% 22% 66%); }
+    .research-field__refraction--three { clip-path: inset(22% 14% 22% 78%); }
+    .research-field__pane { top: 22%; width: 8%; height: 56%; }
+    .research-field__pane--one { left: 54%; }
+    .research-field__pane--two { left: 66%; }
+    .research-field__pane--three { left: 78%; }
+    .interest-list { grid-template-columns: 1fr; }
   }
 </style>
