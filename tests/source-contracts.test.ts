@@ -263,6 +263,7 @@ describe('public source contracts', () => {
     expect(rabbitSource.subarray(0, 8)).toEqual(
       Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     );
+    expect(rabbitSource.readUInt32BE(16)).toBeGreaterThan(rabbitSource.readUInt32BE(20));
     const colorType = rabbitSource[25];
     const hasEmbeddedAlpha = colorType === 4 || colorType === 6;
     const hasIndexedTransparency =
