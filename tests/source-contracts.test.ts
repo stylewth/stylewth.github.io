@@ -672,6 +672,9 @@ describe('public source contracts', () => {
     expect(research.match(/data-research-slice/g) ?? []).toHaveLength(3);
     expect(research).toContain("import '../../scripts/research-motion'");
     expect(research).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+    expect(research).toMatch(
+      /@media\s*\(max-width:\s*48rem\)[\s\S]*?\.research-field__subject\s*\{[^}]*top:\s*34%;[^}]*left:\s*70%;[^}]*width:\s*clamp\(4\.5rem,\s*22vw,\s*6rem\);/,
+    );
     expect(research).not.toContain('gradient(');
     expect(research).not.toMatch(/\bfilter\s*:/);
   });
