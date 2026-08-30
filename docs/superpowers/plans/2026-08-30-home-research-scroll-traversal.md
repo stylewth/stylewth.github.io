@@ -263,7 +263,7 @@ git commit -m "feat: calculate research traversal progress"
 - Delete: `src/scripts/research-motion.ts`
 - Delete: `src/scripts/research-motion.test.ts`
 
-- [ ] **Step 1: Write the failing controller tests**
+- [x] **Step 1: Write the failing controller tests**
 
 Create this complete happy-dom suite:
 
@@ -403,7 +403,7 @@ it('removes listeners and cancels pending work on disconnect', async () => {
 });
 ```
 
-- [ ] **Step 2: Run the controller test and verify RED**
+- [x] **Step 2: Run the controller test and verify RED**
 
 ```powershell
 npx vitest run src/scripts/research-traversal.test.ts
@@ -411,7 +411,7 @@ npx vitest run src/scripts/research-traversal.test.ts
 
 Expected: FAIL because `research-traversal.ts` does not exist.
 
-- [ ] **Step 3: Implement the controller**
+- [x] **Step 3: Implement the controller**
 
 ```ts
 import { calculateTraversalProgress, formatProgressPercent } from './research-traversal-progress';
@@ -461,7 +461,7 @@ if (!customElements.get(tagName)) {
 export {};
 ```
 
-- [ ] **Step 4: Run focused and complete source tests**
+- [x] **Step 4: Run focused and complete source tests**
 
 ```powershell
 npx vitest run src/scripts/research-traversal.test.ts src/scripts/research-traversal-progress.test.ts
@@ -470,7 +470,7 @@ npm run test
 
 Expected: focused suites pass; complete source suite passes after deleting the obsolete motion suite.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```powershell
 git add src/scripts/research-traversal.ts src/scripts/research-traversal.test.ts src/scripts/research-traversal-progress.ts src/scripts/research-traversal-progress.test.ts src/scripts/research-motion.ts src/scripts/research-motion.test.ts
