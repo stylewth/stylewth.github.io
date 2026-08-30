@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
 const projectRoot = process.cwd();
@@ -238,38 +239,53 @@ function projectFiles(directory: string): string[] {
   });
 }
 
+async function pngAlphaRange(path: string): Promise<{ min: number; max: number }> {
+  const metadata = await sharp(path).metadata();
+  expect(metadata.format, path).toBe('png');
+  expect(metadata.hasAlpha, path).toBe(true);
+
+  const { data, info } = await sharp(path)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  let min = 255;
+  let max = 0;
+  for (let index = 3; index < data.length; index += info.channels) {
+    min = Math.min(min, data[index]);
+    max = Math.max(max, data[index]);
+  }
+  return { min, max };
+}
+
 describe('public source contracts', () => {
-  it('stores the approved research scene as two explicit production layers', () => {
+  it('stores the approved research traversal as matched photographic layers', async () => {
     const imageRoot = join(projectRoot, 'src', 'assets', 'images');
-    const approvedPreview = join(
-      projectRoot,
-      'docs',
-      'superpowers',
-      'assets',
-      'home-research-motion-preview.png',
-    );
-    const base = join(imageRoot, 'research-world-model-base.png');
-    const rabbit = join(imageRoot, 'research-world-model-rabbit-layer.png');
-    const oldRabbitSvg = join(imageRoot, 'research-world-model-rabbit-layer.svg');
+    const required = [
+      'research-traversal-base.png',
+      'research-traversal-rabbit.png',
+      'research-traversal-pane-1.png',
+      'research-traversal-pane-2.png',
+      'research-traversal-pane-3.png',
+    ];
 
-    expect(existsSync(approvedPreview)).toBe(true);
-    expect(existsSync(base)).toBe(true);
-    expect(existsSync(rabbit)).toBe(true);
-    expect(existsSync(oldRabbitSvg)).toBe(false);
-    expect(readFileSync(base).byteLength).toBeGreaterThan(10_000);
-    expect(readFileSync(rabbit).byteLength).toBeGreaterThan(1_000);
-    const rabbitSource = readFileSync(rabbit);
+    required.forEach((name) => {
+      const path = join(imageRoot, name);
+      expect(existsSync(path), name).toBe(true);
+      expect(readFileSync(path).byteLength, name).toBeGreaterThan(1_000);
+    });
 
-    expect(rabbitSource.subarray(0, 8)).toEqual(
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    );
-    expect(rabbitSource.readUInt32BE(16)).toBeGreaterThan(rabbitSource.readUInt32BE(20));
-    const colorType = rabbitSource[25];
-    const hasEmbeddedAlpha = colorType === 4 || colorType === 6;
-    const hasIndexedTransparency =
-      colorType === 3 && rabbitSource.includes(Buffer.from('tRNS', 'ascii'));
+    for (const name of required.slice(1)) {
+      const { min, max } = await pngAlphaRange(join(imageRoot, name));
+      expect(min, name).toBeLessThan(255);
+      expect(max, name).toBeGreaterThan(0);
+    }
 
-    expect(hasEmbeddedAlpha || hasIndexedTransparency).toBe(true);
+    const rabbit = await sharp(join(imageRoot, 'research-traversal-rabbit.png')).metadata();
+    expect(rabbit.width, 'research-traversal-rabbit.png width').toBeGreaterThan(rabbit.height ?? 0);
+    expect(
+      existsSync(join(imageRoot, 'research-traversal-foreground.png')),
+      'research-traversal-foreground.png must not exist',
+    ).toBe(false);
   });
 
   it('contains exactly the approved initial content records', () => {

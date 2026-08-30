@@ -101,7 +101,7 @@ npx vitest run tests/source-contracts.test.ts -t "matched photographic layers"
 
 Expected: FAIL because the four required transparent layers do not exist yet.
 
-- [ ] **Step 3: Generate or edit the five raster layers with imagegen**
+- [x] **Step 3: Generate or edit the five raster layers with imagegen**
 
 Read and use the `imagegen` skill. Inspect the approved master first. Use the master as the reference for every request; do not introduce stock photography.
 
@@ -127,7 +127,7 @@ Each transparent layer may receive further targeted retries. After every attempt
 
 The user approved the base image's existing circular ring as the natural occluder. Do not generate, extract, or accept `research-traversal-foreground.png`; the moving subject will be clipped to an ellipse matching the apparatus aperture, with refractions and pane overlays above it.
 
-- [ ] **Step 4: Verify file properties and make the focused test GREEN**
+- [x] **Step 4: Verify file properties and make the focused test GREEN**
 
 Inspect every layer with `view_image`. Run this exact alpha audit from the repository root; it fails when a transparent layer is fully opaque or fully empty:
 
@@ -143,7 +143,7 @@ npx vitest run tests/source-contracts.test.ts -t "matched photographic layers"
 
 Expected: PASS. The rabbit is wider than tall; rabbit and panes have genuine pixel alpha; `research-traversal-foreground.png` is absent.
 
-- [ ] **Step 5: Build a temporary static composite and obtain user approval**
+- [x] **Step 5: Build a temporary static composite and obtain user approval**
 
 Create an ignored visual-companion HTML screen under `.superpowers/brainstorm/` with the base, aperture-clipped rabbit, refraction regions, and three pane overlays absolutely aligned in that four-group depth order. Show desktop and 390-pixel mobile crops side by side. Do not add motion, an independent foreground image, or CSS-drawn glass material. The user must explicitly approve all of these before proceeding:
 
@@ -154,7 +154,7 @@ Create an ignored visual-companion HTML screen under `.superpowers/brainstorm/` 
 
 If rejected, regenerate only the rejected layer and repeat this step. Do not continue to Task 2 without approval.
 
-- [ ] **Step 6: Commit the approved layers and contract**
+- [x] **Step 6: Commit the approved layers and contract**
 
 ```powershell
 git add src/assets/images/research-traversal-*.png tests/source-contracts.test.ts
