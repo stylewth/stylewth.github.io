@@ -116,3 +116,14 @@ Browser checks at 1440, 768, 390, and 320 pixels must confirm that every pane cr
 - replacing the registered silhouette with different rabbit poses;
 - sticky scrolling, pointer-driven parallax, looping motion, chromatic aberration, glow, or science-fiction HUD treatment;
 - generated repair assets or heuristic visual post-processing.
+
+## Verification Record
+
+- `npm run build`: passed.
+- Browser widths inspected: `1440x1000` and `390x900`.
+- Desktop forward and pause: at `25.176%` the rabbit still reads as the physical subject entering the first transition; at `50.09%` the rabbit reads as the aligned mid-traversal representation with local glass occlusion and refraction; at `72.056%` the whole rabbit has cleared the third exit and reads as a volumetric point cloud with distinct far, middle, and near depth.
+- Desktop reverse: scrolling back from `72.056%` to `49.942%` restores the earlier state boundary correctly with matching glass thresholds in reverse.
+- Mobile forward and pause: at `55.205%` and `79.901%` the traversal remains legible, the rabbit stays inside the aperture, and the three panes preserve the expected local transition behavior.
+- Glass behavior: all three panes show rear/front material occlusion and readable refracted offset slices; console `warn` and `error` logs were empty during browser QA.
+- Reduced-motion and script-failure evidence: verified through the automated `matchMedia(true)` branch in `research-traversal.test.ts` plus static CSS and built-output fallback contracts. This record does not claim a live browser-side reduced-motion or JavaScript-off toggle.
+- Evidence: `docs/superpowers/assets/research-repair-desktop-1440.png` and `docs/superpowers/assets/research-repair-mobile-390.png`.

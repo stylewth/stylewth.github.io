@@ -455,7 +455,7 @@ git commit -m "test: enforce physical research traversal gates"
 - Create: `docs/superpowers/assets/research-repair-mobile-390.png`
 - Modify: `docs/superpowers/specs/2026-08-31-home-research-traversal-repair-design.md`
 
-- [ ] **Step 1: Start the built preview**
+- [x] **Step 1: Start the built preview**
 
 Run:
 
@@ -465,7 +465,7 @@ npm run preview -- --host 127.0.0.1
 
 Expected: Astro prints a local preview URL without build or runtime errors.
 
-- [ ] **Step 2: Inspect forward, paused, and reverse traversal at desktop width**
+- [x] **Step 2: Inspect forward, paused, and reverse traversal at desktop width**
 
 At 1440 pixels wide, scroll through the research section and confirm all of the following:
 
@@ -481,13 +481,13 @@ reverse scroll: identical boundaries in reverse with no retained state
 
 Save the evidence screenshot to `docs/superpowers/assets/research-repair-desktop-1440.png`.
 
-- [ ] **Step 3: Inspect responsive and static modes**
+- [x] **Step 3: Inspect responsive and static modes**
 
 At 390 pixels wide, verify the three panes remain visible, the rabbit stays inside the aperture, the refraction uses 4-pixel displacement and 90% horizontal scale, and text does not collide with the scene. Then emulate reduced motion and disable JavaScript separately; both must show one complete aligned rabbit with dynamic gate layers hidden.
 
 Save the evidence screenshot to `docs/superpowers/assets/research-repair-mobile-390.png`.
 
-- [ ] **Step 4: Record verification results**
+- [x] **Step 4: Record verification results**
 
 Append this section to the repair design document with the actual command results and inspected widths:
 
@@ -503,7 +503,7 @@ Append this section to the repair design document with the actual command result
 - Evidence: `docs/superpowers/assets/research-repair-desktop-1440.png` and `docs/superpowers/assets/research-repair-mobile-390.png`.
 ```
 
-- [ ] **Step 5: Commit the verified repair**
+- [x] **Step 5: Commit the verified repair**
 
 ```powershell
 git add -- docs/superpowers/specs/2026-08-31-home-research-traversal-repair-design.md docs/superpowers/assets/research-repair-desktop-1440.png docs/superpowers/assets/research-repair-mobile-390.png
