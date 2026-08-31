@@ -74,21 +74,21 @@ The apparatus aperture continues to clip every rabbit state so the base ring rem
 
 ## Progress Model
 
-The existing normalized scroll progress remains the only runtime input. A pure state-calculation module maps that progress to:
+The existing normalized scroll progress remains the only runtime input and controls only the registered rabbit travel position. State and occlusion changes are fixed spatial clips registered to the three pane boxes:
 
-- rabbit travel position;
-- the active gate, if any;
-- per-state clip ranges;
-- per-pane behind, refracted, and emerged clip ranges.
+- the base subject remains below every pane;
+- the pane-one emerged copy is clipped to the region after pane one and renders surface structure;
+- the pane-two emerged copy is clipped to the region after pane two and renders aligned representation;
+- the pane-three emerged copy is clipped to the region after pane three and renders the volumetric cloud;
+- each refraction copy is clipped to its pane interior and blends that pane's previous and next states.
 
-Pane thresholds are explicit constants shared by rendering and tests. Invalid or non-monotonic thresholds throw during development rather than silently selecting a fallback state.
+This makes the pane geometry itself the transition threshold. Forward and reverse scrolling traverse the same registered clips without a second time-based state model that could drift from responsive layout.
 
 Reduced-motion and script-failure rendering use the approved static middle composition between panes two and three, showing the aligned representation without partial glass intersection.
 
 ## Component Boundaries
 
 - `ResearchInterests.astro` owns state-layer markup, pane depth groups, masks, responsive geometry, and scoped styles.
-- A small pure TypeScript module owns threshold validation and progress-to-state calculations.
 - `research-traversal.ts` continues to own passive scroll and resize listeners, one scheduled animation frame, and one normalized progress write.
 - `index.astro` continues to pass only the base, rabbit, and three pane images.
 
@@ -102,7 +102,7 @@ Automated checks must prove:
 - pane one, two, and three each transition to the correct next state;
 - every pane has rear material, one refracted cross-section, front material, and an emerged subject region;
 - refracted geometry uses the approved narrow band, displacement, and compression rather than stretching the complete rabbit;
-- forward and reverse progress produce symmetric state and occlusion calculations;
+- forward and reverse progress traverse the same fixed state and occlusion clips;
 - reduced motion and script failure show the complete static aligned state;
 - no canvas, WebGL, particle, animation, or new point-cloud raster dependency is introduced;
 - existing source, output, build, and performance contracts still pass.
