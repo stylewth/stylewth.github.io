@@ -858,7 +858,7 @@ git commit -m "test: enforce research traversal output"
 - Create ignored artifacts only under: `.superpowers/qa/`
 - Modify tracked files only if a failing verification requires a test-first correction
 
-- [ ] **Step 1: Start the production preview and open the homepage at the top**
+- [x] **Step 1: Start the production preview and open the homepage at the top**
 
 ```powershell
 npm run build
@@ -867,7 +867,7 @@ npm run preview -- --host 127.0.0.1 --port 4321
 
 Use the in-app Browser skill. Open `/`, not `/#research-interests`. Keep the browser visible for the final user review.
 
-- [ ] **Step 2: Verify actual forward, pause, and reverse motion**
+- [x] **Step 2: Verify actual forward, pause, and reverse motion**
 
 At 1440×900, use browser scrolling rather than page-scope `scrollTo`. Capture the subject's bounding box and `--research-progress` at:
 
@@ -878,13 +878,13 @@ At 1440×900, use browser scrolling rather than page-scope `scrollTo`. Capture t
 
 Pause for 500 ms at halfway and confirm the bounding box does not move. Confirm there are no console warnings or errors.
 
-- [ ] **Step 3: Verify responsive and static modes**
+- [x] **Step 3: Verify responsive and static modes**
 
 Repeat visual inspection at 768×900, 390×844, and 320×720. At each width verify no horizontal overflow and no text-scene collision. On mobile, confirm the text block is above the scene stage.
 
 Emulate `prefers-reduced-motion: reduce` and disable JavaScript separately. Both must show the static 70% state with complete copy and scene.
 
-- [ ] **Step 4: Measure script and scene budgets**
+- [x] **Step 4: Measure script and scene budgets**
 
 After the final build, run:
 
@@ -907,7 +907,7 @@ $scene = Get-ChildItem -LiteralPath 'dist\_astro' -File |
 
 Expected: `MOTION_GZIP` ≤ 2048 bytes and `SCENE_MAX_AVIF` ≤ 307200 bytes.
 
-- [ ] **Step 5: Run final mobile Lighthouse**
+- [x] **Step 5: Run final mobile Lighthouse**
 
 ```powershell
 npx --offline --cache .npm-cache lighthouse http://127.0.0.1:4321/ `
@@ -919,7 +919,7 @@ npx --offline --cache .npm-cache lighthouse http://127.0.0.1:4321/ `
 
 Read the report even if Chrome cleanup returns the known Windows temporary-directory EPERM after the JSON is written. Expected: performance ≥ 95, TBT ≤ 50 ms, CLS ≤ 0.03.
 
-- [ ] **Step 6: Run final repository verification**
+- [x] **Step 6: Run final repository verification**
 
 ```powershell
 npm run build
@@ -929,7 +929,7 @@ git status --short
 
 Expected: build passes, no whitespace errors, and only intentional QA artifacts remain ignored.
 
-- [ ] **Step 7: Request code review and commit any test-first corrections**
+- [x] **Step 7: Request code review and commit any test-first corrections**
 
 Run standards and spec reviews against base `8c98279`. Fix every blocking finding with a failing regression test before implementation. Repeat `npm run build` after corrections.
 
