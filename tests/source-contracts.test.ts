@@ -693,6 +693,7 @@ describe('public source contracts', () => {
     expect(state).toContain('data-research-aligned-layer');
     expect(state.match(/data-research-point-layer/g) ?? []).toHaveLength(1);
     expect(state).toContain('mask-image: var(--research-rabbit-mask)');
+    expect(state).toContain('sizes="(max-width: 48rem) 4rem, 8rem"');
     expect(state).not.toContain('<canvas');
     expect(state).not.toMatch(/\b(?:filter|box-shadow|text-shadow)\s*:/);
   });
@@ -746,9 +747,9 @@ describe('public source contracts', () => {
     expect(research).not.toContain('calc(100% - var(--research-progress))');
     expect(research).not.toContain('calc(90% - var(--research-progress))');
     expect(research).not.toContain('var(--gate-index) * 4');
-    expect(rabbitRule).toMatch(/width:\s*clamp\(10rem,\s*17vw,\s*15rem\);/);
+    expect(rabbitRule).toMatch(/max-width:\s*8rem;/);
     expect(research).toMatch(
-      /@media\s*\(max-width:\s*48rem\)\s*\{[\s\S]*?\.research-field__rabbit\s*\{[^}]*width:\s*8\.5rem;/,
+      /@media\s*\(max-width:\s*48rem\)\s*\{[\s\S]*?\.research-field__rabbit\s*\{[^}]*width:\s*4rem;/,
     );
     expect(research).not.toContain('<canvas');
     expect(research).not.toContain('requestAnimationFrame(draw)');
@@ -766,6 +767,139 @@ describe('public source contracts', () => {
     );
     expect(research).toContain('paneImages: readonly [ImageMetadata, ImageMetadata, ImageMetadata]');
     expect(research).not.toContain('foregroundImage');
+  });
+
+  it('enforces physical research scene geometry and layered optical invariants', () => {
+    const research = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ResearchInterests.astro'),
+      'utf8',
+    );
+    const state = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ResearchRabbitState.astro'),
+      'utf8',
+    );
+    const css = research.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? '';
+    const mobileCss = css.match(/@media\s*\(max-width:\s*48rem\)\s*\{([\s\S]*)\n  \}/)?.[1] ?? '';
+
+    const rule = (source: string, selector: string): string => {
+      const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return source.match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+    };
+    const declaration = (body: string, property: string): string =>
+      body.match(new RegExp(`${property}\\s*:\\s*([^;]+);`))?.[1]?.trim() ?? '';
+    const percent = (value: string): number => Number.parseFloat(value.replace('%', ''));
+    const rem = (value: string): number => Number.parseFloat(value.replace('rem', '')) * 16;
+    const translateX = (value: string): number =>
+      Number.parseFloat(value.match(/translateX?\(\s*(-?[0-9.]+)(?:px)?/)?.[1] ?? 'NaN');
+    const pointMetric = (body: string, property: string): number =>
+      Number.parseFloat(declaration(body, property).match(/-?[0-9.]+/)?.[0] ?? 'NaN');
+    const insetEdges = (value: string): { left: number; right: number; rightInset: number } => {
+      const match = value.match(
+        /inset\(\s*[0-9.]+%?\s+([0-9.]+)%?\s+[0-9.]+%?\s+([0-9.]+)%?\s*\)/,
+      );
+      expect(match, 'inset clip').not.toBeNull();
+      return {
+        left: Number(match?.[2]),
+        right: 100 - Number(match?.[1]),
+        rightInset: Number(match?.[1]),
+      };
+    };
+
+    const geometry = (source: string, viewportWidth: number, rabbitWidthInput: number) => {
+      const aperture = declaration(rule(source, '.research-field__aperture-layer'), 'clip-path');
+      const apertureMatch = aperture.match(/ellipse\(([0-9.]+)% [^@]+ at ([0-9.]+)%/);
+      expect(apertureMatch, 'aperture ellipse').not.toBeNull();
+      const apertureHalf = Number(apertureMatch?.[1]);
+      const apertureCenter = Number(apertureMatch?.[2]);
+      const apertureLeft = apertureCenter - apertureHalf;
+      const apertureRight = apertureCenter + apertureHalf;
+
+      const track = rule(source, '.research-field__travel-track');
+      const trackLeft = percent(declaration(track, 'left'));
+      const trackWidth = percent(declaration(track, 'width'));
+      const paneLefts = ['one', 'two', 'three'].map((name) =>
+        percent(declaration(rule(source, `.research-field__pane--${name}`), 'left')),
+      );
+      const paneWidth = percent(declaration(rule(source, '.research-field__pane'), 'width'));
+      const rabbitWidth = (rabbitWidthInput / viewportWidth) * 100;
+      const centerAt = (progress: number) => trackLeft + trackWidth * progress;
+      const edgesAt = (progress: number) => {
+        const center = centerAt(progress);
+        return { left: center - rabbitWidth / 2, right: center + rabbitWidth / 2 };
+      };
+
+      const initial = edgesAt(0);
+      const terminal = edgesAt(viewportWidth === 1440 ? 0.72 : 0.8);
+      expect(initial.right, 'rabbit right edge before first pane').toBeLessThan(paneLefts[0]);
+      expect(terminal.left, 'rabbit left edge after third pane').toBeGreaterThan(
+        paneLefts[2] + paneWidth,
+      );
+      expect(terminal.left, 'rabbit left edge inside aperture').toBeGreaterThan(apertureLeft);
+      expect(terminal.right, 'rabbit right edge inside aperture').toBeLessThan(apertureRight);
+      expect(paneLefts[1] - (paneLefts[0] + paneWidth), 'pane one/two gap').toBeGreaterThan(0);
+      expect(paneLefts[2] - (paneLefts[1] + paneWidth), 'pane two/three gap').toBeGreaterThan(0);
+
+      ['one', 'two', 'three'].forEach((name, index) => {
+        const paneExit = paneLefts[index] + paneWidth;
+        const paneRegion = insetEdges(
+          declaration(rule(source, `.research-field__scene-region--pane-${name}`), 'clip-path'),
+        );
+        const afterRegion = insetEdges(
+          declaration(rule(source, `.research-field__scene-region--after-${name}`), 'clip-path'),
+        );
+        expect(paneRegion.left, `${name} pane region left`).toBe(paneLefts[index]);
+        expect(paneRegion.right, `${name} pane region right`).toBe(paneExit);
+        expect(paneRegion.rightInset, `${name} pane region right inset`).toBe(100 - paneExit);
+        expect(afterRegion.left, `${name} emerged region left`).toBe(paneExit);
+        expect(afterRegion.right, `${name} emerged region right`).toBe(100);
+        expect(afterRegion.rightInset, `${name} emerged region right inset`).toBe(0);
+      });
+    };
+
+    const desktopRabbit = rule(css, '.research-field__rabbit');
+    const mobileRabbit = rule(mobileCss, '.research-field__rabbit');
+    expect(declaration(desktopRabbit, 'max-width')).toBe('8rem');
+    expect(declaration(mobileRabbit, 'width')).toBe('4rem');
+    geometry(css, 1440, rem(declaration(desktopRabbit, 'max-width')));
+    geometry(mobileCss, 390, rem(declaration(mobileRabbit, 'width')));
+
+    expect(research).not.toContain('45%');
+    const previous = rule(research, ':global(.research-field__refraction-state--previous)');
+    const next = rule(research, ':global(.research-field__refraction-state--next)');
+    expect(pointMetric(previous, 'opacity'), 'previous refraction opacity').toBeLessThan(
+      pointMetric(next, 'opacity'),
+    );
+    expect(research).toContain('research-field__pane--rear :global(img)');
+    expect(research).toContain('research-field__pane--front :global(img)');
+    expect(translateX(declaration(rule(research, '.research-field__pane--rear :global(img)'), 'transform'))).toBe(-1);
+    expect(translateX(declaration(rule(research, '.research-field__pane--front :global(img)'), 'transform'))).toBe(1);
+
+    expect(research).toContain('calc(-50% + 7px)');
+    expect(research).toContain('scaleX(.88)');
+    expect(mobileCss).toContain('calc(-50% + 4px)');
+    expect(mobileCss).toContain('scaleX(.9)');
+
+    const pointRules = ['far', 'middle', 'near'].map((depth) =>
+      rule(state, `.research-rabbit-state__point-depth--${depth}`),
+    );
+    const pointSpacing = pointRules.map((body) => pointMetric(body, 'background-size'));
+    const pointOpacity = pointRules.map((body) => pointMetric(body, 'opacity'));
+    const pointShift = pointRules.map((body) => translateX(declaration(body, 'transform')));
+    const pointSize = pointRules.map((body) =>
+      Math.max(
+        ...[...body.matchAll(/(?:r|rx|ry)=['"]([0-9.]+)/g)].map((match) => Number(match[1])),
+      ),
+    );
+    expect(pointSpacing[1] - pointSpacing[0], 'middle-far point density').toBeGreaterThanOrEqual(8);
+    expect(pointSpacing[2] - pointSpacing[1], 'near-middle point density').toBeGreaterThanOrEqual(10);
+    expect(pointSize[1] - pointSize[0], 'middle-far point size').toBeGreaterThanOrEqual(0.5);
+    expect(pointSize[2] - pointSize[1], 'near-middle point size').toBeGreaterThanOrEqual(1);
+    expect(pointOpacity[1] - pointOpacity[0], 'middle-far point lightness').toBeGreaterThanOrEqual(0.2);
+    expect(pointOpacity[2] - pointOpacity[1], 'near-middle point lightness').toBeGreaterThanOrEqual(0.15);
+    expect(pointShift[1] - pointShift[0], 'middle-far projection shift').toBeGreaterThanOrEqual(2.5);
+    expect(pointShift[2] - pointShift[1], 'near-middle projection shift').toBeGreaterThanOrEqual(2.5);
+
+    expect(`${research}\n${state}`).not.toMatch(/<canvas|\bfilter\s*:|(?:linear|radial|conic)-gradient|glow/i);
   });
 
   it('uses the content-width shell for wide archive pages and metadata config values', () => {

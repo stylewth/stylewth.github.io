@@ -509,3 +509,14 @@ Append this section to the repair design document with the actual command result
 git add -- docs/superpowers/specs/2026-08-31-home-research-traversal-repair-design.md docs/superpowers/assets/research-repair-desktop-1440.png docs/superpowers/assets/research-repair-mobile-390.png
 git commit -m "docs: verify research traversal repair"
 ```
+
+### Task 5: Repair physical scene geometry
+
+**Files:**
+- Modify: `tests/source-contracts.test.ts`
+- Modify: `src/components/home/ResearchInterests.astro`
+- Modify: `src/components/home/ResearchRabbitState.astro`
+
+- [x] **Step 1: Lock and implement desktop/mobile aperture, track, pane clips, refraction, and point-cloud geometry**
+
+The source contract now computes rabbit and pane edges at 1440px and 390px, verifies pane-region clips and emerged exits match the pane geometry, checks positive pane gaps and aperture containment, locks observation image sizes to the rabbit width, and enforces strong point-cloud layer differences without canvas, filters, gradients, or glow.
