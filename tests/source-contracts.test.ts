@@ -680,6 +680,23 @@ describe('public source contracts', () => {
     expect(research).toContain('interestsLabel: string');
   });
 
+  it('defines four registered research rabbit states from one alpha mask', () => {
+    const state = readFileSync(
+      join(projectRoot, 'src', 'components', 'home', 'ResearchRabbitState.astro'),
+      'utf8',
+    );
+
+    expect(state).toContain("type RabbitState = 'observation' | 'surface' | 'aligned' | 'point-cloud';");
+    expect(state).toContain('data-research-state={state}');
+    expect(state).toContain('data-research-observation');
+    expect(state).toContain('data-research-surface-layer');
+    expect(state).toContain('data-research-aligned-layer');
+    expect(state.match(/data-research-point-layer/g) ?? []).toHaveLength(1);
+    expect(state).toContain('mask-image: var(--research-rabbit-mask)');
+    expect(state).not.toContain('<canvas');
+    expect(state).not.toMatch(/\b(?:filter|box-shadow|text-shadow)\s*:/);
+  });
+
   it('owns the layered research scene and restrained motion inside its component', () => {
     const indexPage = readFileSync(join(projectRoot, 'src', 'pages', 'index.astro'), 'utf8');
     const research = readFileSync(

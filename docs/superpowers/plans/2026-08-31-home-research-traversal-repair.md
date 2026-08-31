@@ -26,7 +26,7 @@
 - Create: `src/components/home/ResearchRabbitState.astro`
 - Modify: `tests/source-contracts.test.ts`
 
-- [ ] **Step 1: Write the failing state-renderer contract**
+- [x] **Step 1: Write the failing state-renderer contract**
 
 Add this test inside the main `describe` block in `tests/source-contracts.test.ts`:
 
@@ -49,7 +49,7 @@ Add this test inside the main `describe` block in `tests/source-contracts.test.t
   });
 ```
 
-- [ ] **Step 2: Run the contract and verify RED**
+- [x] **Step 2: Run the contract and verify RED**
 
 Run:
 
@@ -59,7 +59,7 @@ npx vitest run tests/source-contracts.test.ts
 
 Expected: FAIL because `ResearchRabbitState.astro` does not exist.
 
-- [ ] **Step 3: Create the state renderer**
+- [x] **Step 3: Create the state renderer**
 
 Create `src/components/home/ResearchRabbitState.astro` with:
 
@@ -183,7 +183,7 @@ const pointDepths = ['far', 'middle', 'near'] as const;
 </style>
 ```
 
-- [ ] **Step 4: Run the focused contract and verify GREEN**
+- [x] **Step 4: Run the focused contract and verify GREEN**
 
 Run:
 
@@ -193,7 +193,7 @@ npx vitest run tests/source-contracts.test.ts
 
 Expected: all source-contract tests pass.
 
-- [ ] **Step 5: Commit the renderer**
+- [x] **Step 5: Commit the renderer**
 
 ```powershell
 git add -- src/components/home/ResearchRabbitState.astro tests/source-contracts.test.ts
