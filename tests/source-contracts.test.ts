@@ -703,6 +703,7 @@ describe('public source contracts', () => {
     expect(research).not.toContain('data-research-foreground');
     expect(research).toContain('clip-path: ellipse(');
     expect(research).toContain('left: var(--research-progress)');
+    expect(research.match(/data-research-rabbit/g) ?? []).toHaveLength(1);
     expect(research).toContain('data-research-photo');
     expect(research).toContain("const pointDepths = ['far', 'middle', 'near'] as const;");
     expect(research).toContain('data-research-point-layer');

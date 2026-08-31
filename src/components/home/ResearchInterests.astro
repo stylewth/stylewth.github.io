@@ -42,7 +42,7 @@ const subjectMask = await getImage({ src: subjectImage, width: 320, format: 'png
 
       <div class="research-field__subject-layer" data-research-subject data-research-aperture>
         <div class="research-field__travel-track">
-          <div class="research-field__rabbit">
+          <div class="research-field__rabbit" data-research-rabbit>
             <div class="research-field__rabbit-photo" data-research-photo>
               <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
                 widths={[192, 320]} sizes="(max-width: 48rem) 8.5rem, clamp(10rem, 17vw, 15rem)"

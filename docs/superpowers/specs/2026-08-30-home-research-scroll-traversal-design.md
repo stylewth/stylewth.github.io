@@ -85,8 +85,8 @@ Inside each pane cross-section, the narrow clipped slice shows the next represen
 
 The section remains in normal document flow.
 
-- Progress is `0` when the section's top reaches 85% of the viewport height.
-- Progress is `1` when the section's bottom reaches 25% of the viewport height.
+- Progress is `0` when the marked rabbit's top reaches the bottom of the viewport—the first instant the subject can become visible.
+- Progress is `1` when the marked rabbit's bottom reaches the top of the viewport—the instant the subject is no longer visible.
 - Progress is linear and clamped between `0` and `1`.
 - The rabbit begins inside the left side of the apparatus window, before the first pane, and ends just beyond the third pane. It never crosses the title or body copy.
 - Stopping the scroll freezes the subject at the current position.
@@ -95,7 +95,7 @@ The section remains in normal document flow.
 - The representation state advances in the same spatial order: photographic before pane one, progressively abstract inside the panes, and point-based after pane three.
 - The heading, description, and interest labels remain static and readable throughout.
 
-The motion controller uses one passive `scroll` listener and one resize signal. It schedules at most one `requestAnimationFrame` update at a time, reads the section rectangle once per update, and writes a single normalized progress value. It has no perpetual animation loop, stored history, replay state, or external dependency.
+The motion controller uses one passive `scroll` listener and one resize signal. It schedules at most one `requestAnimationFrame` update at a time, reads the marked rabbit rectangle once per update, and writes a single normalized progress value. It has no perpetual animation loop, stored history, replay state, or external dependency.
 
 ## Responsive Behavior
 

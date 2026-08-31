@@ -4,7 +4,7 @@
 
 **Goal:** Replace the rejected one-time layered entrance with a visually matched scene in which one white rabbit moves left to right through three physical glass panes and progressively becomes a point-based predictive representation under direct scroll control.
 
-**Architecture:** A hard visual gate produces scene-matched raster layers before motion code changes. A pure geometry module maps section position to normalized progress; a small custom element coalesces passive scroll and resize signals into one animation-frame update. Component CSS uses the same percentage both to move the subject and to reveal three lightweight SVG-pattern point layers through the rabbit PNG's alpha mask, so the rabbit exits in a visibly different predictive state without canvas, WebGL, a particle system, or a generated point-cloud PNG. The subject remains clipped to the base image's inner aperture, transparent glass assets supply material, and the base ring is the natural occluder.
+**Architecture:** A hard visual gate produces scene-matched raster layers before motion code changes. A pure geometry module maps the marked rabbit's viewport visibility to normalized progress; a small custom element coalesces passive scroll and resize signals into one animation-frame update. Component CSS uses the same percentage both to move the subject and to reveal three lightweight SVG-pattern point layers through the rabbit PNG's alpha mask, so the rabbit exits in a visibly different predictive state without canvas, WebGL, a particle system, or a generated point-cloud PNG. The subject remains clipped to the base image's inner aperture, transparent glass assets supply material, and the base ring is the natural occluder.
 
 **Tech Stack:** Astro 7, TypeScript 6, Vitest 4 with happy-dom, Astro image pipeline, component-scoped CSS, Codex in-app Browser, Lighthouse CLI, imagegen for all generated or edited raster assets.
 
@@ -27,6 +27,8 @@
 | `src/pages/index.astro` | Explicit image imports and props for the research scene |
 | `tests/source-contracts.test.ts` | Source asset, alpha, component-boundary, and prohibited-old-implementation contracts |
 | `tests/site-output.test.ts` | Production HTML layer order, optimized formats, lazy loading, and script count |
+
+> **Post-verification timing correction:** Browser review showed that section-based boundaries advanced the animation while mobile text was visible but the rabbit was still below the viewport. The final implementation supersedes the Task 2/3 geometry examples below: progress is `0` when the marked rabbit's top reaches the viewport bottom and `1` when its bottom reaches the viewport top. The controller reads `[data-research-rabbit]`, not the component host rectangle.
 
 ### Task 1: Pass the photographic asset gate
 

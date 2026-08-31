@@ -13,14 +13,12 @@ export function calculateTraversalProgress({
   bottom,
   viewportHeight,
 }: TraversalGeometry): number {
-  const sectionHeight = bottom - top;
-  if (viewportHeight <= 0 || sectionHeight <= 0) {
+  const subjectHeight = bottom - top;
+  if (viewportHeight <= 0 || subjectHeight <= 0) {
     throw new RangeError('Traversal geometry must have positive dimensions');
   }
 
-  const start = viewportHeight * 0.85;
-  const end = viewportHeight * 0.25;
-  return clamp((start - top) / (sectionHeight + start - end));
+  return clamp((viewportHeight - top) / (viewportHeight + subjectHeight));
 }
 
 export function formatProgressPercent(progress: number): string {

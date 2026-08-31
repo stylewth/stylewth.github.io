@@ -40,12 +40,15 @@ function toDomRect({ top, bottom }: RectState): DOMRect {
 async function mount(initialRect: RectState): Promise<HTMLElement> {
   await import('./research-traversal');
   const host = document.createElement('research-traversal');
+  const rabbit = document.createElement('div');
+  rabbit.setAttribute('data-research-rabbit', '');
   let rect = initialRect;
-  Object.defineProperty(host, 'getBoundingClientRect', {
+  Object.defineProperty(rabbit, 'getBoundingClientRect', {
     configurable: true,
     value: () => toDomRect(rect),
   });
   rectSetters.set(host, (next) => { rect = next; });
+  host.append(rabbit);
   document.body.append(host);
   return host;
 }
@@ -89,23 +92,23 @@ describe('research traversal controller', () => {
   });
 
 it('writes progress from current geometry and reverses with upward scroll', async () => {
-  const host = await mount({ top: 850, bottom: 1450 });
+  const host = await mount({ top: 1000, bottom: 1200 });
   flushFrame();
   expect(host.style.getPropertyValue('--research-progress')).toBe('0%');
 
-  setRect(host, { top: -350, bottom: 250 });
+  setRect(host, { top: -200, bottom: 0 });
   window.dispatchEvent(new Event('scroll'));
   flushFrame();
   expect(host.style.getPropertyValue('--research-progress')).toBe('100%');
 
-  setRect(host, { top: 250, bottom: 850 });
+  setRect(host, { top: 400, bottom: 600 });
   window.dispatchEvent(new Event('scroll'));
   flushFrame();
   expect(host.style.getPropertyValue('--research-progress')).toBe('50%');
 });
 
 it('coalesces repeated scroll signals into one frame', async () => {
-  const host = await mount({ top: 850, bottom: 1450 });
+  const host = await mount({ top: 1000, bottom: 1200 });
   flushFrame();
   vi.mocked(requestAnimationFrame).mockClear();
   window.dispatchEvent(new Event('scroll'));
@@ -117,14 +120,14 @@ it('coalesces repeated scroll signals into one frame', async () => {
 
 it('keeps the static middle state under reduced motion', async () => {
   vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery(true)));
-  const host = await mount({ top: 250, bottom: 850 });
+  const host = await mount({ top: 400, bottom: 600 });
   expect(host.hasAttribute('data-traversal-ready')).toBe(false);
   expect(host.style.getPropertyValue('--research-progress')).toBe('');
   expect(requestAnimationFrame).not.toHaveBeenCalled();
 });
 
 it('removes listeners and cancels pending work on disconnect', async () => {
-  const host = await mount({ top: 850, bottom: 1450 });
+  const host = await mount({ top: 1000, bottom: 1200 });
   host.remove();
   expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   expect(removeEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));

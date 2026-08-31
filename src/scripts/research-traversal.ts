@@ -10,7 +10,9 @@ class ResearchTraversalElement extends HTMLElement {
     if (this.#frame) return;
     this.#frame = window.requestAnimationFrame(() => {
       this.#frame = 0;
-      const rect = this.getBoundingClientRect();
+      const rabbit = this.querySelector<HTMLElement>('[data-research-rabbit]');
+      if (!rabbit) throw new Error('Research traversal requires a marked rabbit subject');
+      const rect = rabbit.getBoundingClientRect();
       const progress = calculateTraversalProgress({
         top: rect.top,
         bottom: rect.bottom,
