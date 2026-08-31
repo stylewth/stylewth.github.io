@@ -206,7 +206,7 @@ git commit -m "feat: add registered research rabbit states"
 - Modify: `src/components/home/ResearchInterests.astro`
 - Modify: `tests/source-contracts.test.ts`
 
-- [ ] **Step 1: Replace the old scene assertions with the failing gate contract**
+- [x] **Step 1: Replace the old scene assertions with the failing gate contract**
 
 In the existing `owns the layered research scene and restrained motion inside its component` test, keep the asset and responsive-size assertions, then replace the old photo/point wipe assertions with:
 
@@ -229,7 +229,7 @@ In the existing `owns the layered research scene and restrained motion inside it
     expect(research).not.toContain('calc(100% - var(--research-progress))');
 ```
 
-- [ ] **Step 2: Run the contract and verify RED**
+- [x] **Step 2: Run the contract and verify RED**
 
 Run:
 
@@ -239,7 +239,7 @@ npx vitest run tests/source-contracts.test.ts
 
 Expected: FAIL because the current component has no state component, gate stack, static aligned fallback, or emerged regions.
 
-- [ ] **Step 3: Add the registered gate data and component import**
+- [x] **Step 3: Add the registered gate data and component import**
 
 In `ResearchInterests.astro`, replace `pointDepths` with the state component import and gate configuration:
 
@@ -254,7 +254,7 @@ const gates = [
 ] as const;
 ```
 
-- [ ] **Step 4: Replace the current scene subject, refraction, and pane markup**
+- [x] **Step 4: Replace the current scene subject, refraction, and pane markup**
 
 Keep the base `Picture`, then replace the current subject/refraction/pane blocks with:
 
@@ -309,7 +309,7 @@ Keep the base `Picture`, then replace the current subject/refraction/pane blocks
       ))}
 ```
 
-- [ ] **Step 5: Replace the old photo/point wipe and pane CSS with registered clips**
+- [x] **Step 5: Replace the old photo/point wipe and pane CSS with registered clips**
 
 Keep the base, content, typography, interest-list, and overall responsive rules. Replace the subject/refraction/pane rules with:
 
@@ -364,7 +364,7 @@ Inside the existing mobile media query, replace the old aperture, refraction, an
     .research-field__travel-track--refracted .research-field__rabbit { transform: translate(calc(-50% + 4px), -50%) scaleX(.9); }
 ```
 
-- [ ] **Step 6: Run source checks and verify GREEN**
+- [x] **Step 6: Run source checks and verify GREEN**
 
 Run:
 
@@ -375,7 +375,7 @@ npm run check
 
 Expected: both commands pass with no warnings.
 
-- [ ] **Step 7: Commit the gate architecture**
+- [x] **Step 7: Commit the gate architecture**
 
 ```powershell
 git add -- src/components/home/ResearchInterests.astro tests/source-contracts.test.ts

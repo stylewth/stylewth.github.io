@@ -1,6 +1,7 @@
 ---
 import { getImage, Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import ResearchRabbitState from './ResearchRabbitState.astro';
 
 interface ResearchCopy {
   eyebrow: string;
@@ -19,7 +20,11 @@ interface Props {
 
 const { copy, baseImage, subjectImage, paneImages } = Astro.props;
 const paneNames = ['one', 'two', 'three'] as const;
-const pointDepths = ['far', 'middle', 'near'] as const;
+const gates = [
+  { name: paneNames[0], previous: 'observation', next: 'surface', rearZ: 3, refractionZ: 4, frontZ: 5, emergedZ: 6 },
+  { name: paneNames[1], previous: 'surface', next: 'aligned', rearZ: 7, refractionZ: 8, frontZ: 9, emergedZ: 10 },
+  { name: paneNames[2], previous: 'aligned', next: 'point-cloud', rearZ: 11, refractionZ: 12, frontZ: 13, emergedZ: 14 },
+] as const;
 const subjectMask = await getImage({ src: subjectImage, width: 320, format: 'png' });
 ---
 
@@ -36,59 +41,127 @@ const subjectMask = await getImage({ src: subjectImage, width: 320, format: 'png
 
     <div class="research-field__scene" aria-hidden="true">
       <div class="research-field__base" data-research-base>
-        <Picture src={baseImage} formats={['avif', 'webp']} fallbackFormat="jpeg"
-          widths={[768, 1280, 1920]} sizes="100vw" alt="" loading="lazy" />
+        <Picture
+          src={baseImage}
+          formats={['avif', 'webp']}
+          fallbackFormat="jpeg"
+          widths={[768, 1280, 1920]}
+          sizes="100vw"
+          alt=""
+          loading="lazy"
+        />
       </div>
 
-      <div class="research-field__subject-layer" data-research-subject data-research-aperture>
+      <div class="research-field__aperture-layer research-field__static-subject" data-research-static-subject>
+        <div class="research-field__travel-track research-field__travel-track--static">
+          <div class="research-field__rabbit">
+            <ResearchRabbitState
+              state="aligned"
+              subjectImage={subjectImage}
+              subjectMaskUrl={subjectMask.src}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="research-field__aperture-layer research-field__subject-layer"
+        data-research-dynamic
+        data-research-subject
+      >
         <div class="research-field__travel-track">
           <div class="research-field__rabbit" data-research-rabbit>
-            <div class="research-field__rabbit-photo" data-research-photo>
-              <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
-                widths={[192, 320]} sizes="(max-width: 48rem) 8.5rem, clamp(10rem, 17vw, 15rem)"
-                alt="" loading="lazy" />
-            </div>
-            <div class="research-field__rabbit-points"
-              style={`--research-rabbit-mask: url("${subjectMask.src}")`}>
-              {pointDepths.map((depth) => (
-                <span class={`research-field__point-depth research-field__point-depth--${depth}`}
-                  data-research-point-layer></span>
-              ))}
-            </div>
+            <ResearchRabbitState
+              state="observation"
+              subjectImage={subjectImage}
+              subjectMaskUrl={subjectMask.src}
+            />
           </div>
         </div>
       </div>
 
-      {paneNames.map((name) => (
-        <div class={`research-field__refraction research-field__refraction--${name}`}
-          data-research-refraction>
-          <div class="research-field__travel-track research-field__travel-track--refracted">
-            <div class="research-field__rabbit">
-              <div class="research-field__rabbit-photo" data-research-photo>
-                <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
-                  widths={[192, 320]} sizes="(max-width: 48rem) 8.5rem, clamp(10rem, 17vw, 15rem)"
-                  alt="" loading="lazy" />
+      {gates.map(({ name, previous, next, rearZ, refractionZ, frontZ, emergedZ }, index) => (
+        <div class={`research-field__gate research-field__gate--${name}`} data-research-gate>
+          <div
+            class={`research-field__pane research-field__pane--${name} research-field__pane--rear`}
+            data-research-dynamic
+            data-research-pane-rear
+            style={`z-index: ${rearZ};`}
+          >
+            <Picture
+              src={paneImages[index]}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[96, 160]}
+              sizes="10vw"
+              alt=""
+              loading="lazy"
+            />
+          </div>
+
+          <div
+            class="research-field__aperture-layer research-field__refraction"
+            data-research-dynamic
+            data-research-refraction
+            style={`z-index: ${refractionZ};`}
+          >
+            <div class={`research-field__scene-region research-field__scene-region--pane-${name}`}>
+              <div class="research-field__travel-track research-field__travel-track--refracted">
+                <div class="research-field__rabbit">
+                  <ResearchRabbitState
+                    class="research-field__refraction-state research-field__refraction-state--previous"
+                    state={previous}
+                    subjectImage={subjectImage}
+                    subjectMaskUrl={subjectMask.src}
+                  />
+                  <ResearchRabbitState
+                    class="research-field__refraction-state research-field__refraction-state--next"
+                    state={next}
+                    subjectImage={subjectImage}
+                    subjectMaskUrl={subjectMask.src}
+                  />
+                </div>
               </div>
-              <div class="research-field__rabbit-points"
-                style={`--research-rabbit-mask: url("${subjectMask.src}")`}>
-                {pointDepths.map((depth) => (
-                  <span class={`research-field__point-depth research-field__point-depth--${depth}`}
-                    data-research-point-layer></span>
-                ))}
+            </div>
+          </div>
+
+          <div
+            class={`research-field__pane research-field__pane--${name} research-field__pane--front`}
+            data-research-dynamic
+            data-research-pane-front
+            style={`z-index: ${frontZ};`}
+          >
+            <Picture
+              src={paneImages[index]}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[96, 160]}
+              sizes="10vw"
+              alt=""
+              loading="lazy"
+            />
+          </div>
+
+          <div
+            class="research-field__aperture-layer research-field__emerged"
+            data-research-dynamic
+            data-research-emerged
+            style={`z-index: ${emergedZ};`}
+          >
+            <div class={`research-field__scene-region research-field__scene-region--after-${name}`}>
+              <div class="research-field__travel-track">
+                <div class="research-field__rabbit">
+                  <ResearchRabbitState
+                    state={next}
+                    subjectImage={subjectImage}
+                    subjectMaskUrl={subjectMask.src}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       ))}
-
-      {paneImages.map((pane, index) => (
-        <div class={`research-field__pane research-field__pane--${paneNames[index]}`}
-          data-research-pane>
-          <Picture src={pane} formats={['avif', 'webp']} fallbackFormat="png"
-            widths={[96, 160]} sizes="8vw" alt="" loading="lazy" />
-        </div>
-      ))}
-
     </div>
   </section>
 </research-traversal>
@@ -105,78 +178,60 @@ const subjectMask = await getImage({ src: subjectImage, width: 320, format: 'png
   .research-field__base { position: absolute; inset: 0; width: 100%; height: 100%; }
   .research-field__base :global(picture), .research-field__base :global(img) { width: 100%; height: 100%; }
   .research-field__base :global(img) { object-fit: cover; object-position: center; }
-  .research-field__subject-layer, .research-field__refraction { position: absolute; inset: 0; }
-  .research-field__subject-layer { z-index: 2; clip-path: ellipse(18% 46% at 72% 49%); overflow: hidden; }
+  .research-field__aperture-layer { position: absolute; inset: 0; clip-path: ellipse(18% 46% at 72% 49%); overflow: hidden; }
+  .research-field__static-subject { z-index: 2; }
+  .research-field__subject-layer { z-index: 2; }
   .research-field__travel-track { position: absolute; top: 46%; left: 60%; width: 27%; height: 20%; }
+  .research-field__travel-track--static { --research-progress: 70%; }
   .research-field__rabbit { position: absolute; top: 50%; left: var(--research-progress); width: clamp(10rem, 17vw, 15rem); aspect-ratio: 3 / 2; transform: translate(-50%, -50%); }
-  .research-field__rabbit-photo, .research-field__rabbit-points, .research-field__point-depth { position: absolute; inset: 0; }
-  .research-field__rabbit-photo { clip-path: inset(0 var(--research-progress) 0 0); }
-  .research-field__rabbit-photo :global(picture), .research-field__rabbit-photo :global(img) { width: 100%; height: 100%; }
-  .research-field__rabbit-photo :global(img) { object-fit: contain; }
-  .research-field__rabbit-points { clip-path: inset(0 0 0 calc(100% - var(--research-progress))); }
-  .research-field__point-depth {
-    background-repeat: repeat;
-    -webkit-mask-image: var(--research-rabbit-mask);
-    mask-image: var(--research-rabbit-mask);
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-size: contain;
-  }
-  .research-field__point-depth--far {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17'%3E%3Ccircle cx='3' cy='4' r='1.1' fill='%23243a4a'/%3E%3Ccircle cx='12' cy='11' r='.8' fill='%23243a4a'/%3E%3C/svg%3E");
-    background-size: 17px 17px;
-    opacity: .72;
-    transform: translate(-1.5px, -1px);
-  }
-  .research-field__point-depth--middle {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23'%3E%3Cellipse cx='5' cy='7' rx='1.35' ry='1' fill='%2358b8c8'/%3E%3Ccircle cx='17' cy='15' r='1.05' fill='%2358b8c8'/%3E%3C/svg%3E");
-    background-size: 23px 23px;
-    opacity: .86;
-    transform: translate(.5px, 0);
-  }
-  .research-field__point-depth--near {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='31' height='31' viewBox='0 0 31 31'%3E%3Cellipse cx='7' cy='8' rx='2.2' ry='1.45' fill='%23e6dfd1'/%3E%3Ccircle cx='22' cy='21' r='1.7' fill='%23d3a169'/%3E%3Ccircle cx='25' cy='6' r='.9' fill='%23e6dfd1'/%3E%3C/svg%3E");
-    background-size: 31px 31px;
-    opacity: .98;
-    transform: translate(1.5px, .75px);
-  }
-  .research-field__refraction { z-index: 3; pointer-events: none; }
-  .research-field__refraction--one { clip-path: inset(24% 29% 24% 66%); }
-  .research-field__refraction--two { clip-path: inset(24% 22% 24% 73%); }
-  .research-field__refraction--three { clip-path: inset(24% 15% 24% 80%); }
-  .research-field__travel-track--refracted .research-field__rabbit { opacity: .82; transform: translate(calc(-50% + 2px), -50%); }
-  .research-field__travel-track--refracted .research-field__rabbit-photo { clip-path: inset(0 calc(var(--research-progress) + 10%) 0 0); }
-  .research-field__travel-track--refracted .research-field__rabbit-points { clip-path: inset(0 0 0 calc(90% - var(--research-progress))); }
-  .research-field__pane { position: absolute; z-index: 4; top: 24%; width: 5%; height: 52%; }
+  .research-field__gate { display: contents; }
+  .research-field__scene-region { position: absolute; inset: 0; overflow: hidden; }
+  .research-field__pane { position: absolute; top: 24%; width: 7%; height: 52%; }
   .research-field__pane--one { left: 66%; }
   .research-field__pane--two { left: 73%; }
   .research-field__pane--three { left: 80%; }
+  .research-field__pane--rear { opacity: 0.24; }
+  .research-field__refraction { pointer-events: none; }
+  .research-field__pane--front { opacity: 0.48; }
+  .research-field__emerged { pointer-events: none; }
   .research-field__pane :global(picture), .research-field__pane :global(img) { width: 100%; height: 100%; }
   .research-field__pane :global(img) { object-fit: fill; }
-  .research-field__content { position: relative; z-index: 5; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
+  .research-field__scene-region--pane-one { clip-path: inset(24% 27% 24% 66%); }
+  .research-field__scene-region--pane-two { clip-path: inset(24% 20% 24% 73%); }
+  .research-field__scene-region--pane-three { clip-path: inset(24% 13% 24% 80%); }
+  .research-field__scene-region--after-one { clip-path: inset(0 0 0 73%); }
+  .research-field__scene-region--after-two { clip-path: inset(0 0 0 80%); }
+  .research-field__scene-region--after-three { clip-path: inset(0 0 0 87%); }
+  .research-field__travel-track--refracted .research-field__rabbit { opacity: 0.88; transform: translate(calc(-50% + 7px), -50%) scaleX(.88); }
+  :global(.research-field__refraction-state--previous) { clip-path: inset(0 45% 0 0); opacity: 0.78; }
+  :global(.research-field__refraction-state--next) { clip-path: inset(0 0 0 45%); opacity: 0.84; }
+  .research-traversal[data-traversal-ready] .research-field__static-subject { visibility: hidden; }
+  .research-traversal:not([data-traversal-ready]) [data-research-dynamic] { visibility: hidden; }
+  .research-field__content { position: relative; z-index: 15; display: flex; min-height: 42rem; flex-direction: column; justify-content: center; padding-block: var(--space-section); }
   .research-field__statement { max-width: 11ch; margin-block-end: 2rem; font-size: clamp(2.6rem, 6.1vw, 5.5rem); }
   .research-field__description { max-width: 46ch; margin-block-end: 3rem; }
   .interest-list { display: grid; max-width: 50rem; margin: 0; padding: 0; border-top: 1px solid var(--color-text); grid-template-columns: repeat(3, 1fr); list-style: none; }
-  .interest-list li { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--color-text); font-size: .88rem; font-weight: 600; }
+  .interest-list li { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--color-text); font-size: 0.88rem; font-weight: 600; }
 
   @media (max-width: 48rem) {
     .research-field { display: grid; min-height: 0; }
     .research-field__content { order: 1; min-height: 0; padding-block: var(--space-section); }
     .research-field__scene { position: relative; inset: auto; order: 2; min-height: 24rem; }
     .research-field__base :global(img) { object-position: 70% center; }
-    .research-field__subject-layer { clip-path: ellipse(26.5% 32% at 73% 49%); }
+    .research-field__aperture-layer { clip-path: ellipse(26.5% 32% at 73% 49%); }
     .research-field__travel-track { top: 46%; left: 48%; width: 42%; height: 20%; }
     .research-field__rabbit { width: 8.5rem; }
-    .research-field__refraction--one { clip-path: inset(22% 38% 22% 54%); }
-    .research-field__refraction--two { clip-path: inset(22% 26% 22% 66%); }
-    .research-field__refraction--three { clip-path: inset(22% 14% 22% 78%); }
-    .research-field__pane { top: 22%; width: 8%; height: 56%; }
+    .research-field__pane { top: 22%; width: 10%; height: 56%; }
     .research-field__pane--one { left: 54%; }
     .research-field__pane--two { left: 66%; }
     .research-field__pane--three { left: 78%; }
+    .research-field__scene-region--pane-one { clip-path: inset(22% 36% 22% 54%); }
+    .research-field__scene-region--pane-two { clip-path: inset(22% 24% 22% 66%); }
+    .research-field__scene-region--pane-three { clip-path: inset(22% 12% 22% 78%); }
+    .research-field__scene-region--after-one { clip-path: inset(0 0 0 64%); }
+    .research-field__scene-region--after-two { clip-path: inset(0 0 0 76%); }
+    .research-field__scene-region--after-three { clip-path: inset(0 0 0 88%); }
+    .research-field__travel-track--refracted .research-field__rabbit { transform: translate(calc(-50% + 4px), -50%) scaleX(.9); }
     .interest-list { grid-template-columns: 1fr; }
   }
 </style>
