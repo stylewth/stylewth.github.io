@@ -767,7 +767,7 @@ git commit -m "feat: morph research rabbit into predictive state"
 - Delete: `src/assets/images/research-world-model-base.png`
 - Delete: `src/assets/images/research-world-model-rabbit-layer.png`
 
-- [ ] **Step 1: Write failing production-output expectations**
+- [x] **Step 1: Write failing production-output expectations**
 
 Replace the old layered-scene output test with assertions that:
 
@@ -817,7 +817,7 @@ scenePictures.forEach((picture) => {
 
 Keep the existing homepage executable-script assertion at exactly one and leave every unrelated route assertion unchanged.
 
-- [ ] **Step 2: Run the site-output test and verify RED**
+- [x] **Step 2: Run the site-output test and verify RED**
 
 ```powershell
 npm run build:site
@@ -826,7 +826,7 @@ npx vitest run tests/site-output.test.ts -t "research"
 
 Expected: FAIL until the old output assertions and old source files are removed.
 
-- [ ] **Step 3: Delete the rejected assets and finish the output contract**
+- [x] **Step 3: Delete the rejected assets and finish the output contract**
 
 Delete only:
 
@@ -837,7 +837,7 @@ src/assets/images/research-world-model-rabbit-layer.png
 
 Do not delete the approved master under `docs/superpowers/assets/`.
 
-- [ ] **Step 4: Run the full build**
+- [x] **Step 4: Run the full build**
 
 ```powershell
 npm run build
@@ -845,7 +845,7 @@ npm run build
 
 Expected: Astro 0 diagnostics, all source tests pass, site build completes, all site-output tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```powershell
 git add tests/site-output.test.ts src/assets/images

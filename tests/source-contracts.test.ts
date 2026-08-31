@@ -11,6 +11,7 @@ const ignoredDirectories = new Set([
   'node_modules',
   'dist',
   '.astro',
+  '.npm-cache',
   'tests',
 ]);
 const forbiddenExtensions = new Set(['.pdf', '.docx', '.tex', '.log', '.aux', '.pptx']);

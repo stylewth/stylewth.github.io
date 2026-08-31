@@ -190,41 +190,52 @@ describe('homepage output', () => {
     expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>All updates<\/a>/);
   });
 
-  it('emits the portrait before a lazy layered research scene', () => {
-    const portraitPosition = html.indexOf('alt="Portrait of Tenghao Wang"');
+  it('emits the ordered research traversal scene with optimized lazy pictures', () => {
     const basePosition = html.indexOf('data-research-base');
     const subjectPosition = html.indexOf('data-research-subject');
-    const portraitPictureEnd = html.indexOf('</picture>', portraitPosition);
-    const portraitPicture = html.slice(
-      html.lastIndexOf('<picture', portraitPosition),
-      portraitPictureEnd,
-    );
-    const basePictureEnd = html.indexOf('</picture>', basePosition);
-    const basePicture = html.slice(basePosition, basePictureEnd);
-    const subjectPictureEnd = html.indexOf('</picture>', subjectPosition);
-    const subjectPicture = html.slice(subjectPosition, subjectPictureEnd);
+    const refractionPosition = html.indexOf('data-research-refraction');
+    const panePosition = html.indexOf('data-research-pane');
 
-    expect(portraitPosition).toBeGreaterThan(-1);
-    expect(basePosition).toBeGreaterThan(portraitPosition);
-    expect(subjectPosition).toBeGreaterThan(basePosition);
-    expect(portraitPicture).toContain('type="image/avif"');
-    expect(portraitPicture).toContain('type="image/webp"');
-    expect(portraitPicture).toContain('loading="eager"');
-    expect(portraitPicture).toContain('fetchpriority="high"');
-    expect(basePicture).toContain('type="image/avif"');
-    expect(basePicture).toContain('type="image/webp"');
-    expect(basePicture).toContain('loading="lazy"');
-    expect(subjectPicture).toContain('src="/_astro/research-world-model-rabbit-layer.');
-    expect(subjectPicture).toContain('type="image/avif"');
-    expect(subjectPicture).toContain('type="image/webp"');
-    expect(subjectPicture).toContain('.png"');
-    expect(subjectPicture).toContain('loading="lazy"');
-    expect(html.match(/data-research-slice/g) ?? []).toHaveLength(3);
-    const motionStart = html.indexOf('<research-motion');
-    const motionOpeningTag = html.slice(motionStart, html.indexOf('>', motionStart));
-    expect(motionOpeningTag).toContain('data-research-motion');
-    expect(motionOpeningTag).not.toContain('data-motion-ready');
-    expect(motionOpeningTag).not.toContain('data-motion-entered');
+    const layerPositions = [basePosition, subjectPosition, refractionPosition, panePosition];
+    layerPositions.forEach((position) => expect(position).toBeGreaterThan(-1));
+    expect(layerPositions)
+      .toEqual([...new Set(layerPositions)]
+        .sort((a, b) => a - b));
+    expect(html.match(/data-research-refraction/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-pane/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-photo/g) ?? []).toHaveLength(4);
+    expect(html.match(/data-research-point-layer/g) ?? []).toHaveLength(12);
+    expect(html).toContain('research-traversal-base.');
+    expect(html).toContain('research-traversal-rabbit.');
+    expect(html).not.toContain('research-traversal-foreground.');
+    expect(html).not.toMatch(/point[-_]cloud|pointcloud/i);
+    expect(html).not.toContain('<canvas');
+    expect(html).not.toContain('data-research-foreground');
+    expect(html).not.toContain('data-motion-entered');
+    expect(html).not.toContain('research-field__slice');
+    expect(
+      existsSync(join(process.cwd(), 'src', 'assets', 'images', 'research-world-model-base.png')),
+    ).toBe(false);
+    expect(
+      existsSync(
+        join(process.cwd(), 'src', 'assets', 'images', 'research-world-model-rabbit-layer.png'),
+      ),
+    ).toBe(false);
+
+    const researchStart = html.indexOf('data-research-traversal');
+    const researchEnd = html.indexOf('</research-traversal>', researchStart);
+    expect(researchStart).toBeGreaterThan(-1);
+    expect(researchEnd).toBeGreaterThan(researchStart);
+
+    const researchHtml = html.slice(researchStart, researchEnd);
+    const scenePictures = researchHtml.match(/<picture[^>]*>[\s\S]*?<\/picture>/g) ?? [];
+    expect(scenePictures).toHaveLength(8);
+    scenePictures.forEach((picture) => {
+      expect(picture).toContain('type="image/avif"');
+      expect(picture).toContain('type="image/webp"');
+      expect(picture).toContain('loading="lazy"');
+      expect(picture).toMatch(/<img [^>]*src="[^"]+\.(?:jpe?g|png)"/);
+    });
   });
 
   it('excludes private details, prohibited effects, and dash glyphs', () => {
