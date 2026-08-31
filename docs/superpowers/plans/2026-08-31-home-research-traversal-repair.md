@@ -387,7 +387,7 @@ git commit -m "fix: restore per-pane rabbit transformations"
 **Files:**
 - Modify: `tests/site-output.test.ts`
 
-- [ ] **Step 1: Replace the old built-scene counts with the complete gate contract**
+- [x] **Step 1: Replace the old built-scene counts with the complete gate contract**
 
 In `emits the ordered research traversal scene with optimized lazy pictures`, replace the old position and count assertions with:
 
@@ -420,7 +420,7 @@ Update the optimized-picture assertion to expect nine `picture` elements in the 
 
 Keep all existing modern format, mask URL, no-canvas, no-foreground, and transfer-budget assertions.
 
-- [ ] **Step 2: Build and run the output test**
+- [x] **Step 2: Build and run the output test**
 
 Run:
 
@@ -431,7 +431,7 @@ npx vitest run tests/site-output.test.ts
 
 Expected: both commands pass; the research section contains three complete gates and the normal modern-browser scene stays at or below 307,200 bytes.
 
-- [ ] **Step 3: Run the complete repository verification**
+- [x] **Step 3: Run the complete repository verification**
 
 Run:
 
@@ -441,7 +441,7 @@ npm run build
 
 Expected: Astro check, component tests, production build, and all site tests pass.
 
-- [ ] **Step 4: Commit output verification**
+- [x] **Step 4: Commit output verification**
 
 ```powershell
 git add -- tests/site-output.test.ts

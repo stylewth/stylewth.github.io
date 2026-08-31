@@ -43,7 +43,7 @@ function researchMaskUrl(researchHtml: string): string {
   const styleAttributes = [...researchHtml.matchAll(/\sstyle="([^"]*)"/g)]
     .map((match) => match[1])
     .filter((style) => style.includes('--research-rabbit-mask'));
-  expect(styleAttributes).toHaveLength(4);
+  expect(styleAttributes).toHaveLength(11);
 
   const decodedStyles = styleAttributes.map((style) =>
     style.replaceAll('&amp;', '&').replaceAll('&quot;', '"'),
@@ -238,23 +238,26 @@ describe('homepage output', () => {
 
   it('emits the ordered research traversal scene with optimized lazy pictures', () => {
     const basePosition = html.indexOf('data-research-base');
+    const staticPosition = html.indexOf('data-research-static-subject');
     const subjectPosition = html.indexOf('data-research-subject');
-    const refractionPosition = html.indexOf('data-research-refraction');
-    const panePosition = html.indexOf('data-research-pane');
+    const gatePosition = html.indexOf('data-research-gate');
 
-    const layerPositions = [basePosition, subjectPosition, refractionPosition, panePosition];
+    const layerPositions = [basePosition, staticPosition, subjectPosition, gatePosition];
     layerPositions.forEach((position) => expect(position).toBeGreaterThan(-1));
-    expect(layerPositions)
-      .toEqual([...new Set(layerPositions)]
-        .sort((a, b) => a - b));
+    expect(layerPositions).toEqual([...new Set(layerPositions)].sort((a, b) => a - b));
+    expect(html.match(/data-research-gate/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-pane-rear/g) ?? []).toHaveLength(3);
     expect(html.match(/data-research-refraction/g) ?? []).toHaveLength(3);
-    expect(html.match(/data-research-pane/g) ?? []).toHaveLength(3);
-    expect(html.match(/data-research-photo/g) ?? []).toHaveLength(4);
-    expect(html.match(/data-research-point-layer/g) ?? []).toHaveLength(12);
+    expect(html.match(/data-research-pane-front/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-emerged/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-state="observation"/g) ?? []).toHaveLength(2);
+    expect(html.match(/data-research-state="surface"/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-state="aligned"/g) ?? []).toHaveLength(4);
+    expect(html.match(/data-research-state="point-cloud"/g) ?? []).toHaveLength(2);
+    expect(html.match(/data-research-point-layer/g) ?? []).toHaveLength(6);
     expect(html).toContain('research-traversal-base.');
     expect(html).toContain('research-traversal-rabbit.');
     expect(html).not.toContain('research-traversal-foreground.');
-    expect(html).not.toMatch(/point[-_]cloud|pointcloud/i);
     expect(html).not.toContain('<canvas');
     expect(html).not.toContain('data-research-foreground');
     expect(html).not.toContain('data-motion-entered');
@@ -264,9 +267,13 @@ describe('homepage output', () => {
     ).toBe(false);
     expect(
       existsSync(
-        join(process.cwd(), 'src', 'assets', 'images', 'research-world-model-rabbit-layer.png'),
+      join(process.cwd(), 'src', 'assets', 'images', 'research-world-model-rabbit-layer.png'),
       ),
     ).toBe(false);
+    expect(
+      readdirSync(join(process.cwd(), 'src', 'assets', 'images'))
+        .filter((file) => /point(?:-|_)?cloud/i.test(file)),
+    ).toHaveLength(0);
 
     const researchStart = html.indexOf('data-research-traversal');
     const researchEnd = html.indexOf('</research-traversal>', researchStart);
@@ -275,12 +282,13 @@ describe('homepage output', () => {
 
     const researchHtml = html.slice(researchStart, researchEnd);
     const scenePictures = researchHtml.match(/<picture[^>]*>[\s\S]*?<\/picture>/g) ?? [];
-    expect(scenePictures).toHaveLength(8);
+    expect(scenePictures).toHaveLength(9);
     scenePictures.forEach((picture) => {
       expect(picture).toContain('type="image/avif"');
       expect(picture).toContain('type="image/webp"');
       expect(picture).toContain('loading="lazy"');
       expect(picture).toMatch(/<img [^>]*src="[^"]+\.(?:jpe?g|png)"/);
+      expect(picture).not.toMatch(/(?:src|srcset)="[^"]*point(?:-|_)?cloud/i);
     });
 
     expect.soft(researchHtml).not.toContain('&amp;quot;');
