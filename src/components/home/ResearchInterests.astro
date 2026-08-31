@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import { getImage, Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface ResearchCopy {
@@ -20,6 +20,7 @@ interface Props {
 const { copy, baseImage, subjectImage, paneImages } = Astro.props;
 const paneNames = ['one', 'two', 'three'] as const;
 const pointDepths = ['far', 'middle', 'near'] as const;
+const subjectMask = await getImage({ src: subjectImage, width: 320, format: 'png' });
 ---
 
 <research-traversal class="research-traversal" data-research-traversal>
@@ -44,11 +45,11 @@ const pointDepths = ['far', 'middle', 'near'] as const;
           <div class="research-field__rabbit">
             <div class="research-field__rabbit-photo" data-research-photo>
               <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
-                widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                widths={[192, 320]} sizes="(max-width: 48rem) 8.5rem, clamp(10rem, 17vw, 15rem)"
                 alt="" loading="lazy" />
             </div>
             <div class="research-field__rabbit-points"
-              style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+              style={`--research-rabbit-mask: url("${subjectMask.src}")`}>
               {pointDepths.map((depth) => (
                 <span class={`research-field__point-depth research-field__point-depth--${depth}`}
                   data-research-point-layer></span>
@@ -65,11 +66,11 @@ const pointDepths = ['far', 'middle', 'near'] as const;
             <div class="research-field__rabbit">
               <div class="research-field__rabbit-photo" data-research-photo>
                 <Picture src={subjectImage} formats={['avif', 'webp']} fallbackFormat="png"
-                  widths={[192, 320]} sizes="(max-width: 48rem) 7rem, 10rem"
+                  widths={[192, 320]} sizes="(max-width: 48rem) 8.5rem, clamp(10rem, 17vw, 15rem)"
                   alt="" loading="lazy" />
               </div>
               <div class="research-field__rabbit-points"
-                style={`--research-rabbit-mask: url(&quot;${subjectImage.src}&quot;)`}>
+                style={`--research-rabbit-mask: url("${subjectMask.src}")`}>
                 {pointDepths.map((depth) => (
                   <span class={`research-field__point-depth research-field__point-depth--${depth}`}
                     data-research-point-layer></span>
@@ -107,7 +108,7 @@ const pointDepths = ['far', 'middle', 'near'] as const;
   .research-field__subject-layer, .research-field__refraction { position: absolute; inset: 0; }
   .research-field__subject-layer { z-index: 2; clip-path: ellipse(18% 46% at 72% 49%); overflow: hidden; }
   .research-field__travel-track { position: absolute; top: 46%; left: 60%; width: 27%; height: 20%; }
-  .research-field__rabbit { position: absolute; top: 50%; left: var(--research-progress); width: clamp(7rem, 10vw, 10rem); aspect-ratio: 3 / 2; transform: translate(-50%, -50%); }
+  .research-field__rabbit { position: absolute; top: 50%; left: var(--research-progress); width: clamp(10rem, 17vw, 15rem); aspect-ratio: 3 / 2; transform: translate(-50%, -50%); }
   .research-field__rabbit-photo, .research-field__rabbit-points, .research-field__point-depth { position: absolute; inset: 0; }
   .research-field__rabbit-photo { clip-path: inset(0 var(--research-progress) 0 0); }
   .research-field__rabbit-photo :global(picture), .research-field__rabbit-photo :global(img) { width: 100%; height: 100%; }
@@ -125,21 +126,21 @@ const pointDepths = ['far', 'middle', 'near'] as const;
     mask-size: contain;
   }
   .research-field__point-depth--far {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23'%3E%3Ccircle cx='4' cy='6' r='1.1' fill='%23365062'/%3E%3Ccircle cx='17' cy='15' r='.75' fill='%23365062'/%3E%3C/svg%3E");
-    background-size: 23px 23px;
-    opacity: .58;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17'%3E%3Ccircle cx='3' cy='4' r='1.1' fill='%23243a4a'/%3E%3Ccircle cx='12' cy='11' r='.8' fill='%23243a4a'/%3E%3C/svg%3E");
+    background-size: 17px 17px;
+    opacity: .72;
     transform: translate(-1.5px, -1px);
   }
   .research-field__point-depth--middle {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='31' height='31' viewBox='0 0 31 31'%3E%3Cellipse cx='7' cy='9' rx='1.35' ry='1' fill='%236ba9b6'/%3E%3Ccircle cx='23' cy='20' r='1.05' fill='%236ba9b6'/%3E%3C/svg%3E");
-    background-size: 31px 31px;
-    opacity: .76;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23'%3E%3Cellipse cx='5' cy='7' rx='1.35' ry='1' fill='%2358b8c8'/%3E%3Ccircle cx='17' cy='15' r='1.05' fill='%2358b8c8'/%3E%3C/svg%3E");
+    background-size: 23px 23px;
+    opacity: .86;
     transform: translate(.5px, 0);
   }
   .research-field__point-depth--near {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='43' height='43' viewBox='0 0 43 43'%3E%3Cellipse cx='10' cy='11' rx='2.2' ry='1.45' fill='%23e6dfd1'/%3E%3Ccircle cx='31' cy='29' r='1.7' fill='%23d3a169'/%3E%3Ccircle cx='35' cy='8' r='.9' fill='%23e6dfd1'/%3E%3C/svg%3E");
-    background-size: 43px 43px;
-    opacity: .9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='31' height='31' viewBox='0 0 31 31'%3E%3Cellipse cx='7' cy='8' rx='2.2' ry='1.45' fill='%23e6dfd1'/%3E%3Ccircle cx='22' cy='21' r='1.7' fill='%23d3a169'/%3E%3Ccircle cx='25' cy='6' r='.9' fill='%23e6dfd1'/%3E%3C/svg%3E");
+    background-size: 31px 31px;
+    opacity: .98;
     transform: translate(1.5px, .75px);
   }
   .research-field__refraction { z-index: 3; pointer-events: none; }
@@ -168,7 +169,7 @@ const pointDepths = ['far', 'middle', 'near'] as const;
     .research-field__base :global(img) { object-position: 70% center; }
     .research-field__subject-layer { clip-path: ellipse(26.5% 32% at 73% 49%); }
     .research-field__travel-track { top: 46%; left: 48%; width: 42%; height: 20%; }
-    .research-field__rabbit { width: 7rem; }
+    .research-field__rabbit { width: 8.5rem; }
     .research-field__refraction--one { clip-path: inset(22% 38% 22% 54%); }
     .research-field__refraction--two { clip-path: inset(22% 26% 22% 66%); }
     .research-field__refraction--three { clip-path: inset(22% 14% 22% 78%); }

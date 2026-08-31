@@ -39,6 +39,52 @@ function executableScripts(page: string): string[] {
   return page.match(/<script(?![^>]*type="application\/ld\+json")[^>]*>/g) ?? [];
 }
 
+function researchMaskUrl(researchHtml: string): string {
+  const styleAttributes = [...researchHtml.matchAll(/\sstyle="([^"]*)"/g)]
+    .map((match) => match[1])
+    .filter((style) => style.includes('--research-rabbit-mask'));
+  expect(styleAttributes).toHaveLength(4);
+
+  const decodedStyles = styleAttributes.map((style) =>
+    style.replaceAll('&amp;', '&').replaceAll('&quot;', '"'),
+  );
+  expect(new Set(decodedStyles)).toHaveLength(1);
+
+  const declaration = decodedStyles[0].match(
+    /(?:^|;)\s*--research-rabbit-mask:\s*url\((?:"([^"]+)"|'([^']+)'|([^\s)'";]+))\)\s*(?:;|$)/,
+  );
+  const url = declaration?.[1] ?? declaration?.[2] ?? declaration?.[3];
+  expect(url, 'research rabbit mask must be a parseable CSS URL').toBeTruthy();
+  return url!;
+}
+
+function outputAssetPath(url: string): string {
+  const pathname = new URL(url, 'https://stylewth.github.io').pathname;
+  const segments = pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  expect(segments[0]).toBe('_astro');
+  expect(segments).not.toContain('..');
+  return join(outputDirectory, ...segments);
+}
+
+function researchAvifBudget(): number {
+  const assetDirectory = join(outputDirectory, '_astro');
+  const familyMaximums = new Map<string, number>();
+
+  readdirSync(assetDirectory, { withFileTypes: true })
+    .filter((entry) =>
+      entry.isFile()
+      && entry.name.startsWith('research-traversal')
+      && entry.name.endsWith('.avif'))
+    .forEach((entry) => {
+      const family = entry.name.split('.')[0];
+      const bytes = readFileSync(join(assetDirectory, entry.name)).byteLength;
+      familyMaximums.set(family, Math.max(familyMaximums.get(family) ?? 0, bytes));
+    });
+
+  expect(familyMaximums.size).toBe(5);
+  return [...familyMaximums.values()].reduce((sum, bytes) => sum + bytes, 0);
+}
+
 function expectDocumentShell(
   page: string,
   canonicalPath: string,
@@ -236,6 +282,19 @@ describe('homepage output', () => {
       expect(picture).toContain('loading="lazy"');
       expect(picture).toMatch(/<img [^>]*src="[^"]+\.(?:jpe?g|png)"/);
     });
+
+    expect.soft(researchHtml).not.toContain('&amp;quot;');
+    const maskUrl = researchMaskUrl(researchHtml);
+    expect(maskUrl).toMatch(/^\/_astro\/[^?#]+\.png$/);
+
+    const maskPath = outputAssetPath(maskUrl);
+    expect(existsSync(maskPath), `${maskUrl} must resolve inside dist/_astro`).toBe(true);
+    const maskBytes = readFileSync(maskPath).byteLength;
+    const rawRabbitBytes = readFileSync(
+      join(process.cwd(), 'src', 'assets', 'images', 'research-traversal-rabbit.png'),
+    ).byteLength;
+    expect.soft(maskBytes).toBeLessThan(rawRabbitBytes);
+    expect.soft(researchAvifBudget() + maskBytes).toBeLessThanOrEqual(307_200);
   });
 
   it('excludes private details, prohibited effects, and dash glyphs', () => {

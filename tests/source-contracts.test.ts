@@ -686,6 +686,10 @@ describe('public source contracts', () => {
       join(projectRoot, 'src', 'components', 'home', 'ResearchInterests.astro'),
       'utf8',
     );
+    const rabbitRule = research.match(/\.research-field__rabbit\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const farPointRule = research.match(/\.research-field__point-depth--far\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const middlePointRule = research.match(/\.research-field__point-depth--middle\s*\{([^}]*)\}/s)?.[1] ?? '';
+    const nearPointRule = research.match(/\.research-field__point-depth--near\s*\{([^}]*)\}/s)?.[1] ?? '';
 
     expect(indexPage).toContain('research-traversal-base.png');
     expect(indexPage).toContain('research-traversal-rabbit.png');
@@ -706,6 +710,20 @@ describe('public source contracts', () => {
     expect(research).toContain('mask-image: var(--research-rabbit-mask)');
     expect(research).toContain('calc(100% - var(--research-progress))');
     expect(research).toContain('calc(90% - var(--research-progress))');
+    expect(rabbitRule).toMatch(/width:\s*clamp\(10rem,\s*17vw,\s*15rem\);/);
+    expect(research).toMatch(
+      /@media\s*\(max-width:\s*48rem\)\s*\{[\s\S]*?\.research-field__rabbit\s*\{[^}]*width:\s*8\.5rem;/,
+    );
+    expect(farPointRule).toMatch(/background-size:\s*17px 17px;/);
+    expect(farPointRule).toMatch(/opacity:\s*\.72;/);
+    expect(farPointRule).toContain("fill='%23243a4a'");
+    expect(middlePointRule).toMatch(/background-size:\s*23px 23px;/);
+    expect(middlePointRule).toMatch(/opacity:\s*\.86;/);
+    expect(middlePointRule).toContain("fill='%2358b8c8'");
+    expect(nearPointRule).toMatch(/background-size:\s*31px 31px;/);
+    expect(nearPointRule).toMatch(/opacity:\s*\.98;/);
+    expect(nearPointRule).toContain("fill='%23e6dfd1'");
+    expect(nearPointRule).toContain("fill='%23d3a169'");
     expect(research).not.toContain('<canvas');
     expect(research).not.toContain('requestAnimationFrame(draw)');
     expect(indexPage).not.toMatch(/point[-_]cloud|pointcloud/i);
@@ -713,6 +731,8 @@ describe('public source contracts', () => {
     expect(research).not.toContain('data-motion-entered');
     expect(research).not.toContain('research-field__slice');
     expect(research).not.toMatch(/\.research-field__pane\s*\{[^}]*border\s*:/);
+    expect(research).not.toMatch(/\b(?:box-shadow|text-shadow|filter)\s*:/);
+    expect(research).not.toMatch(/glow/i);
     expect(research).not.toMatch(/\btransition(?:-[a-z-]+)?\s*:/);
     expect(research).not.toMatch(/@keyframes|\banimation\s*:/);
     expect(indexPage).toMatch(
