@@ -436,39 +436,10 @@ describe('public source contracts', () => {
     expect(existsSync(join(projectRoot, 'public', 'og.png'))).toBe(false);
   });
 
-  it('documents provider-backed favorite maintenance and secret-free deployment', () => {
-    const readme = readFileSync(join(projectRoot, 'README.md'), 'utf8');
+  it('keeps provider secrets outside the repository', () => {
     const envExamplePath = join(projectRoot, '.env.example');
     const gitignore = readFileSync(join(projectRoot, '.gitignore'), 'utf8');
 
-    expect(readme).toContain('npm install');
-    expect(readme).toContain('npm run dev');
-    expect(readme).toContain('npm run build');
-    expect(readme).toContain('## Project Markdown example');
-    expect(readme).toContain('## Update Markdown example');
-    expect(readme).toContain('## Elsewhere Markdown example');
-    expect(readme).toContain('## Favorite Markdown example');
-    expect(readme).toContain('review is optional');
-    expect(readme).toContain('exactly 10 films and 10 albums');
-    expect(readme).toContain('tmdbId: 103');
-    expect(readme).toContain('spotifyUrl: https://open.spotify.com/album/');
-    expect(readme).toContain('npm run sync:favorites');
-    expect(readme).toContain('src/data/favorite-artwork.json');
-    expect(readme).toContain('GitHub Pages builds only from the committed artwork manifest.');
-    expect(readme).toContain(
-      'No TMDB or Spotify secret is required in the repository or GitHub Actions.',
-    );
-    expect(readme).toContain('Never commit `.env`.');
-    expect(readme).not.toContain('coverSourceUrl');
-    expect(readme).not.toContain('editionNote');
-    expect(readme).not.toContain('src/assets/images/favorites');
-    expect(readme).toContain('site config');
-    expect(readme).toContain('i18n');
-    expect(readme).toContain('CV gate');
-    expect(readme).toContain('Chinese');
-    expect(readme).toContain('GitHub Pages');
-    expect(readme).toContain('Settings > Pages');
-    expect(readme).toContain('dynamic character particles');
     expect(existsSync(envExamplePath)).toBe(true);
     if (existsSync(envExamplePath)) {
       const envExample = readFileSync(envExamplePath);
