@@ -373,7 +373,7 @@ describe('public source contracts', () => {
       .join('\n');
 
     expect(projectContent).toContain(
-      'https://github.com/stylewth/Looking-Around-Before-Cropping-SparseNavWM',
+      'https://github.com/stylewth/Meijian-Narrative-Intelligence',
     );
     expect(projectContent).toContain('https://github.com/stylewth/EVRP-datastructure');
   });

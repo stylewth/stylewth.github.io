@@ -43,14 +43,14 @@ describe('sortProjectsForArchive', () => {
       { id: 'zh-featured', data: { lang: 'zh', featured: true, featuredOrder: 0, year: 2028 } },
       { id: 'dynamic-evrp', data: { lang: 'en', featured: true, featuredOrder: 2, year: 2026 } },
       { id: 'newest-unfeatured', data: { lang: 'en', featured: false, year: 2027 } },
-      { id: 'sparse-navwm', data: { lang: 'en', featured: true, featuredOrder: 1, year: 2026 } },
+      { id: 'meijian', data: { lang: 'en', featured: true, featuredOrder: 1, year: 2026 } },
       { id: 'older-unfeatured', data: { lang: 'en', featured: false, year: 2024 } },
       { id: 'same-year-a', data: { lang: 'en', featured: false, year: 2025 } },
     ];
     const originalIds = records.map((entry) => entry.id);
 
     expect(sortProjectsForArchive(records, 'en').map((entry) => entry.id)).toEqual([
-      'sparse-navwm',
+      'meijian',
       'dynamic-evrp',
       'newest-unfeatured',
       'same-year-a',

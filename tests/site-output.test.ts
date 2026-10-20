@@ -214,8 +214,8 @@ describe('homepage output', () => {
   it('renders exactly two selected projects and three newest updates', () => {
     expect(html.match(/class="project-row"/g) ?? []).toHaveLength(2);
     expect(html.match(/class="update-row"/g) ?? []).toHaveLength(3);
-    expect(html.indexOf('SparseNavWM')).toBeLessThan(html.indexOf('Dynamic EVRP'));
-    expect(html.indexOf('Completed SparseNavWM')).toBeLessThan(
+    expect(html.indexOf('Meijian Narrative Intelligence')).toBeLessThan(html.indexOf('Dynamic EVRP'));
+    expect(html.indexOf('Submitted Meijian Narrative Intelligence')).toBeLessThan(
       html.indexOf('MCM Honorable Mention'),
     );
   });
@@ -223,16 +223,16 @@ describe('homepage output', () => {
   it('uses nested record headings and exposes project and update classifications', () => {
     const projectRows = elementFragments(html, 'article', 'project-row');
     const updateRows = elementFragments(html, 'li', 'update-row');
-    const sparseNavwm = projectRows.find((row) => row.includes('SparseNavWM'));
+    const meijian = projectRows.find((row) => row.includes('Meijian Narrative Intelligence'));
     const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
-    const sparseUpdate = updateRows.find((row) => row.includes('Completed SparseNavWM'));
+    const meijianUpdate = updateRows.find((row) => row.includes('Submitted Meijian Narrative Intelligence'));
 
     expectNoHeadingLevelSkips(html);
-    expect(sparseNavwm).toContain('research');
-    expect(sparseNavwm).toContain('completed');
+    expect(meijian).toContain('competition');
+    expect(meijian).toContain('ongoing');
     expect(dynamicEvrp).toContain('engineering');
     expect(dynamicEvrp).toContain('completed');
-    expect(sparseUpdate).toMatch(/<time[^>]*>2026-06<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
+    expect(meijianUpdate).toMatch(/<time[^>]*>2026-08<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
     expect(html).toMatch(/<a[^>]+href="\/work\/"[^>]*>All projects<\/a>/);
     expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>All updates<\/a>/);
   });
@@ -399,34 +399,34 @@ describe('content archive output', () => {
     const work = readOutput('work/index.html');
 
     expectDocumentShell(work, '/work/', 'Work | Tenghao Wang');
-    expect(work).toMatch(/<a[^>]+href="\/work\/sparse-navwm\/"[^>]*>SparseNavWM<\/a>/);
+    expect(work).toMatch(/<a[^>]+href="\/work\/meijian\/"[^>]*>Meijian Narrative Intelligence<\/a>/);
     expect(work).toMatch(/<a[^>]+href="\/work\/dynamic-evrp\/"[^>]*>Dynamic EVRP<\/a>/);
     expect(work).toContain(
-      'https://github.com/stylewth/Looking-Around-Before-Cropping-SparseNavWM',
+      'https://github.com/stylewth/Meijian-Narrative-Intelligence',
     );
     expect(work).toContain('https://github.com/stylewth/EVRP-datastructure');
     expect(work).not.toMatch(/>Paper<\/a>|>Demo<\/a>|>Scholar<\/a>/);
     expect(work).toMatch(/<a[^>]+href="\/work\/"[^>]+aria-current="page"[^>]*>Work<\/a>/);
     expectNoHeadingLevelSkips(work);
-    expect(work.indexOf('SparseNavWM')).toBeLessThan(work.indexOf('Dynamic EVRP'));
+    expect(work.indexOf('Meijian Narrative Intelligence')).toBeLessThan(work.indexOf('Dynamic EVRP'));
     const projectRows = elementFragments(work, 'article', 'project-row');
-    const sparseNavwm = projectRows.find((row) => row.includes('SparseNavWM'));
+    const meijian = projectRows.find((row) => row.includes('Meijian Narrative Intelligence'));
     const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
-    expect(sparseNavwm).toContain('research');
-    expect(sparseNavwm).toContain('completed');
+    expect(meijian).toContain('competition');
+    expect(meijian).toContain('ongoing');
     expect(dynamicEvrp).toContain('engineering');
     expect(dynamicEvrp).toContain('completed');
   });
 
   it('publishes dynamic project details from the full Markdown bodies', () => {
-    const sparseNavwm = readOutput('work/sparse-navwm/index.html');
+    const meijian = readOutput('work/meijian/index.html');
     const dynamicEvrp = readOutput('work/dynamic-evrp/index.html');
 
-    expectDocumentShell(sparseNavwm, '/work/sparse-navwm/', 'SparseNavWM | Tenghao Wang');
+    expectDocumentShell(meijian, '/work/meijian/', 'Meijian Narrative Intelligence | Tenghao Wang');
     expectDocumentShell(dynamicEvrp, '/work/dynamic-evrp/', 'Dynamic EVRP | Tenghao Wang');
-    expect(sparseNavwm).toContain('SparseNavWM studies action-conditioned prediction');
+    expect(meijian).toContain('Meijian Narrative Intelligence turns market feedback into traceable brand narrative decisions');
     expect(dynamicEvrp).toContain('Dynamic electric vehicle routing needs a simulation environment');
-    expect(sparseNavwm).toContain('>Code</a>');
+    expect(meijian).toContain('>Code</a>');
     expect(dynamicEvrp).toContain('>Code</a>');
   });
 
@@ -434,7 +434,7 @@ describe('content archive output', () => {
     const updates = readOutput('updates/index.html');
 
     expectDocumentShell(updates, '/updates/', 'Updates | Tenghao Wang');
-    expect(updates.indexOf('Completed SparseNavWM')).toBeLessThan(
+    expect(updates.indexOf('Submitted Meijian Narrative Intelligence')).toBeLessThan(
       updates.indexOf('Completed Dynamic EVRP'),
     );
     expect(updates.indexOf('Completed Dynamic EVRP')).toBeLessThan(
@@ -443,8 +443,8 @@ describe('content archive output', () => {
     expect(updates).toMatch(/<a[^>]+href="\/updates\/"[^>]+aria-current="page"[^>]*>Updates<\/a>/);
     expectNoHeadingLevelSkips(updates);
     const updateRows = elementFragments(updates, 'li', 'update-row');
-    const sparseUpdate = updateRows.find((row) => row.includes('Completed SparseNavWM'));
-    expect(sparseUpdate).toMatch(/<time[^>]*>2026-06<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
+    const meijianUpdate = updateRows.find((row) => row.includes('Submitted Meijian Narrative Intelligence'));
+    expect(meijianUpdate).toMatch(/<time[^>]*>2026-08<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
   });
 
   it('publishes Top 10 collections before the existing Notes archive', () => {
