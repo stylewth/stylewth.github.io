@@ -12,13 +12,14 @@ interface Props {
   canonicalPath?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   robots?: string;
+  photography?: boolean;
 }
 
-const { title, description, canonicalPath, jsonLd, robots } = Astro.props;
+const { title, description, canonicalPath, jsonLd, robots, photography = false } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={photography ? 'zh-CN' : 'en'}>
   <head>
     <SeoHead
       title={title}
@@ -29,10 +30,10 @@ const { title, description, canonicalPath, jsonLd, robots } = Astro.props;
     />
   </head>
   <body>
-    <SiteHeader />
+    <SiteHeader photography={photography} />
     <main>
       <slot />
     </main>
-    <SiteFooter />
+    <SiteFooter photography={photography} />
   </body>
 </html>

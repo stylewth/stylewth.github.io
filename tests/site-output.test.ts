@@ -31,8 +31,9 @@ function outputHtmlFiles(directory = outputDirectory): string[] {
 
 function outputPathForRootLink(href: string): string {
   if (href === '/') return join(outputDirectory, 'index.html');
-  if (href.endsWith('.html')) return join(outputDirectory, href.slice(1));
-  return join(outputDirectory, href.slice(1), 'index.html');
+  const segments = href.split('/').filter(Boolean).map(decodeURIComponent);
+  if (segments.at(-1)?.includes('.')) return join(outputDirectory, ...segments);
+  return join(outputDirectory, ...segments, 'index.html');
 }
 
 function executableScripts(page: string): string[] {
@@ -81,7 +82,7 @@ function researchAvifBudget(): number {
       familyMaximums.set(family, Math.max(familyMaximums.get(family) ?? 0, bytes));
     });
 
-  expect(familyMaximums.size).toBe(5);
+  expect(familyMaximums.size).toBe(7);
   return [...familyMaximums.values()].reduce((sum, bytes) => sum + bytes, 0);
 }
 
@@ -247,7 +248,7 @@ describe('homepage output', () => {
     expect(layerPositions).toEqual([...new Set(layerPositions)].sort((a, b) => a - b));
     expect(html.match(/data-research-gate/g) ?? []).toHaveLength(3);
     expect(html.match(/data-research-pane-rear/g) ?? []).toHaveLength(3);
-    expect(html.match(/data-research-refraction/g) ?? []).toHaveLength(3);
+    expect(html.match(/data-research-refraction/g) ?? []).toHaveLength(6);
     expect(html.match(/data-research-pane-front/g) ?? []).toHaveLength(3);
     expect(html.match(/data-research-emerged/g) ?? []).toHaveLength(3);
     expect(html.match(/data-research-state="observation"/g) ?? []).toHaveLength(2);
@@ -255,6 +256,8 @@ describe('homepage output', () => {
     expect(html.match(/data-research-state="aligned"/g) ?? []).toHaveLength(4);
     expect(html.match(/data-research-state="point-cloud"/g) ?? []).toHaveLength(2);
     expect(html.match(/data-research-point-layer/g) ?? []).toHaveLength(6);
+    expect(html).toContain('data-research-canvas');
+    expect(html).toContain('clipPathUnits="objectBoundingBox"');
     expect(html).toContain('research-traversal-base.');
     expect(html).toContain('research-traversal-rabbit.');
     expect(html).not.toContain('research-traversal-foreground.');
@@ -273,7 +276,7 @@ describe('homepage output', () => {
     expect(
       readdirSync(join(process.cwd(), 'src', 'assets', 'images'))
         .filter((file) => /point(?:-|_)?cloud/i.test(file)),
-    ).toHaveLength(0);
+    ).toEqual(['research-traversal-point-cloud.png']);
 
     const researchStart = html.indexOf('data-research-traversal');
     const researchEnd = html.indexOf('</research-traversal>', researchStart);
@@ -282,13 +285,13 @@ describe('homepage output', () => {
 
     const researchHtml = html.slice(researchStart, researchEnd);
     const scenePictures = researchHtml.match(/<picture[^>]*>[\s\S]*?<\/picture>/g) ?? [];
-    expect(scenePictures).toHaveLength(9);
+    expect(scenePictures).toHaveLength(22);
     scenePictures.forEach((picture) => {
       expect(picture).toContain('type="image/avif"');
       expect(picture).toContain('type="image/webp"');
       expect(picture).toContain('loading="lazy"');
       expect(picture).toMatch(/<img [^>]*src="[^"]+\.(?:jpe?g|png)"/);
-      expect(picture).not.toMatch(/(?:src|srcset)="[^"]*point(?:-|_)?cloud/i);
+      expect(picture).not.toMatch(/(?:src|srcset)="[^"]*foreground/i);
     });
 
     expect.soft(researchHtml).not.toContain('&amp;quot;');
@@ -326,6 +329,7 @@ describe('production crawl and script contracts', () => {
       'User-agent: *\nAllow: /\nSitemap: https://stylewth.github.io/sitemap-index.xml\n',
     );
     expect(sitemapIndex).toContain('https://stylewth.github.io/sitemap-0.xml');
+    expect(readOutput('sitemap-0.xml')).toContain('https://stylewth.github.io/photos/');
   });
 
   it('keeps every generated root-relative navigation link inside the published site', () => {
@@ -339,8 +343,8 @@ describe('production crawl and script contracts', () => {
     });
   });
 
-  it('ships one route-local script only on Home and Elsewhere', () => {
-    const scriptedRoutes = new Set(['index.html', 'elsewhere/index.html']);
+  it('ships one route-local script only on Home, Elsewhere and Photos', () => {
+    const scriptedRoutes = new Set(['index.html', 'elsewhere/index.html', 'photos/index.html']);
 
     outputHtmlFiles().forEach((file) => {
       const page = readFileSync(file, 'utf8');
@@ -349,6 +353,44 @@ describe('production crawl and script contracts', () => {
         scriptedRoutes.has(relativePath) ? 1 : 0,
       );
     });
+  });
+});
+
+describe('photography output', () => {
+  it('publishes 24 unique original-ratio figures with one prioritized cover', () => {
+    const photos = readOutput('photos/index.html');
+    expectDocumentShell(photos, '/photos/', 'Photos | Tenghao Wang', 1);
+    expect(photos).toMatch(/<html lang="zh-CN">/);
+    expect(photos).toMatch(/<a[^>]+href="\/photos\/"[^>]+aria-current="page"[^>]*>Photos<\/a>/);
+    const figures = photos.match(/<li class="photo-gallery__item[^>]*data-photo-id="([^"]+)"[^>]*>[\s\S]*?<\/li>/g) ?? [];
+    const ids = figures.map((figure) => figure.match(/data-photo-id="([^"]+)"/)?.[1]);
+    expect(figures).toHaveLength(24);
+    expect(new Set(ids).size).toBe(24);
+    expect(photos.match(/<figure(?:\s|>)/g) ?? []).toHaveLength(24);
+    expect(photos.match(/<img(?=[^>]+loading="eager")(?=[^>]+fetchpriority="high")[^>]*>/g) ?? []).toHaveLength(1);
+    expect(photos.match(/<img(?=[^>]+loading="lazy")[^>]*>/g) ?? []).toHaveLength(23);
+    expect(photos.match(/data-photo-full-src="\/images\/photography\//g) ?? []).toHaveLength(24);
+    expect(photos).toContain('data-photo-dialog');
+    expect(photos).not.toMatch(/<img[^>]+src="\/images\/photography\/[^\"]*-full\.jpg"/);
+    for (const photo of figures) {
+      const fullLink = photo.match(/<a[^>]+href="(\/images\/photography\/[^\"]*-full\.jpg)"/)?.[1];
+      expect(fullLink, 'each photo keeps its direct full-image link').toBeTruthy();
+      expect(existsSync(join(outputDirectory, ...fullLink!.split('/').filter(Boolean))), fullLink).toBe(true);
+      const fallback = photo.match(/<img[^>]+src="(\/images\/photography\/[^\"]+)"/)?.[1];
+      expect(fallback).toBeTruthy();
+      expect(existsSync(join(outputDirectory, ...fallback!.split('/').filter(Boolean))), fallback).toBe(true);
+      const srcSet = photo.match(/<source[^>]+srcset="([^\"]+)"/)?.[1];
+      expect(srcSet).toBeTruthy();
+      srcSet!.split(', ').forEach((candidate) => {
+        const url = candidate.split(' ')[0];
+        expect(existsSync(join(outputDirectory, ...url.split('/').filter(Boolean))), url).toBe(true);
+      });
+    }
+  });
+
+  it('adds one restrained Photos entry to Elsewhere', () => {
+    const elsewhere = readOutput('elsewhere/index.html');
+    expect(elsewhere).toMatch(/Photography: <a[^>]+href="\/photos\/"[^>]*>In Passing<\/a>/);
   });
 });
 

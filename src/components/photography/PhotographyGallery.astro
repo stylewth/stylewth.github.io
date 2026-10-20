@@ -1,0 +1,402 @@
+---
+import {
+  photographySeries,
+  photographySeriesId,
+  type PhotographyRecord,
+} from '../../lib/photography';
+
+interface Props {
+  photos: PhotographyRecord[];
+}
+
+const { photos } = Astro.props;
+const layouts = [
+  'hero', 'portrait', 'lighthouse', 'wide-center', 'medium', 'small-center',
+  'landscape', 'portrait-raised', 'medium', 'wide', 'portrait', 'landscape',
+  'portrait', 'wide-center', 'landscape', 'portrait', 'portrait-raised', 'wide',
+  'landscape', 'medium', 'wide-center', 'portrait', 'landscape', 'square',
+];
+const seriesFilters = [
+  { value: 'all', label: '全部' },
+  ...photographySeries.map((series) => ({ value: photographySeriesId(series), label: series })),
+];
+---
+
+<photography-gallery class="photo-gallery" data-photo-gallery>
+  <aside class="photo-gallery__rail" aria-label="摄影专题">
+    <div class="photo-gallery__identity">
+      <h1>途中</h1>
+      <p>In Passing</p>
+    </div>
+    <nav class="photo-gallery__filters" aria-label="摄影专题">
+      {seriesFilters.map(({ value, label }) => (
+        <a
+          href="#photos"
+          data-photo-filter={value}
+          aria-current={value === 'all' ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+    <label class="photo-gallery__mobile-series" data-photo-mobile-filter hidden>
+      <span class="visually-hidden">选择摄影专题</span>
+      <select data-photo-select aria-label="选择摄影专题">
+        <option value="all">全部作品</option>
+        {photographySeries.map((series) => (
+          <option value={photographySeriesId(series)}>{series}</option>
+        ))}
+      </select>
+    </label>
+  </aside>
+
+  <div class="photo-gallery__content" id="photos">
+    <ol class="photo-gallery__list" data-photo-list>
+      {photos.map((photo, index) => (
+        <li
+          class:list={['photo-gallery__item', `photo-gallery__item--${layouts[index]}`]}
+          data-photo-card
+          data-photo-id={photo.id}
+          data-photo-series={photographySeriesId(photo.series)}
+        >
+          <figure>
+            <a
+              class="photo-gallery__link"
+              href={photo.fullSrc}
+              data-photo-trigger
+              data-photo-title={photo.title}
+              data-photo-src={photo.src}
+              data-photo-full-src={photo.fullSrc}
+              data-photo-width={photo.width}
+              data-photo-height={photo.height}
+              data-photo-alt={photo.alt}
+            >
+              <picture>
+                <source type="image/webp" srcset={photo.srcSet} sizes={index === 0 ? '(max-width: 48rem) 100vw, 64rem' : '(max-width: 48rem) 100vw, 40rem'} />
+                <img
+                  src={photo.fallback}
+                  width={photo.width}
+                  height={photo.height}
+                  alt={photo.alt}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </picture>
+            </a>
+            <figcaption>{photo.title}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <dialog class="photo-viewer" data-photo-dialog aria-labelledby="photo-dialog-title">
+    <div class="photo-viewer__bar">
+      <p data-photo-viewer-position></p>
+      <button class="photo-viewer__close" type="button" data-photo-close aria-label="关闭">×</button>
+    </div>
+    <div class="photo-viewer__stage">
+      <button class="photo-viewer__step" type="button" data-photo-previous aria-label="上一张">‹</button>
+      <div class="photo-viewer__art" data-photo-viewer-art></div>
+      <button class="photo-viewer__step" type="button" data-photo-next aria-label="下一张">›</button>
+      <div class="photo-viewer__error" data-photo-viewer-error hidden>
+        <p>图片加载失败</p>
+        <button type="button" data-photo-retry hidden>重试</button>
+      </div>
+    </div>
+    <h2 id="photo-dialog-title" data-photo-viewer-title></h2>
+  </dialog>
+</photography-gallery>
+
+<style>
+  .photo-gallery {
+    display: grid;
+    width: min(calc(100% - 2 * var(--space-page)), 80rem);
+    margin-inline: auto;
+    padding-block: 3.25rem 7rem;
+    grid-template-columns: 10rem minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .photo-gallery__rail {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+  }
+
+  .photo-gallery__identity h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    letter-spacing: 0;
+  }
+
+  .photo-gallery__identity p {
+    margin: 0.15rem 0 2.4rem;
+    color: var(--color-muted);
+    font-size: 0.92rem;
+  }
+
+  .photo-gallery__filters {
+    display: grid;
+    gap: 0.52rem;
+    font-size: 0.88rem;
+  }
+
+  .photo-gallery__filters a {
+    width: fit-content;
+    color: var(--color-muted);
+    text-decoration: none;
+    text-underline-offset: 0.25em;
+  }
+
+  .photo-gallery__filters a:hover,
+  .photo-gallery__filters a[aria-current='page'] {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  .photo-gallery__filters a[aria-current='page'] {
+    font-weight: 600;
+  }
+
+  .photo-gallery__mobile-series {
+    display: none;
+  }
+
+  .photo-gallery__list {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(3.5rem, 7vw, 6rem) 3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .photo-gallery__item {
+    min-width: 0;
+  }
+
+  .photo-gallery__item figure {
+    margin: 0;
+  }
+
+  .photo-gallery__link,
+  .photo-gallery__link picture {
+    display: block;
+  }
+
+  .photo-gallery__link img {
+    width: 100%;
+    height: auto;
+    background: #f4f4f2;
+    transition: opacity 160ms ease;
+  }
+
+  .photo-gallery__link:hover img {
+    opacity: 0.92;
+  }
+
+  .photo-gallery__item figcaption {
+    margin-block-start: 0.6rem;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .photo-gallery__item--hero { flex-basis: 100%; }
+  .photo-gallery__item--portrait { flex-basis: 35%; margin-inline-start: 0; }
+  .photo-gallery__item--lighthouse { flex-basis: 57%; margin-block-start: 3.25rem; }
+  .photo-gallery__item--wide-center { flex-basis: 69%; margin-inline: auto; }
+  .photo-gallery__item--medium { flex-basis: 53%; }
+  .photo-gallery__item--small-center { flex-basis: 39%; margin-inline: auto; }
+  .photo-gallery__item--landscape { flex-basis: 58%; }
+  .photo-gallery__item--portrait-raised { flex-basis: 34%; margin-block-start: 2.75rem; }
+  .photo-gallery__item--wide { flex-basis: 76%; margin-inline: auto; }
+  .photo-gallery__item--square { flex-basis: 44%; margin-inline: auto; }
+
+  .photo-viewer {
+    width: min(100vw, 100%);
+    height: min(100dvh, 100%);
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 1rem clamp(1rem, 3vw, 2.5rem) 1.5rem;
+    overflow: hidden;
+    border: 0;
+    color: var(--color-text);
+    background: var(--color-paper);
+  }
+
+  .photo-viewer::backdrop { background: rgb(17 17 15 / 0.84); }
+  .photo-viewer[open] { display: flex; flex-direction: column; }
+
+  .photo-viewer__bar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .photo-viewer__bar p,
+  .photo-viewer h2 {
+    margin: 0;
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .photo-viewer__close,
+  .photo-viewer__step {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--color-rule);
+    border-radius: 0;
+    color: inherit;
+    background: var(--color-paper);
+    font: inherit;
+    font-size: 1.55rem;
+    cursor: pointer;
+  }
+
+  .photo-viewer__stage {
+    position: relative;
+    display: grid;
+    min-height: 0;
+    flex: 1 1 auto;
+    align-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: clamp(0.5rem, 2vw, 1.5rem);
+    padding-block: 1rem;
+  }
+
+  .photo-viewer__step:disabled { color: #a8aaa5; cursor: default; }
+
+  .photo-viewer__art {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    place-items: center;
+  }
+
+  .photo-viewer__art :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .photo-viewer__art :global([data-photo-full-image]) { opacity: 0; }
+  .photo-viewer__art :global([data-photo-full-image].is-loaded) { opacity: 1; }
+
+  .photo-viewer__error {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .photo-viewer__error[hidden] { display: none; }
+  .photo-viewer__error p { margin: 0; }
+  .photo-viewer__error button { min-height: 2.75rem; padding-inline: 1rem; }
+
+  .photo-viewer h2 { flex: 0 0 auto; text-align: center; }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-gallery__link img { transition: none; }
+  }
+
+  @media (max-width: 64rem) {
+    .photo-gallery { grid-template-columns: 9rem minmax(0, 1fr); }
+    .photo-gallery__item--lighthouse { flex-basis: 59%; }
+    .photo-gallery__item--portrait { flex-basis: 34%; }
+  }
+
+  @media (max-width: 48rem) {
+    .photo-gallery {
+      display: block;
+      width: 100%;
+      padding: 1.1rem 0 4rem;
+    }
+
+    .photo-gallery__rail {
+      position: static;
+      padding-inline: var(--space-page);
+    }
+
+    .photo-gallery__identity h1 { font-size: 1.8rem; }
+    .photo-gallery__identity p { margin-block-end: 1.4rem; }
+    .photo-gallery__filters { display: none; }
+
+    :global(.photo-gallery__mobile-series:not([hidden])) {
+      display: block;
+      margin-block-end: 0.8rem;
+    }
+
+    :global(.photo-gallery__mobile-series select) {
+      width: 100%;
+      min-height: 2.85rem;
+      padding: 0.35rem 0.55rem;
+      border: 0;
+      border-bottom: 1px solid var(--color-rule);
+      border-radius: 0;
+      color: var(--color-text);
+      background: var(--color-paper);
+      font: inherit;
+      font-size: 0.88rem;
+    }
+
+    .photo-gallery__list {
+      display: grid;
+      gap: 2.6rem;
+    }
+
+    .photo-gallery__item,
+    .photo-gallery__item--hero,
+    .photo-gallery__item--portrait,
+    .photo-gallery__item--lighthouse,
+    .photo-gallery__item--wide-center,
+    .photo-gallery__item--medium,
+    .photo-gallery__item--small-center,
+    .photo-gallery__item--landscape,
+    .photo-gallery__item--portrait-raised,
+    .photo-gallery__item--wide,
+    .photo-gallery__item--square {
+      width: 100%;
+      margin: 0;
+      grid-column: 1;
+    }
+
+    .photo-gallery__item figcaption { padding-inline: var(--space-page); }
+    .photo-gallery__item figure > a { padding-inline: var(--space-page); }
+    .photo-gallery__item--hero figure > a { padding: 0; }
+    .photo-gallery__item--hero figcaption { padding-inline: var(--space-page); }
+
+    .photo-viewer { padding: 0.75rem 0.5rem 1rem; }
+    .photo-viewer__stage { grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem; gap: 0.35rem; }
+    .photo-viewer__close,
+    .photo-viewer__step { width: 2.75rem; height: 2.75rem; }
+  }
+</style>

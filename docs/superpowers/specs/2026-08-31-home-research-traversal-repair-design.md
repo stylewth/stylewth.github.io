@@ -127,3 +127,31 @@ Browser checks at 1440, 768, 390, and 320 pixels must confirm that every pane cr
 - Glass behavior: all three panes show rear/front material occlusion and readable refracted offset slices; console `warn` and `error` logs were empty during browser QA.
 - Reduced-motion and script-failure evidence: verified through the automated `matchMedia(true)` branch in `research-traversal.test.ts` plus static CSS and built-output fallback contracts. This record does not claim a live browser-side reduced-motion or JavaScript-off toggle.
 - Evidence: `docs/superpowers/assets/research-repair-desktop-1440.png` and `docs/superpowers/assets/research-repair-mobile-390.png`.
+
+## Revision 2026-09-03: Registered raster states and measured geometry
+
+This revision supersedes the intermediate-state rendering and pane/aperture geometry above. The narrative, gating, occlusion architecture, progress model, and component boundaries are unchanged.
+
+### Owner-drawn registered state rasters
+
+The surface, aligned, and point-cloud states are now owner-drawn transparent rasters (`research-traversal-representation.png`, `research-traversal-point-cloud.png`) registered to the rabbit's 3:2 frame, replacing the embedded SVG pattern layers. This corrects the failed "pattern over photo" composite where the photographic rabbit remained visible under every state: the photographic subject layer is now spatially clipped at the pane-one exit face (`research-field__scene-region--unlearned`), so each travel region renders exactly one dominant state. The aligned state adds the masked cyan/amber accent pattern over the representation body; the point-cloud state keeps three parallax depth copies (opacity 0.3/0.55/1, ±3px shifts) of the single bead-cloud raster. Because the new rasters' inked silhouettes run ~8-9% wider than the photographic rabbit, each renderer compensates with a fixed fit transform (`scale(0.918)` / `scale(0.923)` with sub-percent offsets) back to the measured body box; the rabbit PNG remains the sole alpha-mask source and its stray alpha speckles outside the body component were zeroed (147 pixels, same file). The new rasters are produced by the site owner, not generated fallbacks.
+
+### Measured pane and aperture geometry
+
+Pixel measurement of the rasters replaced the nominal values:
+
+- The pane rasters' glass strips occupy only 15.4%/17.5%/19.7% of their canvas width; each pane picture is therefore scaled 649%/571%/508% (with a 104.6% height fill) inside a shared box so the visible glass exactly fills it. All three panes use the same registered box — 3.6% wide and full-opening tall (69% of the scene on desktop, 61% on mobile) — so the sheets read as mounted in the ring: the aperture ellipse clips their ends into arcs behind the ring band.
+- The panes are distributed evenly inside the measured ring opening: desktop panes at 60.7/67.8/74.9 (exits 64.3/71.4/78.5) with equal 3.5% gaps and margin; mobile panes at 54.5/63.6/72.7 (exits 60.7/69.8/78.9) with equal 2.9-3.1% gaps. The right side of the opening stays as the post-exit runway.
+- The subject is 8.75rem on desktop and 4.5rem on mobile. Its travel track starts at 54% (desktop) / 44.9% (mobile), so the rabbit emerges from behind the left ring band and, past the last pane, is progressively occluded by the right ring band. The aperture ellipse stays recalibrated to the base raster's actual opening: `15.8% 34.6% at 73% 46.4%` desktop, `23.4% 30.5% at 74.5% 47%` mobile.
+- Each rear and front pane copy sits inside an aperture-clipped frame (`research-field__pane-frame`) and is separated by ±3 px with opacity tokens 0.42 rear / 0.5 front for material thickness. The interest list is capped at 34rem. Static fallback progress is 74% desktop / 87% mobile (aligned body just past the last pane).
+
+### Mid-pane crossing switch
+
+The crossing layer switch is registered to each pane's vertical midline, not its entry face. Each pane's refraction slice is split into two spatially clipped copies of the same displaced track: the entry half renders between the pane's rear and front material (rabbit seen through the glass), and the exit half renders above the front material (rabbit riding over the glass). The per-gate depth order is therefore rear material -> entry-half slice -> front material -> exit-half slice -> emerged body, with later panes still occluding earlier bodies. Handing over exactly at the midline makes the subject visibly pierce the middle of each sheet.
+
+### Verification Record 2026-09-03
+
+- `npm run build`: passed (0 errors; 135 tests green including the 300 KiB scene budget with both new rasters).
+- Browser widths inspected: `1440x1000`, `768x1000`, `390x900`.
+- Desktop: at 5% the rabbit is the pure photographic subject before the first glass; at 30% it is the ink representation with no photographic carry-over; at 65% the third crossing shows representation behind the glass and bead point-cloud emerging; at 80% the whole subject reads as the bead volumetric cloud. Reverse from 80% to 30% restores the identical representation frame.
+- Glass: all three panes render inside the ring opening with visible material and inter-pane gaps at every inspected width; no horizontal overflow at 390; interest labels no longer intersect the apparatus at 1440.

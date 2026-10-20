@@ -3,6 +3,11 @@ import { en } from '../../i18n/en';
 import { site } from '../../config/site';
 
 const currentPath = Astro.url.pathname;
+interface Props {
+  photography?: boolean;
+}
+
+const { photography = false } = Astro.props;
 const isCurrent = (path: string) =>
   path === '/' ? currentPath === path : currentPath.startsWith(path);
 ---
@@ -10,12 +15,25 @@ const isCurrent = (path: string) =>
 <header class="site-header">
   <div class="site-header__inner shell">
     <a class="site-name" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
-    <nav class="site-nav" aria-label="Primary">
+    <nav class:list={['site-nav', { 'site-nav--desktop': photography }]} aria-label="Primary">
       <a href="/" aria-current={isCurrent('/') ? 'page' : undefined}>{en.navigation.home}</a>
       <a href="/work/" aria-current={isCurrent('/work/') ? 'page' : undefined}>{en.navigation.work}</a>
       <a href="/updates/" aria-current={isCurrent('/updates/') ? 'page' : undefined}>{en.navigation.updates}</a>
       <a href="/elsewhere/" aria-current={isCurrent('/elsewhere/') ? 'page' : undefined}>{en.navigation.elsewhere}</a>
+      <a href="/photos/" aria-current={isCurrent('/photos/') ? 'page' : undefined}>{en.navigation.photos}</a>
     </nav>
+    {photography && (
+      <details class="site-menu">
+        <summary>Menu</summary>
+        <nav aria-label="Mobile navigation">
+          <a href="/" aria-current={isCurrent('/') ? 'page' : undefined}>{en.navigation.home}</a>
+          <a href="/work/" aria-current={isCurrent('/work/') ? 'page' : undefined}>{en.navigation.work}</a>
+          <a href="/updates/" aria-current={isCurrent('/updates/') ? 'page' : undefined}>{en.navigation.updates}</a>
+          <a href="/elsewhere/" aria-current={isCurrent('/elsewhere/') ? 'page' : undefined}>{en.navigation.elsewhere}</a>
+          <a href="/photos/" aria-current={isCurrent('/photos/') ? 'page' : undefined}>{en.navigation.photos}</a>
+        </nav>
+      </details>
+    )}
   </div>
 </header>
 
@@ -31,6 +49,10 @@ const isCurrent = (path: string) =>
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
+  }
+
+  .site-header__inner:has(.site-nav--desktop) {
+    width: min(calc(100% - (2 * var(--space-page))), 80rem);
   }
 
   .site-name {
@@ -60,7 +82,44 @@ const isCurrent = (path: string) =>
     font-weight: 700;
   }
 
+  .site-menu { display: none; }
+
+  .site-menu summary {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .site-menu summary::-webkit-details-marker { display: none; }
+
+  .site-menu nav {
+    position: absolute;
+    z-index: 2;
+    inset: calc(100% - 0.5rem) var(--space-page) auto;
+    display: grid;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-rule);
+    background: var(--color-paper);
+  }
+
+  .site-menu nav a { padding-block: 0.55rem; text-decoration: none; }
+
   @media (max-width: 48rem) {
+    .site-header__inner:has(.site-nav--desktop) {
+      position: relative;
+      min-height: 4.1rem;
+      align-items: center;
+      flex-direction: row;
+      gap: 1rem;
+      padding-block: 0;
+    }
+
+    .site-nav--desktop { display: none; }
+
+    .site-menu { display: block; font-size: 0.92rem; }
+
     .site-header__inner {
       min-height: auto;
       align-items: flex-start;
@@ -73,6 +132,13 @@ const isCurrent = (path: string) =>
       width: 100%;
       justify-content: space-between;
       gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 24rem) {
+    .site-nav {
+      gap: 0.375rem;
+      font-size: 0.86rem;
     }
   }
 </style>

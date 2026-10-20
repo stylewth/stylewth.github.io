@@ -1,0 +1,1618 @@
+{
+  "generatedAt": "2026-10-08T14:06:35.672Z",
+  "sourceRoot": "D:\\图片\\精选作品",
+  "selection": "24张策展清单.csv",
+  "photoCount": 24,
+  "gallery": {
+    "imageCount": 24,
+    "format": "WebP srcSet plus JPEG fallback",
+    "derivativeCount": 96,
+    "webp640Bytes": 1355328,
+    "webp1000Bytes": 2969960,
+    "webp1600Bytes": 6779318,
+    "jpegFallbackBytes": 9579855,
+    "displayPayloadBytes": 2969960,
+    "bytes": 20684461
+  },
+  "viewer": {
+    "imageCount": 24,
+    "format": "JPEG, longest edge at most 2400px",
+    "derivativeCount": 24,
+    "bytes": 13111838
+  },
+  "totalDerivativeCount": 120,
+  "totalBytes": 33796299,
+  "originalHashes": {
+    "before": {
+      "photo-001": {
+        "path": "晨光中的火山.jpg",
+        "sha256": "37f63de57d125db00ee0a688e7096c62ab12e289dd8db9b69ba07640831276ab",
+        "bytes": 4719780
+      },
+      "photo-002": {
+        "path": "来时路.jpg",
+        "sha256": "4cdc543d81fbee29dbf8b7aa7f58d3ff1d8cebf03a9fc7e12c89a6d560be7d2d",
+        "bytes": 7262706
+      },
+      "photo-003": {
+        "path": "白崖与灯塔.jpg",
+        "sha256": "8235136ffd55c4ba98079f56a0703b026a5dfff578655cedea7e4b84eec36983",
+        "bytes": 11716784
+      },
+      "photo-004": {
+        "path": "火山与行者.jpg",
+        "sha256": "1ec8414582e66674442859715237f19007c659c8dec3d2450579525bbd9759ad",
+        "bytes": 10716164
+      },
+      "photo-005": {
+        "path": "同一拍.jpg",
+        "sha256": "974d37477f62f958ac847955872b0059de55cc5f81c4209be0b215b6fb84b453",
+        "bytes": 11752171
+      },
+      "photo-006": {
+        "path": "岩隙之光.jpg",
+        "sha256": "54d30821533601a3880bbf1f966cc2bfc038de41742fd27d4c34cffe44e242f9",
+        "bytes": 16384310
+      },
+      "photo-007": {
+        "path": "晚霞里的旧船.jpg",
+        "sha256": "124c3d9a1f721f2c4a82c6d1b32bf15480e0e0d3543facac19688c1d578b0f20",
+        "bytes": 7958327
+      },
+      "photo-008": {
+        "path": "水面回声.jpg",
+        "sha256": "bc99ad611ae7a35ba0734d692bf41565ff183536ac52cbcc0589ca5c76f77a14",
+        "bytes": 418994
+      },
+      "photo-009": {
+        "path": "踏着余晖.jpg",
+        "sha256": "9f8f3cd0a4197498a270d13dfc9ed47ab6c946c98528bd08075e171b91481d8d",
+        "bytes": 6642798
+      },
+      "photo-010": {
+        "path": "城市里的教堂.jpg",
+        "sha256": "2f3d9ff657fbb908cdb3321d505ac7b73d06df3394fc2c058d752596fd6b96e7",
+        "bytes": 8164555
+      },
+      "photo-011": {
+        "path": "小小舞步.jpg",
+        "sha256": "b951809f7f1734fea3a63e09b92a278b8a1102ee4e8fede41e15cb278f4ff7aa",
+        "bytes": 11105984
+      },
+      "photo-012": {
+        "path": "一帆.jpg",
+        "sha256": "d020455ca40a9ac1ff0434afd0062862ff0dc5f3ef54294e366aafee912f99ca",
+        "bytes": 9746890
+      },
+      "photo-013": {
+        "path": "分你一口.jpg",
+        "sha256": "63fcbc95a8c9687ddacf9c175dc590442ee8c4dc9e512ba9a54eb9ab430d6e67",
+        "bytes": 5369132
+      },
+      "photo-014": {
+        "path": "雪谷逆光.jpg",
+        "sha256": "7755e76c6beb3be961f9ab32a2312150c3304e06c1a92f00eb78fb7b6e81db51",
+        "bytes": 6026536
+      },
+      "photo-015": {
+        "path": "屋檐之间.jpg",
+        "sha256": "9b3d3c5969c3bc3fde5127374404947eb2d82bcf07d7e4eaa964dc1393e66ecd",
+        "bytes": 2246287
+      },
+      "photo-016": {
+        "path": "隔着网格.jpg",
+        "sha256": "91f2a26fe9d60e4d2122439d3f10f90add9d487cc8b7c6636bd8772da376027e",
+        "bytes": 3637821
+      },
+      "photo-017": {
+        "path": "雨中骑行.jpg",
+        "sha256": "e0e86227c33b749daa6a3d62a503e1ef0336839595098d890dfb41a0f998af24",
+        "bytes": 9221932
+      },
+      "photo-018": {
+        "path": "雾过山谷.jpg",
+        "sha256": "16f465b0926e738bb61923d6b105f0cd9a6d4219d7d1bcb8fec9cd3fdc8df0de",
+        "bytes": 6183628
+      },
+      "photo-019": {
+        "path": "暮色灯塔.jpg",
+        "sha256": "40b3880785d5be26803e0ac3ec9fb5634f0cdb65e1b3fc904bddd5f022bf7073",
+        "bytes": 7398915
+      },
+      "photo-020": {
+        "path": "花间停驻.jpg",
+        "sha256": "ffb91f242038319ced7bce383e7d36755399f9402bafd8d258a96dea31e252d5",
+        "bytes": 2417138
+      },
+      "photo-021": {
+        "path": "白崖海湾.jpg",
+        "sha256": "73e1d7d3c6db8747782131f555f83c76658500b035632c39e3d7600705f165a3",
+        "bytes": 13749576
+      },
+      "photo-022": {
+        "path": "空中的麦克风.jpg",
+        "sha256": "8c858d8e53705a53570b031dc4ac53483a29bb3403fe7b9b34b88dcf0951f726",
+        "bytes": 10738183
+      },
+      "photo-023": {
+        "path": "河涌与高楼.jpg",
+        "sha256": "f67855f334ea986b2d0a907f0bf73de4366899bc0b6e65221d28c51cc5629a09",
+        "bytes": 10705638
+      },
+      "photo-024": {
+        "path": "花与白墙.jpg",
+        "sha256": "1901f734339a70aca186f37871c3ddf56e4aab9c5efedbe93a1cd5d373e7b421",
+        "bytes": 4445411
+      }
+    },
+    "after": {
+      "photo-001": {
+        "path": "晨光中的火山.jpg",
+        "sha256": "37f63de57d125db00ee0a688e7096c62ab12e289dd8db9b69ba07640831276ab",
+        "bytes": 4719780
+      },
+      "photo-002": {
+        "path": "来时路.jpg",
+        "sha256": "4cdc543d81fbee29dbf8b7aa7f58d3ff1d8cebf03a9fc7e12c89a6d560be7d2d",
+        "bytes": 7262706
+      },
+      "photo-003": {
+        "path": "白崖与灯塔.jpg",
+        "sha256": "8235136ffd55c4ba98079f56a0703b026a5dfff578655cedea7e4b84eec36983",
+        "bytes": 11716784
+      },
+      "photo-004": {
+        "path": "火山与行者.jpg",
+        "sha256": "1ec8414582e66674442859715237f19007c659c8dec3d2450579525bbd9759ad",
+        "bytes": 10716164
+      },
+      "photo-005": {
+        "path": "同一拍.jpg",
+        "sha256": "974d37477f62f958ac847955872b0059de55cc5f81c4209be0b215b6fb84b453",
+        "bytes": 11752171
+      },
+      "photo-006": {
+        "path": "岩隙之光.jpg",
+        "sha256": "54d30821533601a3880bbf1f966cc2bfc038de41742fd27d4c34cffe44e242f9",
+        "bytes": 16384310
+      },
+      "photo-007": {
+        "path": "晚霞里的旧船.jpg",
+        "sha256": "124c3d9a1f721f2c4a82c6d1b32bf15480e0e0d3543facac19688c1d578b0f20",
+        "bytes": 7958327
+      },
+      "photo-008": {
+        "path": "水面回声.jpg",
+        "sha256": "bc99ad611ae7a35ba0734d692bf41565ff183536ac52cbcc0589ca5c76f77a14",
+        "bytes": 418994
+      },
+      "photo-009": {
+        "path": "踏着余晖.jpg",
+        "sha256": "9f8f3cd0a4197498a270d13dfc9ed47ab6c946c98528bd08075e171b91481d8d",
+        "bytes": 6642798
+      },
+      "photo-010": {
+        "path": "城市里的教堂.jpg",
+        "sha256": "2f3d9ff657fbb908cdb3321d505ac7b73d06df3394fc2c058d752596fd6b96e7",
+        "bytes": 8164555
+      },
+      "photo-011": {
+        "path": "小小舞步.jpg",
+        "sha256": "b951809f7f1734fea3a63e09b92a278b8a1102ee4e8fede41e15cb278f4ff7aa",
+        "bytes": 11105984
+      },
+      "photo-012": {
+        "path": "一帆.jpg",
+        "sha256": "d020455ca40a9ac1ff0434afd0062862ff0dc5f3ef54294e366aafee912f99ca",
+        "bytes": 9746890
+      },
+      "photo-013": {
+        "path": "分你一口.jpg",
+        "sha256": "63fcbc95a8c9687ddacf9c175dc590442ee8c4dc9e512ba9a54eb9ab430d6e67",
+        "bytes": 5369132
+      },
+      "photo-014": {
+        "path": "雪谷逆光.jpg",
+        "sha256": "7755e76c6beb3be961f9ab32a2312150c3304e06c1a92f00eb78fb7b6e81db51",
+        "bytes": 6026536
+      },
+      "photo-015": {
+        "path": "屋檐之间.jpg",
+        "sha256": "9b3d3c5969c3bc3fde5127374404947eb2d82bcf07d7e4eaa964dc1393e66ecd",
+        "bytes": 2246287
+      },
+      "photo-016": {
+        "path": "隔着网格.jpg",
+        "sha256": "91f2a26fe9d60e4d2122439d3f10f90add9d487cc8b7c6636bd8772da376027e",
+        "bytes": 3637821
+      },
+      "photo-017": {
+        "path": "雨中骑行.jpg",
+        "sha256": "e0e86227c33b749daa6a3d62a503e1ef0336839595098d890dfb41a0f998af24",
+        "bytes": 9221932
+      },
+      "photo-018": {
+        "path": "雾过山谷.jpg",
+        "sha256": "16f465b0926e738bb61923d6b105f0cd9a6d4219d7d1bcb8fec9cd3fdc8df0de",
+        "bytes": 6183628
+      },
+      "photo-019": {
+        "path": "暮色灯塔.jpg",
+        "sha256": "40b3880785d5be26803e0ac3ec9fb5634f0cdb65e1b3fc904bddd5f022bf7073",
+        "bytes": 7398915
+      },
+      "photo-020": {
+        "path": "花间停驻.jpg",
+        "sha256": "ffb91f242038319ced7bce383e7d36755399f9402bafd8d258a96dea31e252d5",
+        "bytes": 2417138
+      },
+      "photo-021": {
+        "path": "白崖海湾.jpg",
+        "sha256": "73e1d7d3c6db8747782131f555f83c76658500b035632c39e3d7600705f165a3",
+        "bytes": 13749576
+      },
+      "photo-022": {
+        "path": "空中的麦克风.jpg",
+        "sha256": "8c858d8e53705a53570b031dc4ac53483a29bb3403fe7b9b34b88dcf0951f726",
+        "bytes": 10738183
+      },
+      "photo-023": {
+        "path": "河涌与高楼.jpg",
+        "sha256": "f67855f334ea986b2d0a907f0bf73de4366899bc0b6e65221d28c51cc5629a09",
+        "bytes": 10705638
+      },
+      "photo-024": {
+        "path": "花与白墙.jpg",
+        "sha256": "1901f734339a70aca186f37871c3ddf56e4aab9c5efedbe93a1cd5d373e7b421",
+        "bytes": 4445411
+      }
+    },
+    "unchanged": true
+  },
+  "photos": [
+    {
+      "id": "photo-001",
+      "source": {
+        "category": "自然风光",
+        "filename": "晨光中的火山.jpg",
+        "width": 4981,
+        "height": 2802
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-001/photo-001-640.webp",
+          "width": 640,
+          "height": 360,
+          "aspectRatio": 1.777778,
+          "bytes": 25302,
+          "sha256": "7d2b956bdf6535077497818cdd208daa06003239159108163129d4862382a7b2",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-001/photo-001-1000.webp",
+          "width": 1000,
+          "height": 563,
+          "aspectRatio": 1.776199,
+          "bytes": 55184,
+          "sha256": "27297ac8863c3207002bbba3d1812b1989ce5bb59d2a68ef09fbb60b8cd3e267",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-001/photo-001-1600.webp",
+          "width": 1600,
+          "height": 900,
+          "aspectRatio": 1.777778,
+          "bytes": 121198,
+          "sha256": "8f190a722fa96f6b0827f6c5f4fc6413874abade0c2e40914ff5f9636f633b18",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-001/photo-001-1600.jpg",
+          "width": 1600,
+          "height": 900,
+          "aspectRatio": 1.777778,
+          "bytes": 186407,
+          "sha256": "f07ecb2eca49349bfd4710d6b2018852b37a5dfdd6f1eb05f4f279adc50e5849",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-001/photo-001-full.jpg",
+          "width": 2400,
+          "height": 1350,
+          "aspectRatio": 1.777778,
+          "bytes": 394751,
+          "sha256": "40f0ea46ab9303056dfe35b4bfd2ea2358b0c0b0f59ac2247f6d0609e8133169",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-002",
+      "source": {
+        "category": "人文",
+        "filename": "来时路.jpg",
+        "width": 3639,
+        "height": 5469
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-002/photo-002-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 55886,
+          "sha256": "4ccc1532c8e2606f270614f87e42530a8d7b5e8ba4aa12d1adeb0c86be493ee1",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-002/photo-002-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 119076,
+          "sha256": "731f55bd5deff4cf69f823c87e7f86b779ae33df031e17e29de2a5b39091f2ba",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-002/photo-002-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 271728,
+          "sha256": "4653d5bd36e732bd11e40961b4e61eb9dfa92bfb7ccbb157ef64584b88fba177",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-002/photo-002-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 438297,
+          "sha256": "2661745abe383753745d145f513fe02f7e472019c0bc2c8f7f258ba4d932099a",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-002/photo-002-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 436864,
+          "sha256": "d5e323385dde081c2d7f0828f0786c7cdeaaabebb766b805c70ae7ee263057fc",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-003",
+      "source": {
+        "category": "自然风光",
+        "filename": "白崖与灯塔.jpg",
+        "width": 5852,
+        "height": 3894
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-003/photo-003-640.webp",
+          "width": 640,
+          "height": 425,
+          "aspectRatio": 1.505882,
+          "bytes": 29842,
+          "sha256": "b2f967290ebf22376ae3efdbc0fbc7305c4e75552dcbbebe11a2c6fd211a7c1e",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-003/photo-003-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 66380,
+          "sha256": "c8ace38c4d79f67792e50110551cfd85279b3a1ee52910d5ee4255f7ae5d0807",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-003/photo-003-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 151206,
+          "sha256": "80e89f8e91508c6c26bbd759f6ba5b4db58e5acbff668600ca2b948a2e4efe65",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-003/photo-003-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 234535,
+          "sha256": "d49f3e9ec7b9738d0d51ee0f239b5b09b1ab4b09a0080076265a1cd0d02be597",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-003/photo-003-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 484533,
+          "sha256": "f41aeb3f9d63b8045ccb315bb2947fd88065a2e0e4b858f0a56d5c9ab68d6070",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-004",
+      "source": {
+        "category": "自然风光",
+        "filename": "火山与行者.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-004/photo-004-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 50982,
+          "sha256": "ed0de015fe6d6a22a6a2e41672d8194ed6ca8a417fe6ffd00c01b1450f305306",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-004/photo-004-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 122958,
+          "sha256": "fd01893a7baee4e3ecba9f41c020a60fb45b148beeb2f42c0857d9c9ffd69aee",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-004/photo-004-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 319648,
+          "sha256": "87ace0559092ef9f294e2df92836c49f71f71e86284c46f2b66ee8111e299878",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-004/photo-004-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 389843,
+          "sha256": "c7e609da3173ff8a1f831d93cec261ac5c310b5a924188e4b2c4f84d3510f0c2",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-004/photo-004-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 873832,
+          "sha256": "10cb7737885b0afa9278550f470ed360081d48db3012b5ab0ad8274646e6c9d4",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-005",
+      "source": {
+        "category": "人文",
+        "filename": "同一拍.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-005/photo-005-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 57744,
+          "sha256": "df89f83ecee5d7c59397580fc8919206d0bbef34f1e45828154895c2347aeb07",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-005/photo-005-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 112930,
+          "sha256": "5c9920c32b58cda37a1849c7eed6e3c26103636c30fc691f74b53177b38bfe5d",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-005/photo-005-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 211496,
+          "sha256": "365510fd3219cd630d76801dee8fe2b5672e6cbf10cbd887091f854fa021a65d",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-005/photo-005-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 322998,
+          "sha256": "83d8050c0e1749a15d06443218a9303a77de99935266f3a9a3e0d26d81ee68e5",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-005/photo-005-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 583700,
+          "sha256": "e6016bb8336e85667380a6a3876a1ced8e03a9f34963648e21d901848ebd0628",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-006",
+      "source": {
+        "category": "自然风光",
+        "filename": "岩隙之光.jpg",
+        "width": 4024,
+        "height": 6048
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-006/photo-006-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 114398,
+          "sha256": "7738e5e244721306249d87ed22c1da2a9126a08c903226e08a255e48e0a55050",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-006/photo-006-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 270222,
+          "sha256": "941c4aaa072e6182106d250027dd5ff410463864c6602a0ff8148523849eb450",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-006/photo-006-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 645684,
+          "sha256": "d4775ccdcc73cc14b07524cb456c8f2571d4bcbc2b3df2ba88f07422e926c885",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-006/photo-006-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 809580,
+          "sha256": "5b1c764a532ba4c7251fbe491f1a3027baffdae57f89820b84a5b821d273495d",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-006/photo-006-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 806228,
+          "sha256": "c5a4a6b139644857ab6c4676dd009678b70b488345612f23796742543428e966",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-007",
+      "source": {
+        "category": "建筑景观",
+        "filename": "晚霞里的旧船.jpg",
+        "width": 5852,
+        "height": 3894
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-007/photo-007-640.webp",
+          "width": 640,
+          "height": 425,
+          "aspectRatio": 1.505882,
+          "bytes": 38036,
+          "sha256": "fbb837256150ce0ec17962b9975858b6b1ec9db0a1183f3d49eda9cb0fcca325",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-007/photo-007-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 85714,
+          "sha256": "d20f7b85aa33784d8ec381c84fdbea542fd41dbc073555e8f63265e99721e191",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-007/photo-007-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 192878,
+          "sha256": "90be9f3dc001e2a6af8b4c29d6c3d1661a65ed5fd2fc07a2754fd96e97a6659e",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-007/photo-007-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 280084,
+          "sha256": "e74966203dd50a97786caf1dcaf4ded4eda205d1427f8785f6d6993f8d2c6cdd",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-007/photo-007-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 580923,
+          "sha256": "ecd9e960e98f79d02c40437b2395e42c78a227582137f8fab62022f34d1784c0",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-008",
+      "source": {
+        "category": "动物",
+        "filename": "水面回声.jpg",
+        "width": 3134,
+        "height": 3981
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-008/photo-008-640.webp",
+          "width": 640,
+          "height": 813,
+          "aspectRatio": 0.787208,
+          "bytes": 25090,
+          "sha256": "6daa1a720bf03ef647b37885559738f22796239fb47055611af969a55cb3d00b",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-008/photo-008-1000.webp",
+          "width": 1000,
+          "height": 1270,
+          "aspectRatio": 0.787402,
+          "bytes": 44614,
+          "sha256": "1291375861a754e84a8bda66a22f44f1adfbe58da10ae4067b00ba1691d265a6",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-008/photo-008-1600.webp",
+          "width": 1600,
+          "height": 2032,
+          "aspectRatio": 0.787402,
+          "bytes": 84796,
+          "sha256": "cf572aceb5e7592d59cb10bcda18fa073635d48f28124fa2cb3a7e0e9a4ae287",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-008/photo-008-1600.jpg",
+          "width": 1600,
+          "height": 2032,
+          "aspectRatio": 0.787402,
+          "bytes": 173352,
+          "sha256": "17746d14cdcb2cdba40383234fef4745ad8bcdc370cb63e961a7e06676370480",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-008/photo-008-full.jpg",
+          "width": 1889,
+          "height": 2400,
+          "aspectRatio": 0.787083,
+          "bytes": 223404,
+          "sha256": "7326c69ca7d6f7e6daa5a00a751070c514e88c377846a88bac8454c0a340e839",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-009",
+      "source": {
+        "category": "人文",
+        "filename": "踏着余晖.jpg",
+        "width": 4024,
+        "height": 6048
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-009/photo-009-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 72062,
+          "sha256": "6901359eba77b67338cfdc11213e7cc10325e7ad0dd0c71f36c414e293a4fabf",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-009/photo-009-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 166072,
+          "sha256": "71488d710561eb35f7c68044ab17710b795a6cb0975bbadee6f025528ee6a439",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-009/photo-009-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 379838,
+          "sha256": "4467b38a33e79b1ecd30dba62da63d661189cb404ab93fa95b3b2589e0b96f1e",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-009/photo-009-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 516102,
+          "sha256": "3ddffe682aa060891ea17955e05a3e160dfb6771d14d4e49245c841d9ffefa22",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-009/photo-009-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 514763,
+          "sha256": "d7c7be68966a3ca1b605e6d0ca36174eb52042aba4e7362f1629d14ba60ead79",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-010",
+      "source": {
+        "category": "建筑景观",
+        "filename": "城市里的教堂.jpg",
+        "width": 3325,
+        "height": 4997
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-010/photo-010-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 156904,
+          "sha256": "986deca02ce394efa45bebe368df58c4a6e69010e21ccca75b41878bcac98039",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-010/photo-010-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 368288,
+          "sha256": "145c59e49bd7fc059daa21e02bea603fcabac1f0d5ae5c7091a30429f01a5bbd",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-010/photo-010-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 902262,
+          "sha256": "4e642ea3e2470c71d82ad07010801ff5f7a179b488b602945c2b4a5890ed7764",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-010/photo-010-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 1086263,
+          "sha256": "371096b66f2cbf5051757bd39c8f3c59134fa27bb0fd762b6e152c629a7308ed",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-010/photo-010-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 1081348,
+          "sha256": "d96fd4466800b36d8c7e2ef86edbe9216bb8d6be3539bef79e3e479e5768f635",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-011",
+      "source": {
+        "category": "人文",
+        "filename": "小小舞步.jpg",
+        "width": 3808,
+        "height": 5724
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-011/photo-011-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 83070,
+          "sha256": "39b01ac4f67f65287fab9e116b49f1b4cdf3606c7777c3a3daadf15c09a20d89",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-011/photo-011-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 161560,
+          "sha256": "c53e83df31ad83c6c8ab82424784148114c55679c741e44553600b16c70b10ab",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-011/photo-011-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 314996,
+          "sha256": "6c51e2fc294e17b7e48a6c7ce1d20bc3ad53c68301d768cb0da99eb99ec4a18d",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-011/photo-011-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 526087,
+          "sha256": "1a6613731fd2cb80f477a27f927d0a8c3612443e0a8d093e9052140bec5dabc2",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-011/photo-011-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 524410,
+          "sha256": "fb6e8714c580a40550e05afafdb8bbce930baead2bec9ca7f5897e5ea38d279d",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-012",
+      "source": {
+        "category": "自然风光",
+        "filename": "一帆.jpg",
+        "width": 2993,
+        "height": 4498
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-012/photo-012-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 65420,
+          "sha256": "b2fa0a6e482ddc92607f9a7d6414b1efbbcec3330c2a35db59b09340b36fe7c6",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-012/photo-012-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 183320,
+          "sha256": "38675ce29d4794e793a926091f5ef65a3a7905f2ce609169cb47f04f8ff74935",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-012/photo-012-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 468774,
+          "sha256": "2c75a6b21964a9f97156e4f673dc4e64634fae75ec50acfa25870f875a946887",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-012/photo-012-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 624755,
+          "sha256": "7f332778218d83746c95d60d1f06fa73fd6843446186674b7ae9f81704210d98",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-012/photo-012-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 621072,
+          "sha256": "3f6a01329d852d96b29640535fc88fb313711d59a6a092d7caadf7a64a1b5c5c",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-013",
+      "source": {
+        "category": "人文",
+        "filename": "分你一口.jpg",
+        "width": 3669,
+        "height": 5515
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-013/photo-013-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 90992,
+          "sha256": "60437fc6131c67620572440ee21a80a477185a4ada4c8382af0770559af5c1bc",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-013/photo-013-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 177200,
+          "sha256": "391d35648143e603adc3229ba3e57d72cf8f95fc7b1300f204df5f518da9266d",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-013/photo-013-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 361818,
+          "sha256": "a23098155e3e3d24a8f0e26d3bc7c7ca90830f701e10fef3728a84b03d277917",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-013/photo-013-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 542043,
+          "sha256": "97f212305f4e74f8f84edb71ed66077964e7ff0ec6496221a6e760725a741a19",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-013/photo-013-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 540875,
+          "sha256": "4b751156b4edc1371b033b1db12b84704ef88f411d0f93e3112459360351e79f",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-014",
+      "source": {
+        "category": "自然风光",
+        "filename": "雪谷逆光.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-014/photo-014-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 19258,
+          "sha256": "2a3d980cf3c3ffc5fe382e554d62691aba41d1ee603b0df8ff62868c5eae8a3f",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-014/photo-014-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 41484,
+          "sha256": "df1a8723cbc62cb4e169ddd12cac3fad1dc86d2efee5fd943d440667108cc7c2",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-014/photo-014-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 93942,
+          "sha256": "f2c5d4dfd00c31dfb23e961ba9589280f10c5ad623c4a838c5501fd9ea32c5a3",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-014/photo-014-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 159503,
+          "sha256": "baad5bb625c5f55b397b064dd628ac9ee6676c8e470383fa84b2250e2dbd9095",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-014/photo-014-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 326073,
+          "sha256": "c867a78917c3ba0db402c54d3b1dce76a6da2efa974aaf05c13748aa1c8ce7f7",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-015",
+      "source": {
+        "category": "建筑景观",
+        "filename": "屋檐之间.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-015/photo-015-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 50544,
+          "sha256": "23ba5b39589e247873d8a839e76482d0c883592052980208a8874548d6419913",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-015/photo-015-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 110484,
+          "sha256": "60e057cccaa97ffbdd6005cd9fd88349e07b4f9d09db67f7ee1d57dee01a1a8d",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-015/photo-015-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 255500,
+          "sha256": "b8aaae3a34424c79c102e22caecfebcf6157e2842ed16b1b1ebf0aef647a8051",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-015/photo-015-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 348462,
+          "sha256": "423bf6ade09489fb40c2738abd42e46dce7bf1c7104b3cc99d6afeca173fb4d3",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-015/photo-015-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 727849,
+          "sha256": "6312cdde003af50ad4758d565cf4e877ad0a3d9861bf23441185c03eccdce8d7",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-016",
+      "source": {
+        "category": "动物",
+        "filename": "隔着网格.jpg",
+        "width": 5143,
+        "height": 3422
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-016/photo-016-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 19914,
+          "sha256": "c955a66f2a219198de3786bb0368e3e94eab46b1fd8220794f65d71c0d014026",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-016/photo-016-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 35740,
+          "sha256": "023d49c64caf2b4463b39f24ffb413d898c477eaa280f9a90b852923b7588784",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-016/photo-016-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 69610,
+          "sha256": "db4f40290d07bf2f57680f497b5543023b9157378f4ce72f9ec433ae72e85d7b",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-016/photo-016-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 134152,
+          "sha256": "75187cad163eaed55bf786dcfd8888663519a89512372c7c3c39683aa475d18d",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-016/photo-016-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 252515,
+          "sha256": "0e9e1d1d979b9edba7b0268c9f8128e967596d97637a5d5f69548ed03d0b0a0e",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-017",
+      "source": {
+        "category": "人文",
+        "filename": "雨中骑行.jpg",
+        "width": 3478,
+        "height": 5227
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-017/photo-017-640.webp",
+          "width": 640,
+          "height": 962,
+          "aspectRatio": 0.665281,
+          "bytes": 135146,
+          "sha256": "7d7bf57ddad959dcbae98a733852d2d9348a0b1f9b0b73e54b4d91952aee40bf",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-017/photo-017-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 259530,
+          "sha256": "aeee51c146480d560e925617c5c89ac323f4e74dba66d8097f883723b859a112",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-017/photo-017-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 485856,
+          "sha256": "937f64b2742355048f1ff468114ea030ccf4aa19eddb074f886a1f4a3c213258",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-017/photo-017-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 714642,
+          "sha256": "1f04a1613a94e460f8fb9c0f4a11bec9f9b3d5d5c0edf66a5ec5fb91e138a165",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-017/photo-017-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 712198,
+          "sha256": "cc2f5b689aacc615c7ffa2dc804d242048dde2e92aefc223d42d337237264e70",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-018",
+      "source": {
+        "category": "自然风光",
+        "filename": "雾过山谷.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-018/photo-018-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 22008,
+          "sha256": "08ba64a8e5ef01d4d5e0169dc224ea9817f0df1a1c95ceb2e84749ab80497c7b",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-018/photo-018-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 49990,
+          "sha256": "e589e21653aed14d55db575398b366e178236147d47a60b5a0d3ed56808ceae9",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-018/photo-018-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 111250,
+          "sha256": "f9fa04d67c2fd02d838025e8cc3fad447e2a2e4a85dc025005b38d2ca33f7e6d",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-018/photo-018-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 192010,
+          "sha256": "d51ce6991cd98730b7a89898d105f5677cc978daf8dc8851cdae224cf50ea0c2",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-018/photo-018-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 387250,
+          "sha256": "5c5cece2aa18a872d93a15996c09c6e514a288b8f784e9ef01d3e974a508c111",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-019",
+      "source": {
+        "category": "建筑景观",
+        "filename": "暮色灯塔.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-019/photo-019-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 13760,
+          "sha256": "ce16fa4caa62c9ecb317ec86bc310b0d48620de5c75df314ff7d857df68326a2",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-019/photo-019-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 28694,
+          "sha256": "ab6ac857594b6b9a50cc324d18db9d0b968e4be2370d9a53e118df941d940fd9",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-019/photo-019-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 59578,
+          "sha256": "5a4d18add57daf22829a441ed623623953ae2e670b1f4b1134d4ff8deea5052b",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-019/photo-019-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 119357,
+          "sha256": "5550093abf9dd3241e44c62f997b21134da6a0ed3c2bf7fc7c205b210db4f687",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-019/photo-019-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 235837,
+          "sha256": "ee11bcc8c98354085ef7b8fc09cee7c747f614c1b2877cf55179397511a13b30",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-020",
+      "source": {
+        "category": "动物",
+        "filename": "花间停驻.jpg",
+        "width": 3444,
+        "height": 2291
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-020/photo-020-640.webp",
+          "width": 640,
+          "height": 425,
+          "aspectRatio": 1.505882,
+          "bytes": 39982,
+          "sha256": "96cd82c9b34535cbd0542339a21dc2cfc715200b146003423d082ad26bf99d9e",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-020/photo-020-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 74526,
+          "sha256": "74cd0e170066b7de40dea4c23764503bd56ec81c33a2155729ac64fbd710658e",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-020/photo-020-1600.webp",
+          "width": 1600,
+          "height": 1064,
+          "aspectRatio": 1.503759,
+          "bytes": 138256,
+          "sha256": "b8ce6f1506cef15a6d51299e8fcf5e18f3712b7f7a1548d01d2c4766071c35a5",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-020/photo-020-1600.jpg",
+          "width": 1600,
+          "height": 1064,
+          "aspectRatio": 1.503759,
+          "bytes": 220841,
+          "sha256": "1aa0f3a6f227a7dd8078db385af0d520bef3ae7eb8c03834dd5398a19593ac9f",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-020/photo-020-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 428992,
+          "sha256": "c3e96cb924fe3649cb9cca6cee3a4e759d4198d7699ebf2960ef8205452e215f",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-021",
+      "source": {
+        "category": "自然风光",
+        "filename": "白崖海湾.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-021/photo-021-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 35004,
+          "sha256": "2be60a24c70adae406545343d693cb68f33fa914bb2b0a1e19a25cdb0ac515dc",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-021/photo-021-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 84762,
+          "sha256": "6f8491c76554d49c5bd966241cde961899e89f7af2b7eefcf29e9901c5b97204",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-021/photo-021-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 219288,
+          "sha256": "660ea709a874023ad6761cfd4d44e5c393c59c973cb2ce184c8f81cbe6890e8d",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-021/photo-021-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 278112,
+          "sha256": "32def913b965d19f1ecc439af1bcb3b42f156268ab275b4b4b8c7dea7087ec05",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-021/photo-021-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 605190,
+          "sha256": "3294c30c6cf689d5266e67e803ac78a013f377835dd7275204b7b97e5c05399b",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-022",
+      "source": {
+        "category": "人文",
+        "filename": "空中的麦克风.jpg",
+        "width": 6048,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-022/photo-022-640.webp",
+          "width": 640,
+          "height": 426,
+          "aspectRatio": 1.502347,
+          "bytes": 12180,
+          "sha256": "9f63840e97f782408e96a66105f113b898d5a716cc720f3de45b12efad28a225",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-022/photo-022-1000.webp",
+          "width": 1000,
+          "height": 665,
+          "aspectRatio": 1.503759,
+          "bytes": 24174,
+          "sha256": "18a5867fef6d4b0796f84af30f70006ccfc83512b1add38052143521b3fc5400",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-022/photo-022-1600.webp",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 48250,
+          "sha256": "d562415fa162a23f4c1a61fe22fc32dad7c492020b0647028349d338b87692e3",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-022/photo-022-1600.jpg",
+          "width": 1600,
+          "height": 1065,
+          "aspectRatio": 1.502347,
+          "bytes": 103965,
+          "sha256": "1994896cc0718585231472f02faba1ecfc7fb1b1930f0b1ced37e56b79a9e198",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-022/photo-022-full.jpg",
+          "width": 2400,
+          "height": 1597,
+          "aspectRatio": 1.502818,
+          "bytes": 208086,
+          "sha256": "3e10ed6b96d4509a84681d2b121da0f12400d0c1491f31838d2ead29c5fc16fe",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-023",
+      "source": {
+        "category": "城市景观",
+        "filename": "河涌与高楼.jpg",
+        "width": 3784,
+        "height": 5687
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-023/photo-023-640.webp",
+          "width": 640,
+          "height": 961,
+          "aspectRatio": 0.665973,
+          "bytes": 106518,
+          "sha256": "71a87bf8ec015ac77dc10404e6cbc7b9b808fe2171f8ad1dcc5b6b23c7bcbf10",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-023/photo-023-1000.webp",
+          "width": 1000,
+          "height": 1503,
+          "aspectRatio": 0.665336,
+          "bytes": 261310,
+          "sha256": "491fe2a69ab12a1cecb0f1dae788c087ee82515c9f6673d9315d48df477981d3",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-023/photo-023-1600.webp",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 722544,
+          "sha256": "2bd1d2ca46c7ac932f3c03a5f4e418423bf6633cfa8d7c0871a92563e841b2d1",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-023/photo-023-1600.jpg",
+          "width": 1600,
+          "height": 2405,
+          "aspectRatio": 0.665281,
+          "bytes": 875141,
+          "sha256": "d191f27a65ef7c87a044c9e13bc12828eb31d5b4e120d5e1a089d4c246ecbca6",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-023/photo-023-full.jpg",
+          "width": 1597,
+          "height": 2400,
+          "aspectRatio": 0.665417,
+          "bytes": 873467,
+          "sha256": "512db0dd828a182ef036f17e1d66fb4472320e0b6e9cebec277e2a7aa42139a2",
+          "hasExif": false
+        }
+      }
+    },
+    {
+      "id": "photo-024",
+      "source": {
+        "category": "自然风光",
+        "filename": "花与白墙.jpg",
+        "width": 4024,
+        "height": 4024
+      },
+      "derivatives": {
+        "webp640": {
+          "path": "/images/photography/photo-024/photo-024-640.webp",
+          "width": 640,
+          "height": 640,
+          "aspectRatio": 1,
+          "bytes": 35286,
+          "sha256": "1b7cab18e55f3bb1ac5744cdfc16d4b9c2a4fbd694994ab43dbf3875c3ce342c",
+          "hasExif": false
+        },
+        "webp1000": {
+          "path": "/images/photography/photo-024/photo-024-1000.webp",
+          "width": 1000,
+          "height": 1000,
+          "aspectRatio": 1,
+          "bytes": 65748,
+          "sha256": "2aaa28fa8a84472f5e640bf1fb98937fb31a73f513144ab88788a2cc33ea1c79",
+          "hasExif": false
+        },
+        "webp1600": {
+          "path": "/images/photography/photo-024/photo-024-1600.webp",
+          "width": 1600,
+          "height": 1600,
+          "aspectRatio": 1,
+          "bytes": 148922,
+          "sha256": "b9a9b46fc598290603a19efb3b05da5b25d0fb5eff894d453c801739a52bed37",
+          "hasExif": false
+        },
+        "jpeg1600": {
+          "path": "/images/photography/photo-024/photo-024-1600.jpg",
+          "width": 1600,
+          "height": 1600,
+          "aspectRatio": 1,
+          "bytes": 303324,
+          "sha256": "47eabccc81f6d4beb3066dc30dd0c48ee10f74e7c2c73d9635cb11866ca1fbbd",
+          "hasExif": false
+        },
+        "jpegFull": {
+          "path": "/images/photography/photo-024/photo-024-full.jpg",
+          "width": 2400,
+          "height": 2400,
+          "aspectRatio": 1,
+          "bytes": 687678,
+          "sha256": "756ee152b065943bf1a39be0aa89b835516c4cdbd1670d890eb4da47446dd350",
+          "hasExif": false
+        }
+      }
+    }
+  ]
+}

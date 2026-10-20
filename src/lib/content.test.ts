@@ -123,6 +123,7 @@ describe('English UI copy', () => {
       work: 'Work',
       updates: 'Updates',
       elsewhere: 'Elsewhere',
+      photos: 'Photos',
     });
     expect(en.profile.role).toBe(
       'Undergraduate in Artificial Intelligence at South China University of Technology',

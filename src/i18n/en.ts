@@ -4,6 +4,7 @@ export const en = {
     work: 'Work',
     updates: 'Updates',
     elsewhere: 'Elsewhere',
+    photos: 'Photos',
   },
   profile: {
     role: 'Undergraduate in Artificial Intelligence at South China University of Technology',

@@ -1,0 +1,23 @@
+---
+import PhotographyGallery from '../../components/photography/PhotographyGallery.astro';
+import photographyData from '../../data/photography.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { assertPhotographyManifest, type PhotographyRecord } from '../../lib/photography';
+import { site } from '../../config/site';
+
+const photos = photographyData as PhotographyRecord[];
+assertPhotographyManifest(photos);
+---
+
+<BaseLayout
+  title={`Photos | ${site.name}`}
+  description="途中 · In Passing — a selection of photographs by Tenghao Wang."
+  canonicalPath="/photos/"
+  photography
+>
+  <PhotographyGallery photos={photos} />
+</BaseLayout>
+
+<script>
+  import '../../scripts/photography-gallery';
+</script>

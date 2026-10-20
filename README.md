@@ -16,6 +16,18 @@ npm run build
 
 Add English Markdown records to the matching collection folder. Keep front matter complete and use a unique `translationKey`. Run the complete build before publishing.
 
+## Photography maintenance
+
+The Photos page is curated from the 24-row `24张策展清单.csv` in the design workspace, outside this repository. Keep IDs stable and unique (`photo-001` through `photo-024`); `order` controls display order and must remain sequential from 1 to 24. Each row points to an original by its category folder and filename. Use one of the four existing series names: `远方与尺度`, `擦肩与回望`, `城市的留白`, or `微小的回声`. Write factual `alt` text for the selected frame.
+
+After changing the curated list or replacing an original, regenerate the public derivatives and `src/data/photography.json` with:
+
+```bash
+node scripts/prepare-photography.mjs
+```
+
+The script accepts `--source-root`, `--selection`, and `--notes` when the source folders or curation files live elsewhere. Review the generated manifest and `docs/performance/2026-10-08-photography-images.json` after regeneration. Do not edit generated JSON or derivatives by hand; the original photographs are read-only inputs.
+
 ## Project Markdown example
 
 ```md
@@ -131,8 +143,10 @@ The public site does not publish CV files, phone numbers, GPA, passports, visas,
 
 The future dynamic character particles and richer interactive visual experiments are intentionally deferred. They should be designed separately and must preserve the current no-client-hydration, accessible static baseline.
 
-## GitHub Pages activation
+## Deployment
 
-This repository includes a deployment workflow but does not create a remote or push changes. GitHub Pages builds only from the committed artwork manifest. No TMDB or Spotify secret is required in the repository or GitHub Actions.
+The public site is hosted at [https://stylewth.github.io/](https://stylewth.github.io/) from [stylewth/stylewth.github.io](https://github.com/stylewth/stylewth.github.io). GitHub Pages uses **GitHub Actions** as its source.
 
-After the repository is on GitHub, open `Settings > Pages`, set **Source** to **GitHub Actions**, and allow the workflow to run from the `main` branch. Confirm the published address is `https://stylewth.github.io/` and inspect the workflow run before sharing the site.
+Push reviewed changes to `main` to publish. The workflow in `.github/workflows/deploy.yml` runs the complete `npm run build` checks, uploads `dist`, and deploys to GitHub Pages. It can also be started manually from the Actions tab. Check that both the build and deployment jobs succeed before sharing an update.
+
+GitHub Pages builds only from the committed artwork manifest and photography derivatives. No TMDB or Spotify secret is required in the repository or GitHub Actions. Keep `.env` and private source documents outside the published source.

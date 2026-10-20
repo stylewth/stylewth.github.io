@@ -49,6 +49,7 @@ const albums = sortFavorites(favorites, 'album', 'en').map((entry) =>
   wide
 >
   <FavoritesStage films={films} albums={albums} copy={en.elsewhere} />
+  <p class="elsewhere-photo-link">Photography: <a href="/photos/">In Passing</a></p>
   <section class="elsewhere-notes">
     <h2>{en.elsewhere.notes}</h2>
     {
@@ -73,6 +74,12 @@ const albums = sortFavorites(favorites, 'album', 'en').map((entry) =>
 <style>
   .elsewhere-notes {
     margin-block-start: var(--space-section);
+  }
+
+  .elsewhere-photo-link {
+    margin-block-start: 2rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
   }
 
   .elsewhere-notes > h2 {

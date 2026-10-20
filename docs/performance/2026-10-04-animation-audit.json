@@ -1,0 +1,377 @@
+{
+  "date": "2026-10-04",
+  "environment": "Local production build, headless Chrome, 1440x1000, DPR 1 for performance",
+  "baseline": {
+    "label": "baseline",
+    "geometry": {
+      "top": 1251.1640625,
+      "height": 93.328125,
+      "sceneTop": 829,
+      "sceneHeight": 837.21875,
+      "maxScroll": 2417,
+      "dom": 342
+    },
+    "frames": {
+      "frames": 119,
+      "median": 6.099999999999909,
+      "p95": 12.099999999999909,
+      "over25ms": 0,
+      "geometryReads": 119
+    },
+    "delta": {
+      "LayoutCount": 117,
+      "RecalcStyleCount": 117,
+      "LayoutDuration": 0.018489000000000005,
+      "RecalcStyleDuration": 0.072347,
+      "TaskDuration": 0.230535,
+      "JSHeapUsedSize": 205652,
+      "JSHeapTotalSize": 786432
+    },
+    "heapUsed": 1427076,
+    "offscreen": {
+      "outside": true,
+      "reads": 12
+    },
+    "reduced": {
+      "ready": true,
+      "staticVisibility": "hidden",
+      "reads": 1
+    },
+    "errors": []
+  },
+  "optimized": {
+    "label": "optimized",
+    "geometry": {
+      "top": 1251.1640625,
+      "height": 93.328125,
+      "sceneTop": 829,
+      "sceneHeight": 837.21875,
+      "maxScroll": 2417,
+      "dom": 342
+    },
+    "frames": {
+      "frames": 119,
+      "median": 6.099999999999909,
+      "p95": 6.2000000000000455,
+      "over25ms": 0,
+      "geometryReads": 119
+    },
+    "delta": {
+      "LayoutCount": 0,
+      "RecalcStyleCount": 117,
+      "LayoutDuration": 0,
+      "RecalcStyleDuration": 0.062261,
+      "TaskDuration": 0.176326,
+      "JSHeapUsedSize": 212468,
+      "JSHeapTotalSize": 1048576
+    },
+    "heapUsed": 1443340,
+    "offscreen": {
+      "outside": true,
+      "reads": 0
+    },
+    "reduced": {
+      "ready": false,
+      "staticVisibility": "visible",
+      "reads": 0
+    },
+    "errors": []
+  },
+  "verification": {
+    "responsive": [
+      {
+        "width": 1440,
+        "samples": [
+          {
+            "progress": 0.05016,
+            "x": 736.4859008789062,
+            "y": 945.1640625,
+            "width": 140,
+            "trackX": 806.4859008789062,
+            "overflow": false
+          },
+          {
+            "progress": 0.29985,
+            "x": 880.307373046875,
+            "y": 672.1640625,
+            "width": 140,
+            "trackX": 950.307373046875,
+            "overflow": false
+          },
+          {
+            "progress": 0.54955,
+            "x": 1024.134521484375,
+            "y": 399.1640625,
+            "width": 140,
+            "trackX": 1094.134521484375,
+            "overflow": false
+          },
+          {
+            "progress": 0.8001600000000001,
+            "x": 1168.48583984375,
+            "y": 125.1640625,
+            "width": 140,
+            "trackX": 1238.48583984375,
+            "overflow": false
+          },
+          {
+            "progress": 0.29985,
+            "x": 880.307373046875,
+            "y": 672.1640625,
+            "width": 140,
+            "trackX": 950.307373046875,
+            "overflow": false
+          }
+        ],
+        "maxPositionError": 0.010498046875,
+        "memoryBefore": {
+          "documents": 2,
+          "nodes": 424,
+          "jsEventListeners": 32
+        },
+        "memoryAfter": {
+          "documents": 2,
+          "nodes": 423,
+          "jsEventListeners": 32
+        }
+      },
+      {
+        "width": 1024,
+        "samples": [
+          {
+            "progress": 0.05028,
+            "x": 503.5474853515625,
+            "y": 945.0234375,
+            "width": 140,
+            "trackX": 573.5474853515625,
+            "overflow": false
+          },
+          {
+            "progress": 0.29998,
+            "x": 605.8230590820312,
+            "y": 672.0234375,
+            "width": 140,
+            "trackX": 675.8230590820312,
+            "overflow": false
+          },
+          {
+            "progress": 0.5496800000000001,
+            "x": 708.0986328125,
+            "y": 399.0234375,
+            "width": 140,
+            "trackX": 778.0986328125,
+            "overflow": false
+          },
+          {
+            "progress": 0.80029,
+            "x": 810.7469482421875,
+            "y": 125.0234375,
+            "width": 140,
+            "trackX": 880.7469482421875,
+            "overflow": false
+          },
+          {
+            "progress": 0.29998,
+            "x": 605.8230590820312,
+            "y": 672.0234375,
+            "width": 140,
+            "trackX": 675.8230590820312,
+            "overflow": false
+          }
+        ],
+        "maxPositionError": 0.01055908203125,
+        "memoryBefore": {
+          "documents": 2,
+          "nodes": 424,
+          "jsEventListeners": 32
+        },
+        "memoryAfter": {
+          "documents": 2,
+          "nodes": 423,
+          "jsEventListeners": 32
+        }
+      },
+      {
+        "width": 768,
+        "samples": [
+          {
+            "progress": 0.04983,
+            "x": 327.96282958984375,
+            "y": 947.78125,
+            "width": 72,
+            "trackX": 363.96282958984375,
+            "overflow": false
+          },
+          {
+            "progress": 0.29983,
+            "x": 423.96282958984375,
+            "y": 685.78125,
+            "width": 72,
+            "trackX": 459.96282958984375,
+            "overflow": false
+          },
+          {
+            "progress": 0.5498299999999999,
+            "x": 519.9628295898438,
+            "y": 423.78125,
+            "width": 72,
+            "trackX": 555.9628295898438,
+            "overflow": false
+          },
+          {
+            "progress": 0.79983,
+            "x": 615.962890625,
+            "y": 161.78125,
+            "width": 72,
+            "trackX": 651.962890625,
+            "overflow": false
+          },
+          {
+            "progress": 0.29983,
+            "x": 423.96282958984375,
+            "y": 685.78125,
+            "width": 72,
+            "trackX": 459.96282958984375,
+            "overflow": false
+          }
+        ],
+        "maxPositionError": 0.00970458984375,
+        "memoryBefore": {
+          "documents": 2,
+          "nodes": 424,
+          "jsEventListeners": 32
+        },
+        "memoryAfter": {
+          "documents": 2,
+          "nodes": 423,
+          "jsEventListeners": 32
+        }
+      },
+      {
+        "width": 390,
+        "samples": [
+          {
+            "progress": 0.0499,
+            "x": 148.83987426757812,
+            "y": 947.703125,
+            "width": 72,
+            "trackX": 184.83987426757812,
+            "overflow": false
+          },
+          {
+            "progress": 0.2999,
+            "x": 197.58987426757812,
+            "y": 685.703125,
+            "width": 72,
+            "trackX": 233.58987426757812,
+            "overflow": false
+          },
+          {
+            "progress": 0.5499,
+            "x": 246.33987426757812,
+            "y": 423.703125,
+            "width": 72,
+            "trackX": 282.3398742675781,
+            "overflow": false
+          },
+          {
+            "progress": 0.7998999999999999,
+            "x": 295.0898742675781,
+            "y": 161.703125,
+            "width": 72,
+            "trackX": 331.0898742675781,
+            "overflow": false
+          },
+          {
+            "progress": 0.2999,
+            "x": 197.58987426757812,
+            "y": 685.703125,
+            "width": 72,
+            "trackX": 233.58987426757812,
+            "overflow": false
+          }
+        ],
+        "maxPositionError": 0.011749267578125,
+        "memoryBefore": {
+          "documents": 2,
+          "nodes": 424,
+          "jsEventListeners": 32
+        },
+        "memoryAfter": {
+          "documents": 2,
+          "nodes": 423,
+          "jsEventListeners": 32
+        }
+      },
+      {
+        "width": 320,
+        "samples": [
+          {
+            "progress": 0.049690000000000005,
+            "x": 115.62226867675781,
+            "y": 947.921875,
+            "width": 72,
+            "trackX": 151.6222686767578,
+            "overflow": false
+          },
+          {
+            "progress": 0.29969,
+            "x": 155.62228393554688,
+            "y": 685.921875,
+            "width": 72,
+            "trackX": 191.62228393554688,
+            "overflow": false
+          },
+          {
+            "progress": 0.54969,
+            "x": 195.62228393554688,
+            "y": 423.921875,
+            "width": 72,
+            "trackX": 231.62228393554688,
+            "overflow": false
+          },
+          {
+            "progress": 0.7996899999999999,
+            "x": 235.62228393554688,
+            "y": 161.921875,
+            "width": 72,
+            "trackX": 271.6222839355469,
+            "overflow": false
+          },
+          {
+            "progress": 0.29969,
+            "x": 155.62228393554688,
+            "y": 685.921875,
+            "width": 72,
+            "trackX": 191.62228393554688,
+            "overflow": false
+          }
+        ],
+        "maxPositionError": 0.012908935546875,
+        "memoryBefore": {
+          "documents": 2,
+          "nodes": 424,
+          "jsEventListeners": 32
+        },
+        "memoryAfter": {
+          "documents": 2,
+          "nodes": 423,
+          "jsEventListeners": 32
+        }
+      }
+    ],
+    "favorites": {
+      "memoryBefore": {
+        "documents": 3,
+        "nodes": 433,
+        "jsEventListeners": 53
+      },
+      "memoryAfter": {
+        "documents": 3,
+        "nodes": 433,
+        "jsEventListeners": 53
+      }
+    },
+    "errors": []
+  }
+}
