@@ -9,7 +9,6 @@ export const en = {
   profile: {
     role: 'Undergraduate in Artificial Intelligence at South China University of Technology',
     portraitAlt: 'Portrait of Tenghao Wang',
-    emailLabel: 'Email',
     githubLabel: 'GitHub',
     introduction:
       'I am an undergraduate in Artificial Intelligence at South China University of Technology. I am interested in world models and multimodal learning, especially how models can build useful internal representations from partial observations.',
@@ -66,6 +65,7 @@ export const en = {
     role: 'Role',
     topics: 'Topics',
     stage: 'Stage',
+    result: 'Result',
   },
   links: {
     source: 'Source',

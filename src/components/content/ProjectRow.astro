@@ -19,7 +19,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     <p>{project.summary}</p>
   </div>
   <div class="project-row__meta">
-    <p class="project-row__classification"><span>{project.kind}</span><span>{project.stage}</span></p>
+    <p class="project-row__classification"><span>{project.kind}</span><span>{project.result ?? project.stage}</span></p>
     <p>{project.year}</p>
     <p>{project.role}</p>
     <p>{project.topics.join(', ')}</p>
@@ -63,7 +63,6 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     display: flex;
     gap: 0.65rem;
     color: var(--color-muted);
-    text-transform: lowercase;
   }
 
   .project-row__classification span + span::before {

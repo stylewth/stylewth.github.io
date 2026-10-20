@@ -23,6 +23,7 @@ const projects = defineCollection({
         year: z.number().int().min(1900),
         kind: z.enum(['research', 'engineering', 'competition']),
         stage: z.enum(['ongoing', 'completed', 'preprint', 'published']),
+        result: z.string().trim().min(1).optional(),
         topics: z.array(z.string().trim().min(1)).min(1),
         featured: z.boolean(),
         featuredOrder: z.number().int().positive().optional(),

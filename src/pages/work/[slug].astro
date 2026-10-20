@@ -30,8 +30,8 @@ const { Content } = await render(entry);
       <dd>{entry.data.year}</dd>
     </div>
     <div>
-      <dt>{en.metadata.stage}</dt>
-      <dd>{entry.data.stage}</dd>
+      <dt>{entry.data.result ? en.metadata.result : en.metadata.stage}</dt>
+      <dd>{entry.data.result ?? entry.data.stage}</dd>
     </div>
     <div>
       <dt>{en.metadata.role}</dt>

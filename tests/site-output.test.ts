@@ -156,7 +156,8 @@ describe('homepage output', () => {
     expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>Updates<\/a>/);
     expect(html).toMatch(/<a[^>]+href="\/elsewhere\/"[^>]*>Elsewhere<\/a>/);
     expect(html.match(/<h1(?:\s|>)/g) ?? []).toHaveLength(1);
-    expect(html).toContain('mailto:202464871049@mail.scut.edu.cn');
+    expect(html).toContain('202464871049@mail.scut.edu.cn');
+    expect(html).not.toContain('mailto:');
     expect(html).toContain('https://github.com/stylewth');
     expect(html).toContain('Guangzhou, China');
     expect(html).toContain('© 2026 Tenghao Wang');
@@ -185,7 +186,7 @@ describe('homepage output', () => {
     expect(html).toContain('Predictive planning');
   });
 
-  it('renders an academic profile hierarchy with direct contact links', () => {
+  it('renders an academic profile hierarchy with a plain school email and GitHub link', () => {
     const profileStart = sectionPosition('profile');
     const profileEnd = html.indexOf('</section>', profileStart);
     const profile = html.slice(profileStart, profileEnd);
@@ -194,7 +195,7 @@ describe('homepage output', () => {
     expect(profile).toMatch(
       /<p class="profile__role"[^>]*>Undergraduate in Artificial Intelligence at South China University of Technology<\/p>/,
     );
-    expect(profile).toMatch(/<a href="mailto:202464871049@mail\.scut\.edu\.cn"[^>]*>Email<\/a>/);
+    expect(profile).toMatch(/<span class="profile__email"[^>]*>202464871049@mail\.scut\.edu\.cn<\/span>/);
     expect(profile).toMatch(/<a href="https:\/\/github\.com\/stylewth"[^>]*>GitHub<\/a>/);
     expect(profile).not.toContain('Academic portfolio');
   });
@@ -215,7 +216,7 @@ describe('homepage output', () => {
     expect(html.match(/class="project-row"/g) ?? []).toHaveLength(2);
     expect(html.match(/class="update-row"/g) ?? []).toHaveLength(3);
     expect(html.indexOf('Meijian Narrative Intelligence')).toBeLessThan(html.indexOf('Dynamic EVRP'));
-    expect(html.indexOf('Submitted Meijian Narrative Intelligence')).toBeLessThan(
+    expect(html.indexOf('Meijian - National Top 40')).toBeLessThan(
       html.indexOf('MCM Honorable Mention'),
     );
   });
@@ -225,14 +226,14 @@ describe('homepage output', () => {
     const updateRows = elementFragments(html, 'li', 'update-row');
     const meijian = projectRows.find((row) => row.includes('Meijian Narrative Intelligence'));
     const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
-    const meijianUpdate = updateRows.find((row) => row.includes('Submitted Meijian Narrative Intelligence'));
+    const meijianUpdate = updateRows.find((row) => row.includes('Meijian - National Top 40'));
 
     expectNoHeadingLevelSkips(html);
     expect(meijian).toContain('competition');
-    expect(meijian).toContain('ongoing');
+    expect(meijian).toMatch(/<span[^>]*>National Top 40<\/span>/);
     expect(dynamicEvrp).toContain('engineering');
     expect(dynamicEvrp).toContain('completed');
-    expect(meijianUpdate).toMatch(/<time[^>]*>2026-08<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
+    expect(meijianUpdate).toMatch(/<time[^>]*>2026-09<\/time>[\s\S]*?<span[^>]*>award<\/span>/);
     expect(html).toMatch(/<a[^>]+href="\/work\/"[^>]*>All projects<\/a>/);
     expect(html).toMatch(/<a[^>]+href="\/updates\/"[^>]*>All updates<\/a>/);
   });
@@ -413,7 +414,7 @@ describe('content archive output', () => {
     const meijian = projectRows.find((row) => row.includes('Meijian Narrative Intelligence'));
     const dynamicEvrp = projectRows.find((row) => row.includes('Dynamic EVRP'));
     expect(meijian).toContain('competition');
-    expect(meijian).toContain('ongoing');
+    expect(meijian).toMatch(/<span[^>]*>National Top 40<\/span>/);
     expect(dynamicEvrp).toContain('engineering');
     expect(dynamicEvrp).toContain('completed');
   });
@@ -425,6 +426,9 @@ describe('content archive output', () => {
     expectDocumentShell(meijian, '/work/meijian/', 'Meijian Narrative Intelligence | Tenghao Wang');
     expectDocumentShell(dynamicEvrp, '/work/dynamic-evrp/', 'Dynamic EVRP | Tenghao Wang');
     expect(meijian).toContain('Meijian Narrative Intelligence turns market feedback into traceable brand narrative decisions');
+    expect(meijian).toMatch(/<dt[^>]*>Result<\/dt>\s*<dd[^>]*>National Top 40<\/dd>/);
+    expect(meijian).toContain('Feishu 2026 AI Pioneer Future Talent Competition');
+    expect(meijian).toContain('Full-stack development lead');
     expect(dynamicEvrp).toContain('Dynamic electric vehicle routing needs a simulation environment');
     expect(meijian).toContain('>Code</a>');
     expect(dynamicEvrp).toContain('>Code</a>');
@@ -434,7 +438,7 @@ describe('content archive output', () => {
     const updates = readOutput('updates/index.html');
 
     expectDocumentShell(updates, '/updates/', 'Updates | Tenghao Wang');
-    expect(updates.indexOf('Submitted Meijian Narrative Intelligence')).toBeLessThan(
+    expect(updates.indexOf('Meijian - National Top 40')).toBeLessThan(
       updates.indexOf('Completed Dynamic EVRP'),
     );
     expect(updates.indexOf('Completed Dynamic EVRP')).toBeLessThan(
@@ -443,8 +447,8 @@ describe('content archive output', () => {
     expect(updates).toMatch(/<a[^>]+href="\/updates\/"[^>]+aria-current="page"[^>]*>Updates<\/a>/);
     expectNoHeadingLevelSkips(updates);
     const updateRows = elementFragments(updates, 'li', 'update-row');
-    const meijianUpdate = updateRows.find((row) => row.includes('Submitted Meijian Narrative Intelligence'));
-    expect(meijianUpdate).toMatch(/<time[^>]*>2026-08<\/time>[\s\S]*?<span[^>]*>project<\/span>/);
+    const meijianUpdate = updateRows.find((row) => row.includes('Meijian - National Top 40'));
+    expect(meijianUpdate).toMatch(/<time[^>]*>2026-09<\/time>[\s\S]*?<span[^>]*>award<\/span>/);
   });
 
   it('publishes Top 10 collections before the existing Notes archive', () => {

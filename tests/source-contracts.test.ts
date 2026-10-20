@@ -646,7 +646,6 @@ describe('public source contracts', () => {
     expect(projectRow).toContain('codeLabel: string');
     expect(projectRow).not.toContain('>Code</a>');
     expect(profile).toContain('portraitAlt: string');
-    expect(profile).toContain('emailLabel: string');
     expect(profile).toContain('githubLabel: string');
     expect(research).toContain('interestsLabel: string');
   });
