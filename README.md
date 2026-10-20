@@ -145,8 +145,8 @@ The future dynamic character particles and richer interactive visual experiments
 
 ## Deployment
 
-The public site is hosted at [https://stylewth.github.io/](https://stylewth.github.io/) from [stylewth/stylewth.github.io](https://github.com/stylewth/stylewth.github.io). GitHub Pages uses **GitHub Actions** as its source.
+The public site is hosted at [https://stylewth.github.io/](https://stylewth.github.io/) from [stylewth/stylewth.github.io](https://github.com/stylewth/stylewth.github.io). `Settings > Pages` uses **GitHub Actions** as its source.
 
 Push reviewed changes to `main` to publish. The workflow in `.github/workflows/deploy.yml` runs the complete `npm run build` checks, uploads `dist`, and deploys to GitHub Pages. It can also be started manually from the Actions tab. Check that both the build and deployment jobs succeed before sharing an update.
 
-GitHub Pages builds only from the committed artwork manifest and photography derivatives. No TMDB or Spotify secret is required in the repository or GitHub Actions. Keep `.env` and private source documents outside the published source.
+GitHub Pages builds only from the committed artwork manifest. Photography derivatives are also committed for deployment. No TMDB or Spotify secret is required in the repository or GitHub Actions. Keep `.env` and private source documents outside the published source.
